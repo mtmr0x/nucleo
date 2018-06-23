@@ -1,0 +1,23 @@
+{
+  "name": "super-cool-data-tool",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "author": "Matheus Marsiglio <matmarsiglio@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/mocha": "^5.2.3",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.17.5",
+    "ts-node": "^7.0.0",
+    "typescript": "^2.9.2"
+  },
+  "scripts": {
+    "start": "ts-node ./src/index.ts",
+    "nodemon": "nodemon",
+    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "compile": "tsc"
+  }
+}
