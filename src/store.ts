@@ -1,3 +1,5 @@
+import dispatch from './dispatcher';
+
 let __store__:any = {};
 let __storeTree__: any = {};
 let listeners: Array<Function | void> = [];
@@ -20,7 +22,7 @@ function subscribe(listener: Function) {
 }
 
 function createStore(models: Array<ModelType>) {
-  if (JSON.stringify(__store__) !== '{}') {
+  if (JSON.stringify(__storeTree__) !== '{}') {
     throw Error('You can\'t create a store when it\'s already created.');
   }
 
@@ -31,13 +33,14 @@ function createStore(models: Array<ModelType>) {
     __storeTree__[current.name] = { ...fields };
   }
 
-  console.log('aqui', __storeTree__);
-
-  // return (preloadedState: any) => {
-  //   return console.log(preloadedState);
-  // }
+  return {
+    dispatch,
+    subscribe
+  };
 }
 
-
-export { getStore, createStore };
+export {
+  getStore,
+  createStore
+};
 

@@ -26,15 +26,19 @@ const models = [
 describe('createStore function', () => {
   it('should create store properly', () => {
     const newStore = createStore(models);
-    const store = getStore();
 
-    expect(JSON.stringify(store)).to.equal('{}');
+    console.log('store', newStore);
+    expect(newStore.hasOwnProperty('dispatch')).to.equal(true);
   });
 
-  //  it('should fails trying to create a new store', () => {
-  //    const store = () => createStore(models);
-  //
-  //    expect(store).to.throw();
-  //  });
+  it('should fails trying to create a new store', () => {
+    const store = () => createStore(models);
+
+    expect(store).to.throw();
+  });
+
+  it('should destroy store', () => {
+
+  })
 });
 
