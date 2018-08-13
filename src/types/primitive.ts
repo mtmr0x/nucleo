@@ -1,5 +1,5 @@
 export const NucleoString = {
-  name: 'NucleoString',
+  Type: 'NucleoString',
   serialize: (value: string):string => {
     if (typeof value !== 'string') {
       throw Error(
@@ -12,7 +12,7 @@ export const NucleoString = {
 };
 
 export const NucleoNumber = {
-  name: 'NucleoNumber',
+  Type: 'NucleoNumber',
   serialize: (value: number):number => {
     if (typeof value !== 'number') {
       throw Error(
@@ -25,7 +25,7 @@ export const NucleoNumber = {
 };
 
 export const NucleoBoolean = {
-  name: 'NucleoBoolean',
+  Type: 'NucleoBoolean',
   serialize: (value: boolean):boolean => {
     if (typeof value !== 'boolean') {
       throw Error(

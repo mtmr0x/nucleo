@@ -1,4 +1,5 @@
-let store:any = {};
+let __store__:any = {};
+let __storeTree__: any = {};
 let listeners: Array<Function | void> = [];
 
 type ModelType = {
@@ -6,15 +7,9 @@ type ModelType = {
   fields: any
 };
 
-function createState(name: string, state: any) {
-  if (store[name]) {
-    throw Error(`Object with ${name} name already exists in store`);
-  }
-  store[name] = state;
-}
-
+function mirrorStore(s: any) { return s }
 function getStore() {
-  return store;
+  return mirrorStore(__store__);
 }
 
 function subscribe(listener: Function) {
@@ -25,21 +20,18 @@ function subscribe(listener: Function) {
 }
 
 function createStore(models: Array<ModelType>) {
-  if (JSON.stringify(store) !== '{}') {
+  if (JSON.stringify(__store__) !== '{}') {
     throw Error('You can\'t create a store when it\'s already created.');
   }
-  let storeTree: any = {};
 
-  console.log('models', models);
   for (let m = 0; m < models.length; m++) {
     const current = models[m]
-    console.log('current', current);
     const { fields = {} } = current;
 
-    storeTree[current.name] = { ...fields };
+    __storeTree__[current.name] = { ...fields };
   }
 
-  console.log('aqui', storeTree);
+  console.log('aqui', __storeTree__);
 
   // return (preloadedState: any) => {
   //   return console.log(preloadedState);
@@ -47,5 +39,5 @@ function createStore(models: Array<ModelType>) {
 }
 
 
-export { getStore, createState, createStore };
+export { getStore, createStore };
 

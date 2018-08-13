@@ -1,4 +1,4 @@
-import { getStore, createState, createStore } from './store';
+import { getStore, createStore } from './store';
 import {
   NucleoString,
   NucleoNumber,
