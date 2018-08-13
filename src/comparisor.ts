@@ -1,14 +1,11 @@
-const primitiveTypes = {
-  String: '',
-  Number: 0
-}
+import { NucleoString, NucleoNumber } from './types/primitive';
 
 const types = {
   example: {
     name: 'example',
     type: {
-      alpha: primitiveTypes.String,
-      delta: primitiveTypes.Number
+      alpha: NucleoString,
+      delta: NucleoNumber
     }
   }
 };
@@ -44,18 +41,6 @@ const comparison = (value: string, data: any) => {
 const dispatcher = (value: string, data: any) => {
   const isValid = comparison(value, data);
   // const pointer = keyPointer(data);
-};
-
-const catalog = {
-  string: {
-    0: "Alpha",
-    1: "Delta"
-  }
-};
-
-const obj = {
-  alpha: 'Alpha',
-  delta: 'Delta'
 };
 
 export default comparison;
