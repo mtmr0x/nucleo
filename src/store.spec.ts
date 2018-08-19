@@ -1,44 +1,51 @@
-import { getStore, createStore } from './store';
+import { createStore } from './store';
 import {
   NucleoString,
   NucleoNumber,
   NucleoBoolean
 } from './types/primitive'
+import NucleoObjectType from './types/NucleoObjectType';
 import { expect } from 'chai';
 import 'mocha';
 
-const models = [
-  {
+const contracts = {
+  userTest: new NucleoObjectType({
     name: 'userTest',
     fields: {
       name: NucleoString,
       age: NucleoNumber
     }
-  },
-  {
+  }),
+  productsTest: new NucleoObjectType({
     name: 'productTest',
     fields: {
       available: NucleoBoolean
     }
-  }
-];
+  })
+}
 
 describe('createStore function', () => {
+  const newStore = createStore(contracts);
+  const { dispatch } = newStore;
   it('should create store properly', () => {
-    const newStore = createStore(models);
-
-    console.log('store', newStore);
     expect(newStore.hasOwnProperty('dispatch')).to.equal(true);
   });
 
-  it('should fails trying to create a new store', () => {
-    const store = () => createStore(models);
+  it('should throw at trying to dispatch an invalid contract', () => {
+    const d = () => dispatch('user')({ name: 'Test' });
 
-    expect(store).to.throw();
+    expect(d).to.throw();
   });
 
-  it('should destroy store', () => {
+  it('should throw at saving data to userTest not according to its contract fields', () => {
+    const d = () => dispatch('userTest')({ firstName: 'Test' });
 
-  })
+    expect(d).to.throw();
+  });
+
+  it('should throw at saving data to userTest not according to its contract types', () => {
+    const d = () => dispatch('userTest')({ name: 123 });
+    expect(d).to.throw();
+  });
 });
 

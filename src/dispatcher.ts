@@ -1,36 +1,15 @@
-import { NucleoString, NucleoNumber } from './types/primitive';
+import lawyer from './lawyer';
 
-// const comparison = (value: string, data: any) => {
-//   const { type } = types[value];
-//   const dataKeys = Object.keys(data);
-//   const typeKeys = Object.keys(type);
-//   let keysErrors = [];
-//
-//   // loop checking object values comparison
-//   for (let i = 0; dataKeys.length >= i; i++) {
-//     // data: @argument
-//     // type: @variable
-//
-//     // check if is a primitive type
-//     if (typeof data[dataKeys[i]] === 'object' || typeof data[dataKeys[i]] === 'function') {
-//       throw Error(`${data[dataKeys[i]]} type is not a primitive type. Expected a primitive type, got ${typeof data[dataKeys[i]]}`);
-//     }
-//
-//     // check data and type primitive types
-//     if (typeof data[dataKeys[i]] !== typeof type[typeKeys[i]]) {
-//       keysErrors.push({ field: data[dataKeys[i]], error: `Non-equal type. Expected ${typeof type[typeKeys[i]]}, got ${typeof data[dataKeys[i]]}`});
-//     }
-//   }
-//
-//   console.log(keysErrors);
-//   if (keysErrors.length) {
-//     throw Error(JSON.stringify({ errors: keysErrors }));
-//   }
-// }
-
-const dispatch = (value: string, data: any) => {
-  return {};
+export default function dispatch(contracts: any) {
+  return (contractName: string) => {
+    if (!contracts[contractName]) {
+      throw Error(
+        `The provided contract named as "${contractName}" could not be found in store contracts`
+      );
+    }
+    return (data: any) => {
+      return lawyer({ name: contractName, fields: contracts[contractName]}, data);
+    };
+  }
 };
-
-export default dispatch;
 

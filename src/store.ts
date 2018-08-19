@@ -1,18 +1,12 @@
 import dispatch from './dispatcher';
+import NucleoObjectType from './types/NucleoObjectType';
 
-let __store__:any = {};
-let __storeTree__: any = {};
 let listeners: Array<Function | void> = [];
 
 type ModelType = {
   name: string,
   fields: any
 };
-
-function mirrorStore(s: any) { return s }
-function getStore() {
-  return mirrorStore(__store__);
-}
 
 function subscribe(listener: Function) {
   if (typeof listener !== 'function') {
@@ -21,26 +15,40 @@ function subscribe(listener: Function) {
   return listeners.push(listener);
 }
 
-function createStore(models: Array<ModelType>) {
-  if (JSON.stringify(__storeTree__) !== '{}') {
+function createStore(contracts: any) {
+  let __store__:any = {};
+  let __contracts__: any = {};
+  if (JSON.stringify(__contracts__) !== '{}') {
     throw Error('You can\'t create a store when it\'s already created.');
   }
 
-  for (let m = 0; m < models.length; m++) {
-    const current = models[m]
-    const { fields = {} } = current;
+  const contractsKeys: any = Object.keys(contracts);
 
-    __storeTree__[current.name] = { ...fields };
+  for (let c = 0; c < contractsKeys.length; c++) {
+    const current: any = contracts[contractsKeys[c]];
+    if (!(current instanceof NucleoObjectType)) {
+      throw Error(
+        `Each contract must be instances of NucleoObjectType. Received ${JSON.stringify(current)}.\nTo understand more, check the documentation about creating a contract in Nucleo here: https://github.com/mtmr0x/nucleo`
+      );
+    }
+
+    const { fields = {} } = current;
+    if (__contracts__[current.name]) {
+      __contracts__ = {};
+      throw Error(
+        `Two contracts can not have the same name. Received more than one ${current.name} contract`
+      );
+    }
+    __contracts__[current.name] = { ...fields };
   }
 
   return {
-    dispatch,
+    dispatch: dispatch(__contracts__),
     subscribe
   };
 }
 
 export {
-  getStore,
   createStore
 };
 
