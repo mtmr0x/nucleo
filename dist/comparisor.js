@@ -1,15 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const primitiveTypes = {
-    String: '',
-    Number: 0
-};
+const primitive_1 = require("./types/primitive");
 const types = {
     example: {
         name: 'example',
         type: {
-            alpha: primitiveTypes.String,
-            delta: primitiveTypes.Number
+            alpha: primitive_1.NucleoString,
+            delta: primitive_1.NucleoNumber
         }
     }
 };
@@ -39,16 +36,6 @@ const comparison = (value, data) => {
 const dispatcher = (value, data) => {
     const isValid = comparison(value, data);
     // const pointer = keyPointer(data);
-};
-const catalog = {
-    string: {
-        0: "Alpha",
-        1: "Delta"
-    }
-};
-const obj = {
-    alpha: 'Alpha',
-    delta: 'Delta'
 };
 exports.default = comparison;
 //# sourceMappingURL=comparisor.js.map
