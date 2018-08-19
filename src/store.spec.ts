@@ -8,21 +8,33 @@ import NucleoObjectType from './types/NucleoObjectType';
 import { expect } from 'chai';
 import 'mocha';
 
+const completeNameType = new NucleoObjectType({
+  name: 'completeName',
+  fields:  {
+    firstName: NucleoString,
+    lastName: NucleoString
+  }
+});
+
+const userTestType = new NucleoObjectType({
+  name: 'userTest',
+  fields: {
+    name: completeNameType,
+    age: NucleoNumber
+  }
+});
+
+const productsTestType = new NucleoObjectType({
+  name: 'productTest',
+  fields: {
+    available: NucleoBoolean
+  }
+});
+
 const contracts = {
-  userTest: new NucleoObjectType({
-    name: 'userTest',
-    fields: {
-      name: NucleoString,
-      age: NucleoNumber
-    }
-  }),
-  productsTest: new NucleoObjectType({
-    name: 'productTest',
-    fields: {
-      available: NucleoBoolean
-    }
-  })
-}
+  userTest: userTestType,
+  productsTest: productsTestType
+};
 
 describe('createStore function errors', () => {
   const newStore = createStore(contracts);
@@ -44,7 +56,7 @@ describe('createStore function errors', () => {
   });
 
   it('should throw at saving data to userTest not according to its contract types', () => {
-    const d = () => dispatch('userTest')({ name: 123 });
+    const d = () => dispatch('userTest')({ age: '23' });
     expect(d).to.throw();
   });
 });
@@ -53,12 +65,10 @@ describe('createStore function dispatch flow', () => {
   const newStore = createStore(contracts);
   const { dispatch, getStore } = newStore;
   it('should dispatch values to store', () => {
-    console.log(getStore());
-    dispatch('userTest')({ name: "John Doe" });
-    console.log(getStore());
+    dispatch('userTest')({ name: { firstName: 'John', lastName: 'Doe' } });
+
     const { userTest } = getStore();
-    userTest.name = 'Joaquim';
-    console.log(getStore());
+    expect(userTest.name.firstName).to.equal('John');
   })
 });
 

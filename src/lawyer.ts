@@ -11,11 +11,11 @@ export default function lawyer(contract: any, data: any) {
   for (let i = 0; dataKeys.length > i; i++) {
     const currentDataKey = data[dataKeys[i]];
     // recursion to call itself when is NucleoObjectType instance
-    if (currentDataKey instanceof NucleoObjectType) {
-      lawyer(contract[dataKeys[i]], currentDataKey);
+    if (contractFields[dataKeys[i]] instanceof NucleoObjectType) {
+      lawyer(contractFields[dataKeys[i]], currentDataKey);
+      continue;
     }
 
-    // console.log('currentDataKey', currentDataKey);
     if (!contractFields[dataKeys[i]]) {
       __errors__.push({
         contract: contractName,
@@ -34,6 +34,8 @@ export default function lawyer(contract: any, data: any) {
   if (__errors__.length) {
     throw Error(JSON.stringify({ errors: __errors__ }));
   }
+
+  console.log('> lawyer errors', __errors__);
 
   return (store:any) => {
     return store[contractName] = data;
