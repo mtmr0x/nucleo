@@ -1,6 +1,6 @@
 import lawyer from './lawyer';
 
-export default function dispatch(contracts: any) {
+export default function dispatch(contracts: any, store: any) {
   return (contractName: string) => {
     if (!contracts[contractName]) {
       throw Error(
@@ -8,7 +8,7 @@ export default function dispatch(contracts: any) {
       );
     }
     return (data: any) => {
-      return lawyer({ name: contractName, fields: contracts[contractName]}, data);
+      return lawyer({ name: contractName, fields: contracts[contractName]}, data)(store);
     };
   }
 };

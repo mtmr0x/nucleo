@@ -15,6 +15,13 @@ function subscribe(listener: Function) {
   return listeners.push(listener);
 }
 
+// TODO: should I call it getStoreClone or something like that?
+function getStore(store: any) {
+  return () => {
+    return JSON.parse(JSON.stringify(store));
+  };
+}
+
 function createStore(contracts: any) {
   let __store__:any = {};
   let __contracts__: any = {};
@@ -43,8 +50,9 @@ function createStore(contracts: any) {
   }
 
   return {
-    dispatch: dispatch(__contracts__),
-    subscribe
+    dispatch: dispatch(__contracts__, __store__),
+    subscribe,
+    getStore: getStore(__store__)
   };
 }
 

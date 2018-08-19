@@ -24,7 +24,7 @@ const contracts = {
   })
 }
 
-describe('createStore function', () => {
+describe('createStore function errors', () => {
   const newStore = createStore(contracts);
   const { dispatch } = newStore;
   it('should create store properly', () => {
@@ -47,5 +47,18 @@ describe('createStore function', () => {
     const d = () => dispatch('userTest')({ name: 123 });
     expect(d).to.throw();
   });
+});
+
+describe('createStore function dispatch flow', () => {
+  const newStore = createStore(contracts);
+  const { dispatch, getStore } = newStore;
+  it('should dispatch values to store', () => {
+    console.log(getStore());
+    dispatch('userTest')({ name: "John Doe" });
+    console.log(getStore());
+    const { userTest } = getStore();
+    userTest.name = 'Joaquim';
+    console.log(getStore());
+  })
 });
 

@@ -34,5 +34,9 @@ export default function lawyer(contract: any, data: any) {
   if (__errors__.length) {
     throw Error(JSON.stringify({ errors: __errors__ }));
   }
+
+  return (store:any) => {
+    return store[contractName] = data;
+  }
 }
 
