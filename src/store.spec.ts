@@ -3,8 +3,8 @@ import {
   NucleoString,
   NucleoNumber,
   NucleoBoolean
-} from './types/primitive'
-import NucleoObjectType from './types/NucleoObjectType';
+} from './nucleoTypes/primitive'
+import NucleoObjectType from './nucleoTypes/NucleoObjectType';
 import { expect } from 'chai';
 import 'mocha';
 
@@ -63,11 +63,11 @@ describe('createStore function errors', () => {
 
 describe('createStore function dispatch flow', () => {
   const newStore = createStore(contracts);
-  const { dispatch, getStore } = newStore;
+  const { dispatch, cloneStore } = newStore;
   it('should dispatch values to store', () => {
     dispatch('userTest')({ name: { firstName: 'John', lastName: 'Doe' } });
 
-    const { userTest } = getStore();
+    const { userTest } = cloneStore();
     expect(userTest.name.firstName).to.equal('John');
   })
 });

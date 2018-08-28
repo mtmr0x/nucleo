@@ -1,5 +1,5 @@
 import dispatch from './dispatcher';
-import NucleoObjectType from './types/NucleoObjectType';
+import NucleoObjectType from './nucleoTypes/NucleoObjectType';
 
 let listeners: Array<Function | void> = [];
 
@@ -16,7 +16,7 @@ function subscribe(listener: Function) {
 }
 
 // TODO: should I call it getStoreClone or something like that?
-function getStore(store: any) {
+function cloneStore(store: any) {
   return () => {
     return JSON.parse(JSON.stringify(store));
   };
@@ -31,7 +31,7 @@ function createStore(contracts: any) {
 
   const contractsKeys: any = Object.keys(contracts);
 
-  for (let c = 0; c < contractsKeys.length; c++) {
+  for (let c:number = 0; c < contractsKeys.length; c++) {
     const current: any = contracts[contractsKeys[c]];
     if (!(current instanceof NucleoObjectType)) {
       throw Error(
@@ -52,7 +52,7 @@ function createStore(contracts: any) {
   return {
     dispatch: dispatch(__contracts__, __store__),
     subscribe,
-    getStore: getStore(__store__)
+    cloneStore: cloneStore(__store__)
   };
 }
 

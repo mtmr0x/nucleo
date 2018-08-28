@@ -1,4 +1,4 @@
-import NucleoObjectType from './types/NucleoObjectType';
+import NucleoObjectType from './nucleoTypes/NucleoObjectType';
 
 export default function lawyer(contract: any, data: any) {
   const contractKeys = Object.keys(contract);
