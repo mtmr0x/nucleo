@@ -4,11 +4,11 @@ import {
   NucleoNumber,
   NucleoBoolean
 } from './nucleoTypes/primitive'
-import NucleoObjectType from './nucleoTypes/NucleoObjectType';
+import NucleoObject from './nucleoTypes/NucleoObject';
 import { expect } from 'chai';
 import 'mocha';
 
-const completeNameType = new NucleoObjectType({
+const completeNameType = new NucleoObject({
   name: 'completeName',
   fields:  {
     firstName: NucleoString,
@@ -16,7 +16,7 @@ const completeNameType = new NucleoObjectType({
   }
 });
 
-const userTestType = new NucleoObjectType({
+const userTestType = new NucleoObject({
   name: 'userTest',
   fields: {
     name: completeNameType,
@@ -24,7 +24,7 @@ const userTestType = new NucleoObjectType({
   }
 });
 
-const productsTestType = new NucleoObjectType({
+const productsTestType = new NucleoObject({
   name: 'productTest',
   fields: {
     available: NucleoBoolean

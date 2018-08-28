@@ -1,5 +1,5 @@
 import dispatch from './dispatcher';
-import NucleoObjectType from './nucleoTypes/NucleoObjectType';
+import NucleoObject from './nucleoTypes/NucleoObject';
 
 let listeners: Array<Function | void> = [];
 
@@ -15,7 +15,6 @@ function subscribe(listener: Function) {
   return listeners.push(listener);
 }
 
-// TODO: should I call it getStoreClone or something like that?
 function cloneStore(store: any) {
   return () => {
     return JSON.parse(JSON.stringify(store));
@@ -33,9 +32,9 @@ function createStore(contracts: any) {
 
   for (let c:number = 0; c < contractsKeys.length; c++) {
     const current: any = contracts[contractsKeys[c]];
-    if (!(current instanceof NucleoObjectType)) {
+    if (!(current instanceof NucleoObject)) {
       throw Error(
-        `Each contract must be instances of NucleoObjectType. Received ${JSON.stringify(current)}.\nTo understand more, check the documentation about creating a contract in Nucleo here: https://github.com/mtmr0x/nucleo`
+        `Each contract must be instances of NucleoObject. Received ${JSON.stringify(current)}.\nTo understand more, check the documentation about creating a contract in Nucleo here: https://github.com/mtmr0x/nucleo`
       );
     }
 

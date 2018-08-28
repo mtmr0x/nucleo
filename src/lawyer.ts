@@ -1,4 +1,4 @@
-import NucleoObjectType from './nucleoTypes/NucleoObjectType';
+import NucleoObject from './nucleoTypes/NucleoObject';
 
 export default function lawyer(contract: any, data: any) {
   const contractKeys = Object.keys(contract);
@@ -10,8 +10,8 @@ export default function lawyer(contract: any, data: any) {
   // loop checking object values comparison
   for (let i = 0; dataKeys.length > i; i++) {
     const currentDataKey = data[dataKeys[i]];
-    // recursion to call itself when is NucleoObjectType instance
-    if (contractFields[dataKeys[i]] instanceof NucleoObjectType) {
+    // recursion to call itself when is NucleoObject instance
+    if (contractFields[dataKeys[i]] instanceof NucleoObject) {
       lawyer(contractFields[dataKeys[i]], currentDataKey);
       continue;
     }

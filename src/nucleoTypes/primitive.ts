@@ -32,6 +32,3 @@ export const NucleoBoolean = {
   }
 };
 
-export const NucleoNull = null;
-export const NucleoUndefined = undefined;
-
