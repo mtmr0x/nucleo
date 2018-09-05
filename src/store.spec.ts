@@ -5,6 +5,7 @@ import {
   NucleoBoolean
 } from './nucleoTypes/primitive'
 import NucleoObject from './nucleoTypes/NucleoObject';
+import NucleoList from './nucleoTypes/NucleoList';
 import { expect } from 'chai';
 import 'mocha';
 
@@ -69,6 +70,16 @@ describe('createStore function dispatch flow', () => {
 
     const { userTest } = cloneStore();
     expect(userTest.name.firstName).to.equal('John');
+  });
+
+  it('should have a NucleoList of NucleoString and dispatch it properly', () => {
+    const contracts = new NucleoObject({
+      name: 'products',
+      fields: {
+        sku: new NucleoList(NucleoString)
+      }
+    });
+    const store = createStore({ products: {  } });
   })
 });
 

@@ -1,5 +1,7 @@
 // TODO: choose a better name for serialize, it doesn't fit perfectly
-export const NucleoString = {
+import { NucleoPrimitiveType } from './../_types/primitiveTypes';
+
+export const NucleoString: NucleoPrimitiveType = {
   Type: 'NucleoString',
   serialize: (value: string):boolean => {
     if (typeof value !== 'string') {
@@ -10,7 +12,7 @@ export const NucleoString = {
   }
 };
 
-export const NucleoNumber = {
+export const NucleoNumber: NucleoPrimitiveType = {
   Type: 'NucleoNumber',
   serialize: (value: number):boolean => {
     if (typeof value !== 'number') {
@@ -21,7 +23,7 @@ export const NucleoNumber = {
   }
 };
 
-export const NucleoBoolean = {
+export const NucleoBoolean: NucleoPrimitiveType = {
   Type: 'NucleoBoolean',
   serialize: (value: boolean):boolean => {
     if (typeof value !== 'boolean') {

@@ -1,11 +1,21 @@
 import { NucleoObjectType } from './../_types/NucleoObjectType';
 import { NucleoListType } from './../_types/NucleoListType';
+import { NucleoPrimitiveType } from './../_types/primitiveTypes';
+
+interface N {
+  name?:string;
+  fields?: any;
+  Type?:string;
+  serialize?:Function;
+};
 
 export default class NucleoList {
-  itemsType: string|number|boolean|NucleoObjectType;
+  _NucleoObject: N;
+  _NucleoPrimitive: N;
 
-  constructor(config: NucleoListType) {
-    this.itemsType = config.itemsType;
+  constructor(config: N) {
+    this._NucleoObject = { name: config.name, fields: config.fields };
+    this._NucleoPrimitive = { Type: config.Type, serialize: config.serialize }
   }
 }
 

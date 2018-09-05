@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const dispatcher_1 = require("./dispatcher");
-const NucleoObjectType_1 = require("./types/NucleoObjectType");
+const NucleoObject_1 = require("./nucleoTypes/NucleoObject");
 let listeners = [];
 function subscribe(listener) {
     if (typeof listener !== 'function') {
@@ -9,8 +9,7 @@ function subscribe(listener) {
     }
     return listeners.push(listener);
 }
-// TODO: should I call it getStoreClone or something like that?
-function getStore(store) {
+function cloneStore(store) {
     return () => {
         return JSON.parse(JSON.stringify(store));
     };
@@ -24,8 +23,8 @@ function createStore(contracts) {
     const contractsKeys = Object.keys(contracts);
     for (let c = 0; c < contractsKeys.length; c++) {
         const current = contracts[contractsKeys[c]];
-        if (!(current instanceof NucleoObjectType_1.default)) {
-            throw Error(`Each contract must be instances of NucleoObjectType. Received ${JSON.stringify(current)}.\nTo understand more, check the documentation about creating a contract in Nucleo here: https://github.com/mtmr0x/nucleo`);
+        if (!(current instanceof NucleoObject_1.default)) {
+            throw Error(`Each contract must be instances of NucleoObject. Received ${JSON.stringify(current)}.\nTo understand more, check the documentation about creating a contract in Nucleo here: https://github.com/mtmr0x/nucleo`);
         }
         const { fields = {} } = current;
         if (__contracts__[current.name]) {
@@ -37,7 +36,7 @@ function createStore(contracts) {
     return {
         dispatch: dispatcher_1.default(__contracts__, __store__),
         subscribe,
-        getStore: getStore(__store__)
+        cloneStore: cloneStore(__store__)
     };
 }
 exports.createStore = createStore;

@@ -1,10 +1,11 @@
 import NucleoObject from './nucleoTypes/NucleoObject';
+import NucleoList from './nucleoTypes/NucleoList';
 
 export default function lawyer(contract: any, data: any) {
-  const contractKeys = Object.keys(contract);
-  const { fields: contractFields } = contract;
-  const dataKeys = Object.keys(data);
-  const contractName = contract.name;
+  const contractKeys:Array<string> = Object.keys(contract);
+  const { fields: contractFields }:any = contract;
+  const dataKeys:Array<string> = Object.keys(data);
+  const contractName:string = contract.name;
   let __errors__: Array<any> =  [];
 
   // loop checking object values comparison
@@ -14,6 +15,10 @@ export default function lawyer(contract: any, data: any) {
     if (contractFields[dataKeys[i]] instanceof NucleoObject) {
       lawyer(contractFields[dataKeys[i]], currentDataKey);
       continue;
+    }
+
+    if (contractFields[dataKeys[i]] instanceof NucleoList) {
+      console.log(contractFields[dataKeys[i]]);
     }
 
     if (!contractFields[dataKeys[i]]) {
@@ -37,6 +42,8 @@ export default function lawyer(contract: any, data: any) {
 
   console.log('> lawyer errors', __errors__);
 
+  // TODO: compare contract with received and every operation be a update, not a rewrite
+  // TODO: actually it's not really necessary either. Side effects of programming late, right?
   return (store:any) => {
     return store[contractName] = data;
   }

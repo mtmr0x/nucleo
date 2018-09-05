@@ -1,6 +1,7 @@
 import { NucleoObjectType } from './NucleoObjectType';
+import { NucleoPrimitiveType } from './primitiveTypes';
 
 export type NucleoListType = {
-  itemsType: string|number|boolean|NucleoObjectType;
+  itemsType: NucleoPrimitiveType
 };
 
