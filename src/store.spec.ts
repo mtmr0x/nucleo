@@ -60,6 +60,21 @@ describe('createStore function errors', () => {
     const d = () => dispatch('userTest')({ age: '23' });
     expect(d).to.throw();
   });
+
+  it('should have a NucleoList of NucleoString and throw for dispatching wrong value type', () => {
+    const productsType = new NucleoObject({
+      name: 'products',
+      fields: {
+        sku: new NucleoList(NucleoString)
+      }
+    });
+    const contracts = { products: productsType };
+    const store = createStore(contracts);
+    const { dispatch, cloneStore } = store;
+
+    const d = () => dispatch('products')({ sku: ['a', 1] });
+    expect(d).to.throw();
+  })
 });
 
 describe('createStore function dispatch flow', () => {
@@ -73,13 +88,19 @@ describe('createStore function dispatch flow', () => {
   });
 
   it('should have a NucleoList of NucleoString and dispatch it properly', () => {
-    const contracts = new NucleoObject({
+    const productsType = new NucleoObject({
       name: 'products',
       fields: {
         sku: new NucleoList(NucleoString)
       }
     });
-    const store = createStore({ products: {  } });
+    const contracts = { products: productsType };
+    const store = createStore(contracts);
+    const { dispatch, cloneStore } = store;
+
+    console.log('store 1', cloneStore().products);
+    dispatch('products')({ sku: ['a', 'b'] });
+    console.log('store 2', cloneStore().products);
   })
 });
 

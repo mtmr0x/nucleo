@@ -1,5 +1,5 @@
 // TODO: choose a better name for serialize, it doesn't fit perfectly
-import { NucleoPrimitiveType } from './../_types/primitiveTypes';
+import { NucleoPrimitiveType } from './../_types/NucleoPrimitiveType';
 
 export const NucleoString: NucleoPrimitiveType = {
   Type: 'NucleoString',

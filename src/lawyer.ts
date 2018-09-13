@@ -1,7 +1,9 @@
 import NucleoObject from './nucleoTypes/NucleoObject';
 import NucleoList from './nucleoTypes/NucleoList';
 
-export default function lawyer(contract: any, data: any) {
+import { NucleoObjectType } from './_types/NucleoObjectType';
+
+export default function lawyer(contract: NucleoObjectType, data: any) {
   const contractKeys:Array<string> = Object.keys(contract);
   const { fields: contractFields }:any = contract;
   const dataKeys:Array<string> = Object.keys(data);
@@ -18,7 +20,8 @@ export default function lawyer(contract: any, data: any) {
     }
 
     if (contractFields[dataKeys[i]] instanceof NucleoList) {
-      console.log(contractFields[dataKeys[i]]);
+      console.log('lawyer', contractFields[dataKeys[i]].getListChildrenType());
+      continue;
     }
 
     if (!contractFields[dataKeys[i]]) {

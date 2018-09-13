@@ -1,6 +1,6 @@
 import { NucleoObjectType } from './../_types/NucleoObjectType';
 import { NucleoListType } from './../_types/NucleoListType';
-import { NucleoPrimitiveType } from './../_types/primitiveTypes';
+import { NucleoPrimitiveType } from './../_types/NucleoPrimitiveType';
 
 interface N {
   name?:string;
@@ -16,6 +16,13 @@ export default class NucleoList {
   constructor(config: N) {
     this._NucleoObject = { name: config.name, fields: config.fields };
     this._NucleoPrimitive = { Type: config.Type, serialize: config.serialize }
+  }
+
+  getListChildrenType = ():string => {
+    if (this._NucleoObject.name) {
+      return 'NucleoObject';
+    }
+    return 'NucleoPrimitive';
   }
 }
 
