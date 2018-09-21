@@ -74,7 +74,51 @@ describe('createStore function errors', () => {
 
     const d = () => dispatch('products')({ sku: ['a', 1] });
     expect(d).to.throw();
-  })
+  });
+
+  it('should have a NucleoList and dispatch it as a non-list and show receive and error', () => {
+    const productsType = new NucleoObject({
+      name: 'products',
+      fields: {
+        sku: new NucleoList(NucleoString)
+      }
+    });
+    const contracts = { products: productsType };
+    const store = createStore(contracts);
+    const { dispatch, cloneStore } = store;
+
+    const d = () => dispatch('products')({ sku: 'a' });
+    expect(d).to.throw();
+  });
+
+  it('should have a NucleoList of NucleoObject and fails at dispatch it because the contract is violated', () => {
+    const productType = new NucleoObject({
+      name: 'product',
+      fields: {
+        title: NucleoString,
+        sku: NucleoString
+      }
+    });
+
+    const productsType = new NucleoObject({
+      name: 'products',
+      fields: {
+        items: new NucleoList(productType)
+      }
+    });
+
+    const contracts = { products: productsType };
+    const store = createStore(contracts);
+    const { dispatch, cloneStore } = store;
+    const items = [
+      { title: 'USB adapter', sku: '1324' },
+      { title: 'USB Type-C adapter', sku: 4321 }
+    ];
+
+    const d = () => dispatch('products')({ items });
+
+    expect(d).to.throw();
+  });
 });
 
 describe('createStore function dispatch flow', () => {
@@ -98,9 +142,38 @@ describe('createStore function dispatch flow', () => {
     const store = createStore(contracts);
     const { dispatch, cloneStore } = store;
 
-    console.log('store 1', cloneStore().products);
     dispatch('products')({ sku: ['a', 'b'] });
-    console.log('store 2', cloneStore().products);
-  })
+
+    expect(JSON.stringify(cloneStore().products.sku)).to.equal(JSON.stringify(['a', 'b']));
+  });
+
+  it('should have a NucleoList of NucleoObject and dispatch it properly', () => {
+    const productType = new NucleoObject({
+      name: 'product',
+      fields: {
+        title: NucleoString,
+        sku: NucleoString
+      }
+    });
+
+    const productsType = new NucleoObject({
+      name: 'products',
+      fields: {
+        items: new NucleoList(productType)
+      }
+    });
+
+    const contracts = { products: productsType };
+    const store = createStore(contracts);
+    const { dispatch, cloneStore } = store;
+    const items = [
+      { title: 'USB adapter', sku: '1324' },
+      { title: 'USB Type-C adapter', sku: '4321' }
+    ];
+
+    dispatch('products')({ items });
+
+    expect(JSON.stringify(cloneStore().products)).to.equal(JSON.stringify({ items }));
+  });
 });
 

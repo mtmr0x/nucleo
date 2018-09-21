@@ -19,9 +19,44 @@ export default function lawyer(contract: NucleoObjectType, data: any) {
       continue;
     }
 
-    if (contractFields[dataKeys[i]] instanceof NucleoList) {
-      console.log('lawyer', contractFields[dataKeys[i]].getListChildrenType());
+    if ((contractFields[dataKeys[i]] instanceof NucleoList) && Array.isArray(currentDataKey)) {
+      const _listItemType = contractFields[dataKeys[i]].getListChildrenType();
+      const _NucleoItemType = contractFields[dataKeys[i]][_listItemType];
+
+      const dataTypeReflection:Function = () => ({
+        NucleoPrimitive: () => {
+          const { serialize, Type } = _NucleoItemType;
+
+          for (let d = 0; d < currentDataKey.length; d++) {
+            if (!serialize(currentDataKey[d])) {
+              __errors__.push({
+                contract: contractName,
+                error: `NucleoList expect to receive ${Type}, but got ${typeof currentDataKey[d]}`
+              });
+            }
+          }
+        },
+        NucleoObject: () => {
+          // TODO: check in NucleoList to this.NucleoObject keep as a instanceof NucleoObject to make this validation here
+          if (_NucleoItemType instanceof NucleoObject) {
+            console.log('OLOCO');
+          }
+          console.log('> Lawyer NucleoList _NucleoItemType', _NucleoItemType);
+          for (let d = 0; d < currentDataKey.length; d++) {
+            lawyer(_NucleoItemType, currentDataKey[d]);
+            console.log('asdf');
+          }
+        },
+      });
+
+      dataTypeReflection()[_listItemType]();
+
       continue;
+    } else if ((contractFields[dataKeys[i]] instanceof NucleoList) && !Array.isArray(currentDataKey)) {
+      __errors__.push({
+        contract: contractName,
+        error: `NucleoList should receive data as list, but got ${typeof currentDataKey}`
+      });
     }
 
     if (!contractFields[dataKeys[i]]) {

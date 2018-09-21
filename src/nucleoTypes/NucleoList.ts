@@ -10,16 +10,16 @@ interface N {
 };
 
 export default class NucleoList {
-  _NucleoObject: N;
-  _NucleoPrimitive: N;
+  NucleoObject: N;
+  NucleoPrimitive: N;
 
   constructor(config: N) {
-    this._NucleoObject = { name: config.name, fields: config.fields };
-    this._NucleoPrimitive = { Type: config.Type, serialize: config.serialize }
+    this.NucleoObject = { name: config.name, fields: config.fields };
+    this.NucleoPrimitive = { Type: config.Type, serialize: config.serialize }
   }
 
   getListChildrenType = ():string => {
-    if (this._NucleoObject.name) {
+    if (this.NucleoObject.name) {
       return 'NucleoObject';
     }
     return 'NucleoPrimitive';
