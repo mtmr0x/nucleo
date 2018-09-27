@@ -2,6 +2,8 @@ import { NucleoObjectType } from './../_types/NucleoObjectType';
 import { NucleoListType } from './../_types/NucleoListType';
 import { NucleoPrimitiveType } from './../_types/NucleoPrimitiveType';
 
+import NucleoObject from './../nucleoTypes/NucleoObject';
+
 interface N {
   name?:string;
   fields?: any;
@@ -10,16 +12,19 @@ interface N {
 };
 
 export default class NucleoList {
-  NucleoObject: N;
+  NucleoObject: NucleoObjectType;
   NucleoPrimitive: N;
 
   constructor(config: N) {
-    this.NucleoObject = { name: config.name, fields: config.fields };
+    if (config instanceof NucleoObject) {
+      this.NucleoObject = config;
+    }
     this.NucleoPrimitive = { Type: config.Type, serialize: config.serialize }
   }
 
   getListChildrenType = ():string => {
-    if (this.NucleoObject.name) {
+    // TODO: oh please, improve this shit
+    if (this.NucleoObject) {
       return 'NucleoObject';
     }
     return 'NucleoPrimitive';

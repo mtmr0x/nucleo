@@ -37,15 +37,12 @@ export default function lawyer(contract: NucleoObjectType, data: any) {
           }
         },
         NucleoObject: () => {
-          // TODO: check in NucleoList to this.NucleoObject keep as a instanceof NucleoObject to make this validation here
           if (_NucleoItemType instanceof NucleoObject) {
-            console.log('OLOCO');
+            for (let d = 0; d < currentDataKey.length; d++) {
+              lawyer(_NucleoItemType, currentDataKey[d]);
+            }
           }
           console.log('> Lawyer NucleoList _NucleoItemType', _NucleoItemType);
-          for (let d = 0; d < currentDataKey.length; d++) {
-            lawyer(_NucleoItemType, currentDataKey[d]);
-            console.log('asdf');
-          }
         },
       });
 
