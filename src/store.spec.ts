@@ -70,7 +70,7 @@ describe('createStore function errors', () => {
     });
     const contracts = { products: productsType };
     const store = createStore(contracts);
-    const { dispatch, cloneStore } = store;
+    const { dispatch, getStore } = store;
 
     const d = () => dispatch('products')({ sku: ['a', 1] });
     expect(d).to.throw();
@@ -85,7 +85,7 @@ describe('createStore function errors', () => {
     });
     const contracts = { products: productsType };
     const store = createStore(contracts);
-    const { dispatch, cloneStore } = store;
+    const { dispatch, getStore } = store;
 
     const d = () => dispatch('products')({ sku: 'a' });
     expect(d).to.throw();
@@ -109,7 +109,7 @@ describe('createStore function errors', () => {
 
     const contracts = { products: productsType };
     const store = createStore(contracts);
-    const { dispatch, cloneStore } = store;
+    const { dispatch, getStore } = store;
     const items = [
       { title: 'USB adapter', sku: '1324' },
       { title: 'USB Type-C adapter', sku: 4321 }
@@ -123,11 +123,11 @@ describe('createStore function errors', () => {
 
 describe('createStore function dispatch flow', () => {
   const newStore = createStore(contracts);
-  const { dispatch, cloneStore } = newStore;
+  const { dispatch, getStore } = newStore;
   it('should dispatch values to store', () => {
     dispatch('userTest')({ name: { firstName: 'John', lastName: 'Doe' } });
 
-    const { userTest } = cloneStore();
+    const { userTest } = getStore();
     expect(userTest.name.firstName).to.equal('John');
   });
 
@@ -140,11 +140,11 @@ describe('createStore function dispatch flow', () => {
     });
     const contracts = { products: productsType };
     const store = createStore(contracts);
-    const { dispatch, cloneStore } = store;
+    const { dispatch, getStore } = store;
 
     dispatch('products')({ sku: ['a', 'b'] });
 
-    expect(JSON.stringify(cloneStore().products.sku)).to.equal(JSON.stringify(['a', 'b']));
+    expect(JSON.stringify(getStore().products.sku)).to.equal(JSON.stringify(['a', 'b']));
   });
 
   it('should have a NucleoList of NucleoObject and dispatch it properly', () => {
@@ -165,7 +165,7 @@ describe('createStore function dispatch flow', () => {
 
     const contracts = { products: productsType };
     const store = createStore(contracts);
-    const { dispatch, cloneStore } = store;
+    const { dispatch, getStore } = store;
     const items = [
       { title: 'USB adapter', sku: '1324' },
       { title: 'USB Type-C adapter', sku: '4321' }
@@ -173,7 +173,7 @@ describe('createStore function dispatch flow', () => {
 
     dispatch('products')({ items });
 
-    expect(JSON.stringify(cloneStore().products)).to.equal(JSON.stringify({ items }));
+    expect(JSON.stringify(getStore().products)).to.equal(JSON.stringify({ items }));
   });
 });
 

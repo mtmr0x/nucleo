@@ -15,9 +15,9 @@ function subscribe(listener: Function) {
   return listeners.push(listener);
 }
 
-function cloneStore(store: any) {
+function getStore(store: any) {
   return () => {
-    return JSON.parse(JSON.stringify(store));
+    return store;
   };
 }
 
@@ -51,7 +51,7 @@ function createStore(contracts: any) {
   return {
     dispatch: dispatch(__contracts__, __store__),
     subscribe,
-    cloneStore: cloneStore(__store__)
+    getStore: getStore(__store__)
   };
 }
 

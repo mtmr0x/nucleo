@@ -42,12 +42,10 @@ export default function lawyer(contract: NucleoObjectType, data: any) {
               lawyer(_NucleoItemType, currentDataKey[d]);
             }
           }
-          console.log('> Lawyer NucleoList _NucleoItemType', _NucleoItemType);
         },
       });
 
       dataTypeReflection()[_listItemType]();
-
       continue;
     } else if ((contractFields[dataKeys[i]] instanceof NucleoList) && !Array.isArray(currentDataKey)) {
       __errors__.push({
@@ -75,10 +73,6 @@ export default function lawyer(contract: NucleoObjectType, data: any) {
     throw Error(JSON.stringify({ errors: __errors__ }));
   }
 
-  console.log('> lawyer errors', __errors__);
-
-  // TODO: compare contract with received and every operation be a update, not a rewrite
-  // TODO: actually it's not really necessary either. Side effects of programming late, right?
   return (store:any) => {
     return store[contractName] = data;
   }

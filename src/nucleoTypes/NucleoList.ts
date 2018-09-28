@@ -6,7 +6,7 @@ import NucleoObject from './../nucleoTypes/NucleoObject';
 
 interface N {
   name?:string;
-  fields?: any;
+  fields?:any;
   Type?:string;
   serialize?:Function;
 };
