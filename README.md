@@ -24,7 +24,7 @@ yadn add nucleo
 
 ## Usage
 
-Defining a data model (contract):
+### Defining a data model (contract):
 
 ```javascript
 import {
@@ -62,7 +62,7 @@ const contracts = {
 }
 ```
 
-Creating the store:
+### Creating the store:
 
 ```javascript
 import { createStore } from 'nucleo';
@@ -71,15 +71,31 @@ const store = createStore(contracts); // send contracts to create the store
 const { dispatch, update, getStore, subscribe } = store; // these 4 functions are returned from store creation
 ```
 
-Dispatching and updating the store:
+### Dispatching and updating the store:
+
+Nucleo provides two methods of saving data, used for different approaches.
+
+**dispatch:** works for saving data according to the full contract, used to save the very first contract state in the store or to update the whole contract in the store;
+
+**update:** works for updating parts of data, it performs a index search in the object and save it. `update` will fail if you try to first save a contract to the store using it.
+
+---
+
+Dispatch function, considering user contract above:
 
 ```javascript
 
-const userNewData = {
-  
-}
+dispatch('user', { name: { firstName: 'John', lastName: 'Nor' } });
+// it'll fail because it's missing age field
 
-dispatch('user', { name: { fir } })
+dispatch('user', { name: { firstName: 'John', lastName: 'Nor' }, age: 27 });
+// it'll save the data to store properly
+```
 
+Update function, considering user contract above:
+
+```javascript
+update('user', { name: { firstName: 'John' }});
+// it'll update only the user first name and only if this item has been already created in the store before
 ```
 
