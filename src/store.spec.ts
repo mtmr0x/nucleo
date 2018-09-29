@@ -123,7 +123,26 @@ describe('createStore function errors', () => {
 
 describe('createStore function dispatch flow', () => {
   const newStore = createStore(contracts);
-  const { dispatch, getStore } = newStore;
+  const { dispatch, getStore, subscribe } = newStore;
+  it('should subscribe and listeners be properly executed', () => {
+    type listenerObjectArgumentType = {
+      contractName: string
+    };
+
+    let value:Array<listenerObjectArgumentType> = [];
+
+    function myListener(obj:listenerObjectArgumentType) {
+      return value.push(obj);
+    }
+
+    subscribe(myListener);
+
+    dispatch('userTest')({ name: { firstName: 'John', lastName: 'Doe' }, age: 27 });
+    dispatch('userTest')({ name: { firstName: 'John', lastName: 'Doe' }, age: 28 });
+
+    expect(value.length).to.equal(2);
+  });
+
   it('should dispatch values to store', () => {
     dispatch('userTest')({ name: { firstName: 'John', lastName: 'Doe' } });
 

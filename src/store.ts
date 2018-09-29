@@ -1,7 +1,7 @@
 import dispatch from './dispatcher';
 import NucleoObject from './nucleoTypes/NucleoObject';
 
-let listeners: Array<Function | void> = [];
+let listeners: Array<Function> = [];
 
 type ModelType = {
   name: string,
@@ -49,7 +49,7 @@ function createStore(contracts: any) {
   }
 
   return {
-    dispatch: dispatch(__contracts__, __store__),
+    dispatch: dispatch(__contracts__, __store__, listeners),
     subscribe,
     getStore: getStore(__store__)
   };

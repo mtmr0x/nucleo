@@ -3,6 +3,12 @@ import NucleoList from './nucleoTypes/NucleoList';
 
 import { NucleoObjectType } from './_types/NucleoObjectType';
 
+function executeListeners(contractName: string, listeners: Array<Function>) {
+  for (let i = 0; i < listeners.length; i++) {
+    listeners[i]({ contractName });
+  }
+}
+
 export default function lawyer(contract: NucleoObjectType, data: any) {
   const contractKeys:Array<string> = Object.keys(contract);
   const { fields: contractFields }:any = contract;
@@ -73,8 +79,9 @@ export default function lawyer(contract: NucleoObjectType, data: any) {
     throw Error(JSON.stringify({ errors: __errors__ }));
   }
 
-  return (store:any) => {
-    return store[contractName] = data;
+  return (store:any, listeners:Array<Function>) => {
+    store[contractName] = data;
+    return executeListeners(contractName, listeners);
   }
 }
 
