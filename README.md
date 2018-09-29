@@ -99,3 +99,17 @@ update('user', { name: { firstName: 'John' }});
 // it'll update only the user first name and only if this item has been already created in the store before
 ```
 
+### Subscribing to changes
+
+You can simply subscribe to store changes by passing your listener functions to `subscribe` function. The listener must be a function and Nucleo will execute your listener sending an object argument with the updated contract for each update or dispatch to the store:
+
+```javascript
+subscribe(listener); // if it's not a function, Nucleo will throw an error
+```
+
+And inside Nucleo, your listener will be executed like this:
+
+```javascript
+listener({ contractName }); // This way you can understand better what was updated and consult Nucleo store as you wish
+```
+
