@@ -10,11 +10,16 @@ function executeListeners(contractName: string, listeners: Array<Function>) {
 }
 
 export default function lawyer(contract: NucleoObjectType, data: any) {
-  const contractKeys:Array<string> = Object.keys(contract);
   const { fields: contractFields }:any = contract;
   const dataKeys:Array<string> = Object.keys(data);
   const contractName:string = contract.name;
-  let __errors__: Array<any> =  [];
+  let __errors__: Array<any> = [];
+
+  if (dataKeys.length !== Object.keys(contractFields).length) {
+    throw Error(
+      `In dispatch, the dispatched data and the contract must match in every level. For changing just few values from ${contractName} contract, use update() method.`
+    );
+  }
 
   // loop checking object values comparison
   for (let i = 0; dataKeys.length > i; i++) {

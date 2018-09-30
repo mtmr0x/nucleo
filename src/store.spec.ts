@@ -144,7 +144,7 @@ describe('createStore function dispatch flow', () => {
   });
 
   it('should dispatch values to store', () => {
-    dispatch('userTest')({ name: { firstName: 'John', lastName: 'Doe' } });
+    dispatch('userTest')({ name: { firstName: 'John', lastName: 'Doe' }, age: 29 });
 
     const { userTest } = getStore();
     expect(userTest.name.firstName).to.equal('John');
