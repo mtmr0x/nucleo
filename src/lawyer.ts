@@ -15,9 +15,9 @@ export default function lawyer(contract: NucleoObjectType, data: any, saveMethod
   const contractName:string = contract.name;
   let __errors__: Array<any> = [];
 
-  if (dataKeys.length !== Object.keys(contractFields).length) {
+  if (dataKeys.length !== Object.keys(contractFields).length && saveMethod === 'dispatch') {
     throw Error(
-      `In dispatch, the dispatched data and the contract must match in every level. For changing just few values from ${contractName} contract, use update() method.`
+      `Fata error: In dispatch, the dispatched data and the contract must match in every level. For changing just few values from ${contractName} contract, use update() method.`
     );
   }
 
