@@ -121,6 +121,7 @@ Considering Nucleo is strongly typed and is designed to run in a client side env
 
 ```javascript
 {
+  status:  'NOK',
   errors: [
     {
       error: '<some key> is not in <some contract> contract and can not be saved in store',
@@ -152,20 +153,29 @@ const userType = new NucleoObject({
   }
 });
 
-const data = update('user', { age: 140 });
+const dispatcher = update('user', { age: 140 });
 
-console.log(data.error); // here you'll find the error below:
+console.log(dispatcher.error); // here you'll find the error below:
 /*
 
   [
     {
-      error: 'age is not in user contract and can not be saved in store',
+      error: 'age field does not match its rules according to user contract',
       contract: 'user',
       field: 'age'
     }
   ]
 }
 */
+```
 
+In cases with no errors, `errors` list will be an empty list and `status` will be `OK`
+
+```javascript
+{
+  status: 'OK',
+  errors: []
+  data: { ... } // the data you just tried to save in store
+}
 ```
 

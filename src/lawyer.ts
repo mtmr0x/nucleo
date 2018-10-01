@@ -75,18 +75,28 @@ export default function lawyer(contract: NucleoObjectType, data: any, saveMethod
     if (contractFields[dataKeys[i]] && !contractFields[dataKeys[i]].serialize(currentDataKey)) {
       __errors__.push({
         contract: contractName,
-        error: `${dataKeys[i]} field was expected as ${contractFields[dataKeys[i]].Type} but got ${typeof currentDataKey}`
+        field: contractFields[dataKeys[i]],
+        error: `${dataKeys[i]} does not match its rules according to ${contractName} contract`
       });
     }
   }
 
+  let operationStatus:''|'NOK'|'OK' = '';
   if (__errors__.length) {
-    throw Error(JSON.stringify({ errors: __errors__ }));
+    operationStatus = 'NOK';
+  } else {
+    operationStatus = 'OK';
   }
 
   return (store:any, listeners:Array<Function>) => {
     store[contractName] = data;
-    return executeListeners(contractName, listeners);
+    executeListeners(contractName, listeners);
+
+    return {
+      status: operationStatus,
+      errors: __errors__,
+      data,
+    }
   }
 }
 
