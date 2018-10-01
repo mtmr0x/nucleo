@@ -22,7 +22,7 @@ Using Yarn:
 yadn add nucleo
 ```
 
-## Usage
+## Basic usage
 
 ### Defining a data model (contract):
 
@@ -111,5 +111,61 @@ And inside Nucleo, your listener will be executed like this:
 
 ```javascript
 listener({ contractName }); // This way you can understand better what was updated and consult Nucleo store as you wish
+```
+
+## Error management
+
+Considering Nucleo is strongly typed and is designed to run in a client side environment, errors might be tricky to handle in how your user is inputting data and Nucleo is also designed to make sure your rules will work out and your user can make mistakes.
+
+`dispatch` and `update` methods return an object containing the following structure:
+
+```javascript
+{
+  errors: [
+    {
+      error: '<some key> is not in <some contract> contract and can not be saved in store',
+      contract: 'contractName',
+      field: 'fieldName'
+    }
+  ],
+  data: { ... } // the data you just tried to save in store
+}
+```
+
+Let's go deep into an example using a Nucleo custom primitive type with an inferred rule:
+
+```javascript
+import { 
+  NucleoString,
+  NucleoObject
+} from 'nucleo-js';
+
+const ageRule = (value) => {
+  return value < 100; // you defined here that age can not be higher than 100
+}
+
+const userType = new NucleoObject({
+  name: 'user',
+  fields: {
+    name: NucleoString(),
+    age: NucleoString(ageRule)
+  }
+});
+
+const data = update('user', { age: 140 });
+
+console.log(data.error); // here you'll find the error below:
+/*
+
+  [
+    {
+      error: 'age is not in user contract and can not be saved in store',
+      contract: 'user',
+      field: 'age'
+    }
+  ]
+}
+*/
+
 ```
 
