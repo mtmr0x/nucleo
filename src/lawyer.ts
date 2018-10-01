@@ -9,7 +9,7 @@ function executeListeners(contractName: string, listeners: Array<Function>) {
   }
 }
 
-export default function lawyer(contract: NucleoObjectType, data: any) {
+export default function lawyer(contract: NucleoObjectType, data: any, saveMethod:'update'|'dispatch') {
   const { fields: contractFields }:any = contract;
   const dataKeys:Array<string> = Object.keys(data);
   const contractName:string = contract.name;
@@ -26,7 +26,7 @@ export default function lawyer(contract: NucleoObjectType, data: any) {
     const currentDataKey = data[dataKeys[i]];
     // recursion to call itself when is NucleoObject instance
     if (contractFields[dataKeys[i]] instanceof NucleoObject) {
-      lawyer(contractFields[dataKeys[i]], currentDataKey);
+      lawyer(contractFields[dataKeys[i]], currentDataKey, saveMethod);
       continue;
     }
 
@@ -50,7 +50,7 @@ export default function lawyer(contract: NucleoObjectType, data: any) {
         NucleoObject: () => {
           if (_NucleoItemType instanceof NucleoObject) {
             for (let d = 0; d < currentDataKey.length; d++) {
-              lawyer(_NucleoItemType, currentDataKey[d]);
+              lawyer(_NucleoItemType, currentDataKey[d], saveMethod);
             }
           }
         },

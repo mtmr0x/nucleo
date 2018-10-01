@@ -1,4 +1,4 @@
-import dispatch from './dispatcher';
+import save from './save';
 import NucleoObject from './nucleoTypes/NucleoObject';
 
 let listeners: Array<Function> = [];
@@ -49,7 +49,8 @@ function createStore(contracts: any) {
   }
 
   return {
-    dispatch: dispatch(__contracts__, __store__, listeners),
+    dispatch: save({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'dispatch' }),
+    update: save({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'update' }),
     subscribe,
     getStore: getStore(__store__)
   };
