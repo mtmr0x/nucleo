@@ -1,6 +1,6 @@
 {
   "name": "super-cool-data-tool",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "src/index.js",
   "author": "Matheus Marsiglio <matmarsiglio@gmail.com>",
   "license": "MIT",

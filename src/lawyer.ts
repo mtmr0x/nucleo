@@ -3,11 +3,20 @@ import NucleoList from './nucleoTypes/NucleoList';
 
 import { NucleoObjectType } from './_types/NucleoObjectType';
 
-function executeListeners(contractName: string, listeners: Array<Function>) {
+const  executeListeners = (contractName: string, listeners: Array<Function>) => {
   for (let i = 0; i < listeners.length; i++) {
     listeners[i]({ contractName });
   }
-}
+};
+
+const saveMethodReflection = (store: any, contractName: string) => ({
+  dispatch: (data: any) => {
+    return store[contractName] = data;
+  },
+  update: (data: any) => {
+    return store[contractName] = Object.assign(store[contractName], data);
+  }
+});
 
 export default function lawyer(contract: NucleoObjectType, data: any, saveMethod:'update'|'dispatch') {
   const { fields: contractFields }:any = contract;
@@ -89,7 +98,7 @@ export default function lawyer(contract: NucleoObjectType, data: any, saveMethod
   }
 
   return (store:any, listeners:Array<Function>) => {
-    store[contractName] = data;
+    saveMethodReflection(store, contractName)[saveMethod](data);
     executeListeners(contractName, listeners);
 
     return {
