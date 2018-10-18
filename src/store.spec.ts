@@ -71,9 +71,11 @@ describe('createStore function errors', () => {
     const contracts = { products: productsType };
     const store = createStore(contracts);
     const { dispatch, getStore } = store;
+    const firstDispatch = dispatch('products')({ sku: ['a', 'b'] });
+    const { errors, data } = dispatch('products')({ sku: ['a', 1] });
 
-    const d = () => dispatch('products')({ sku: ['a', 1] });
-    expect(d).to.throw();
+    expect(errors.length).to.equal(1);
+    expect(JSON.stringify(getStore().products)).to.equal('{"sku":["a","b"]}');
   });
 
   it('should have a NucleoList and dispatch it as a non-list and show receive and error', () => {
@@ -86,9 +88,9 @@ describe('createStore function errors', () => {
     const contracts = { products: productsType };
     const store = createStore(contracts);
     const { dispatch, getStore } = store;
+    const { errors } = dispatch('products')({ sku: 'a' });
 
-    const d = () => dispatch('products')({ sku: 'a' });
-    expect(d).to.throw();
+    expect(errors.length).to.equal(1);
   });
 
   it('should have a NucleoList of NucleoObject and fails at dispatch it because the contract is violated', () => {
@@ -115,9 +117,8 @@ describe('createStore function errors', () => {
       { title: 'USB Type-C adapter', sku: 4321 }
     ];
 
-    const d = () => dispatch('products')({ items });
-
-    expect(d).to.throw();
+    const { errors } = dispatch('products')({ items });
+    expect(errors.length).to.equal(1);
   });
 });
 

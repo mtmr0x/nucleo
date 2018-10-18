@@ -1,6 +1,26 @@
 // TODO: choose a better name for serialize, it doesn't fit perfectly
 import { NucleoPrimitiveType } from './../_types/NucleoPrimitiveType';
 
+// class NucleoCustomPrimitive {
+//   Type: string;
+//   userFormatValidation: Function|void;
+//   nativeType: string;
+//
+//   serialize(value:string|number|boolean):boolean {
+//     if (typeof value !== this.nativeType || this.formatValidation()) {
+//       return false;
+//     }
+//     return true;
+//   }
+//
+//   formatValidation():boolean {
+//     if (this.userFormatValidation) {
+//       return this.userFormatValidation();
+//     }
+//     return false;
+//   }
+// }
+
 export const NucleoString: NucleoPrimitiveType = {
   Type: 'NucleoString',
   serialize: (value: string):boolean => {
@@ -33,4 +53,31 @@ export const NucleoBoolean: NucleoPrimitiveType = {
     return true;
   }
 };
+
+// export class NucleoString extends NucleoCustomPrimitive {
+//   constructor(userFormatValidation:Function|void) {
+//     super();
+//     this.Type = 'NucleoString';
+//     this.nativeType = 'string';
+//     this.userFormatValidation = userFormatValidation;
+//   }
+// }
+//
+// export class NucleoNumber extends NucleoCustomPrimitive {
+//   constructor(userFormatValidation:Function|void) {
+//     super();
+//     this.Type = 'NucleoNumber';
+//     this.nativeType = 'number';
+//     this.userFormatValidation = userFormatValidation;
+//   }
+// }
+//
+// export class NucleoBoolean extends NucleoCustomPrimitive {
+//   constructor(userFormatValidation:Function|void) {
+//     super();
+//     this.Type = 'NucleoBoolean';
+//     this.nativeType = 'boolean';
+//     this.userFormatValidation = userFormatValidation;
+//   }
+// }
 

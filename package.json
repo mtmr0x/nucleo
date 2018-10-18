@@ -1,6 +1,6 @@
 {
   "name": "super-cool-data-tool",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "src/index.js",
   "author": "Matheus Marsiglio <matmarsiglio@gmail.com>",
   "license": "MIT",
@@ -17,7 +17,8 @@
   "scripts": {
     "start": "ts-node ./src/index.ts",
     "nodemon": "nodemon",
-    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "tests": "mocha -r ts-node/register src/**/*.spec.ts",
+    "test": "mocha -r ts-node/register",
     "compile": "tsc"
   }
 }

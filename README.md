@@ -59,7 +59,7 @@ const productsContract = new NucleoObject({
 const contracts = {
   user: userContract,
   products: productsContract
-}
+};
 ```
 
 ### Creating the store:
@@ -85,17 +85,17 @@ Dispatch function, considering user contract above:
 
 ```javascript
 
-dispatch('user', { name: { firstName: 'John', lastName: 'Nor' } });
+dispatch('user')({ name: { firstName: 'John', lastName: 'Nor' } });
 // it'll fail because it's missing age field
 
-dispatch('user', { name: { firstName: 'John', lastName: 'Nor' }, age: 27 });
+dispatch('user')({ name: { firstName: 'John', lastName: 'Nor' }, age: 27 });
 // it'll save the data to store properly
 ```
 
 Update function, considering user contract above:
 
 ```javascript
-update('user', { name: { firstName: 'John' }});
+update('user')({ name: { firstName: 'John' }});
 // it'll update only the user first name and only if this item has been already created in the store before
 ```
 
@@ -115,9 +115,7 @@ listener({ contractName }); // This way you can understand better what was updat
 
 ## Error management
 
-Considering Nucleo is strongly typed and is designed to run in a client side environment, errors might be tricky to handle in how your user is inputting data and Nucleo is also designed to make sure your rules will work out and your user can make mistakes.
-
-`dispatch` and `update` methods return an object containing the following structure:
+Nucleo makes error management easy by type checking every level of contracts and returning an Object human and machine readable. The `update` and `dispatch` methods return an object with the following structure:
 
 ```javascript
 {
@@ -133,7 +131,7 @@ Considering Nucleo is strongly typed and is designed to run in a client side env
 }
 ```
 
-Let's go deep into an example using a Nucleo custom primitive type with an inferred rule:
+Code example:
 
 ```javascript
 import { 
@@ -141,21 +139,22 @@ import {
   NucleoObject
 } from 'nucleo-js';
 
-const ageRule = (value) => {
-  return value < 100; // you defined here that age can not be higher than 100
-}
-
 const userType = new NucleoObject({
   name: 'user',
   fields: {
-    name: NucleoString(),
-    age: NucleoString(ageRule)
+    name: NucleoString,
   }
 });
 
-const dispatcher = update('user', { age: 140 });
+const contracts = {
+  user: userType
+};
 
-console.log(dispatcher.error); // here you'll find the error below:
+const { update } = createStore(contracts); // send contracts to create the store
+
+const user = update('user')({ age: 140 });
+
+console.log(user.errors); // here you'll find the error below:
 /*
 
   [
