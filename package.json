@@ -1,7 +1,7 @@
 {
-  "name": "super-cool-data-tool",
-  "version": "0.2.0",
-  "main": "src/index.js",
+  "name": "Nucleo-js",
+  "version": "0.2.1",
+  "main": "dist/index.js",
   "author": "Matheus Marsiglio <matmarsiglio@gmail.com>",
   "license": "MIT",
   "private": false,
