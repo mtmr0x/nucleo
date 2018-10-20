@@ -31,7 +31,7 @@ import {
   NucleoString,
   NucleoNumber,
   NucleoObject
-} from 'nucleo'
+} from 'nucleojs'
 
 const completeNameContract = new NucleoObject({
   name: 'completeNameContract',
@@ -65,7 +65,7 @@ const contracts = {
 ### Creating the store:
 
 ```javascript
-import { createStore } from 'nucleo';
+import { createStore } from 'nucleojs';
 
 const store = createStore(contracts); // send contracts to create the store
 const { dispatch, update, getStore, subscribe } = store; // these 4 functions are returned from store creation
@@ -137,7 +137,7 @@ Code example:
 import { 
   NucleoString,
   NucleoObject
-} from 'nucleo-js';
+} from 'nucleojs';
 
 const userType = new NucleoObject({
   name: 'user',
