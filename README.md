@@ -13,13 +13,13 @@ JavaScript is a really dynamic language which we can't always rely in the langua
 Using NPM:
 
 ```
-npm i nucleo
+npm i nucleojs
 ```
 
 Using Yarn:
 
 ```
-yadn add nucleo
+yarn add nucleojs
 ```
 
 ## Basic usage
