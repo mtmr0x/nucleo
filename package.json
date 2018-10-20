@@ -1,6 +1,6 @@
 {
-  "name": "Nucleo-js",
-  "version": "0.2.1",
+  "name": "nucleojs",
+  "version": "0.2.2",
   "main": "dist/index.js",
   "author": "Matheus Marsiglio <matmarsiglio@gmail.com>",
   "license": "MIT",
