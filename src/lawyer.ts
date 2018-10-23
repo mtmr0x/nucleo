@@ -14,10 +14,8 @@ const indexSearch = (contractData: any, data: any, newData:any = {}) => {
   const contractDataKeys = Object.keys(contractData);
 
   for (let i = 0; contractDataKeys.length > i; i++) {
-    // reflection for appending data to newData
     const dataTypeReflection = () => ({
       'object': () => {
-        // if current data is object, recusirvely call indexSearch
         const bufferData = data[contractDataKeys[i]] || contractData[contractDataKeys[i]];
         newData[contractDataKeys[i]] = {}
         return indexSearch(contractData[contractDataKeys[i]], bufferData, newData[contractDataKeys[i]]);
@@ -29,10 +27,12 @@ const indexSearch = (contractData: any, data: any, newData:any = {}) => {
         return newData[contractDataKeys[i]] = contractData[contractDataKeys[i]];
       }
     });
+
     if (typeof contractData[contractDataKeys[i]] === 'object') {
       dataTypeReflection()['object']();
       continue;
     }
+
     dataTypeReflection()['primitive']();
   }
 
@@ -71,10 +71,8 @@ export default function lawyer({
     );
   }
 
-  // loop object values comparison
   for (let i = 0; dataKeys.length > i; i++) {
     const currentDataKey = data[dataKeys[i]];
-    // REGION NucleoObject
     if (contractFields[dataKeys[i]] instanceof NucleoObject) {
       lawyer({
         contract: contractFields[dataKeys[i]],
@@ -84,9 +82,7 @@ export default function lawyer({
       });
       continue;
     }
-    // END REGION NucleoObject
 
-    // REGION NucleoList
     if ((contractFields[dataKeys[i]] instanceof NucleoList) && Array.isArray(currentDataKey)) {
       const _listItemType = contractFields[dataKeys[i]].getListChildrenType();
       const _NucleoItemType = contractFields[dataKeys[i]][_listItemType];
@@ -126,9 +122,7 @@ export default function lawyer({
         error: `NucleoList should receive data as list, but got ${typeof currentDataKey}`
       });
     }
-    // END REGION NucleoList
 
-    // REGION primitive types validation
     if (!contractFields[dataKeys[i]]) {
       __errors__.push({
         contract: contractName,
@@ -143,7 +137,6 @@ export default function lawyer({
         error: `${dataKeys[i]} does not match its rules according to ${contractName} contract`
       });
     }
-    // END REGION primitive types validation
   }
 
   let operationStatus:''|'NOK'|'OK' = '';

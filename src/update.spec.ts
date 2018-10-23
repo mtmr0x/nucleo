@@ -58,11 +58,29 @@ describe('Update method', () => {
     }
   });
 
+  const userAddressType = new NucleoObject({
+    name: 'userAddressType',
+    fields: {
+      street: NucleoString,
+      streetNumber: NucleoString,
+      complement: NucleoString
+    }
+  });
+
+  const userLocationType = new NucleoObject({
+    name: 'userLocationType',
+    fields: {
+      city: NucleoString,
+      address: userAddressType
+    }
+  });
+
   const userType = new NucleoObject({
     name: 'user',
     fields: {
       name: completeNameType,
-      age: NucleoNumber
+      age: NucleoNumber,
+      location: userLocationType
     }
   });
   const contracts = { user: userType };
@@ -72,19 +90,40 @@ describe('Update method', () => {
   it('should dispatch only one property in deeper levels and just this property should be updated in store', () => {
     const d = dispatch('user')({
       name: { firstName: 'John', lastName: 'Doe' },
+      location: {
+        city: 'NY',
+        address: {
+          street: '9 avenue',
+          streetNumber: '678',
+          complement:  ''
+        }
+      },
       age: 27
     });
 
-    const { errors, data } = update('user')({ name: { firstName: 'matheus' } });
-    expect(getStore().user.name.firstName).to.equal('matheus');
+    const { errors, data } = update('user')({ name: { firstName: 'Joseph' } });
+    expect(getStore().user.name.firstName).to.equal('Joseph');
     expect(getStore().user.name.lastName).to.equal('Doe');
     expect(getStore().user.age).to.equal(27);
   });
   it('should dispatch only one property in first level and just this property should be updated in store', () => {
     const { errors, data } = update('user')({ age: 18 });
 
-    expect(getStore().user.name.firstName).to.equal('matheus');
+    expect(getStore().user.name.firstName).to.equal('Joseph');
     expect(getStore().user.name.lastName).to.equal('Doe');
     expect(getStore().user.age).to.equal(18);
   });
+
+  it('should dispatch a value to a deeper level and save it properly', () => {
+    const d = update('user')({ location: { address: { complement: 'apartment 2' } } });
+
+    expect(getStore().user.name.firstName).to.equal('Joseph');
+    expect(getStore().user.name.lastName).to.equal('Doe');
+    expect(getStore().user.age).to.equal(18);
+    expect(getStore().user.location.city).to.equal('NY');
+    expect(getStore().user.location.address.street).to.equal('9 avenue');
+    expect(getStore().user.location.address.streetNumber).to.equal('678');
+    expect(getStore().user.location.address.complement).to.equal('apartment 2');
+  });
 });
+

@@ -1,8 +1,8 @@
 # Nucleo
 
-Nucleo creates and manages a strongly typed and predictable state container free of dependencies. It was built in TypeScript for be ran in any JavaScript ecosystem.
+Nucleo creates and manages a strongly typed and predictable state container.
 
-> Important note: This project is still under development. It's not recommended for production use yet, despite Nucleo basic functionalities are checked as done.
+> Important note: This project is still under development. It's not recommended for production use yet. Some bug fixes are being worked on and we're improving documentation and tests to make sure everything is running as expected.
 
 ## Roadmap
 
