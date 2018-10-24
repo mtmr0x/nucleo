@@ -50,7 +50,7 @@ const completeNameContract = new NucleoObject({
 const userContract = new NucleoObject({
   name: 'user', // don't need to be the same name as the variable, but need to be unique
   fields: {
-    name: completeNameType,
+    name: completeNameContract,
     age: NucleoNumber
   }
 });
@@ -140,7 +140,7 @@ Nucleo makes error management easy by type checking every level of contracts and
 Code example:
 
 ```javascript
-import { 
+import {
   NucleoString,
   NucleoObject
 } from 'nucleojs';
