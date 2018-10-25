@@ -2,42 +2,13 @@ import NucleoObject from './nucleoTypes/NucleoObject';
 import NucleoList from './nucleoTypes/NucleoList';
 
 import { NucleoObjectType } from './_types/NucleoObjectType';
+import indexSearch from './indexSearch';
 
 const executeListeners = (contractName: string, listeners: Array<Function>) => {
   for (let i = 0; i < listeners.length; i++) {
     listeners[i]({ contractName });
   }
 };
-
-const indexSearch = (contractData: any, data: any, newData:any = {}) => {
-  const dataKeys = Object.keys(data);
-  const contractDataKeys = Object.keys(contractData);
-
-  for (let i = 0; contractDataKeys.length > i; i++) {
-    const dataTypeReflection = () => ({
-      'object': () => {
-        const bufferData = data[contractDataKeys[i]] || contractData[contractDataKeys[i]];
-        newData[contractDataKeys[i]] = {}
-        return indexSearch(contractData[contractDataKeys[i]], bufferData, newData[contractDataKeys[i]]);
-      },
-      'primitive': () => {
-        if (data[contractDataKeys[i]]) {
-          return newData[contractDataKeys[i]] = data[contractDataKeys[i]];
-        }
-        return newData[contractDataKeys[i]] = contractData[contractDataKeys[i]];
-      }
-    });
-
-    if (typeof contractData[contractDataKeys[i]] === 'object') {
-      dataTypeReflection()['object']();
-      continue;
-    }
-
-    dataTypeReflection()['primitive']();
-  }
-
-  return newData;
-}
 
 const saveMethodReflection = (store: any, contractName: string) => ({
   dispatch: (data: any) => {
@@ -73,6 +44,7 @@ export default function lawyer({
 
   for (let i = 0; dataKeys.length > i; i++) {
     const currentDataKey = data[dataKeys[i]];
+
     if (contractFields[dataKeys[i]] instanceof NucleoObject) {
       lawyer({
         contract: contractFields[dataKeys[i]],
@@ -103,6 +75,15 @@ export default function lawyer({
         NucleoObject: () => {
           if (_NucleoItemType instanceof NucleoObject) {
             for (let d = 0; d < currentDataKey.length; d++) {
+              if (Object.keys(currentDataKey[d]).length !== Object.keys(_NucleoItemType.fields).length) {
+                __errors__.push({
+                  contract: _NucleoItemType.name,
+                  error: 'You can not update a NucleoList of NucleoObject without its data according to contract in every level'
+                });
+
+                continue;
+              }
+
               lawyer({
                 contract: _NucleoItemType,
                 data: currentDataKey[d],
