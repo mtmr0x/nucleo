@@ -19,7 +19,7 @@ JavaScript is a really dynamic language which we can't always rely in the langua
 Using NPM:
 
 ```
-npm i nucleojs
+npm install nucleojs --save
 ```
 
 Using Yarn:
@@ -27,6 +27,25 @@ Using Yarn:
 ```
 yarn add nucleojs
 ```
+
+## Documentation
+
+The links below take you to our `API_DOCUMENTATION.md` file present in this repository with deeper information and documentation to Nucleo usage.
+
+- [Installation](API_DOCUMENTATION.md#installation)
+- [Usage](API_DOCUMENTATION.md#usage)
+- [Contracts](API_DOCUMENTATION.md#contracts)
+- [Types](API_DOCUMENTATION.md#types)
+  - [NucleoObject](API_DOCUMENTATION.md#creating-nucleoobject)
+  - [NucleoList](API_DOCUMENTATION.md#creating-nucleolist)
+  - [NucleoString](API_DOCUMENTATION.md#creating-nucleostring)
+  - [NucleoNumber](API_DOCUMENTATION.md#creating-nucleonumber)
+  - [NucleoBoolean](API_DOCUMENTATION.md#creating-nucleoboolean)
+- [Creating the store](API_DOCUMENTATION.md#creating-the-store)
+- [Dispatching and updating the store](API_DOCUMENTATION.md#dispatching-and-updating-the-store)
+- [Get contracts in store](API_DOCUMENTATION.md#get-contracts-in-store)
+- [Subscribing to changes](API_DOCUMENTATION.md#subscribing-to-changes)
+- [Error management](API_DOCUMENTATION.md#error-management)
 
 ## Basic usage
 
@@ -66,122 +85,6 @@ const contracts = {
   user: userContract,
   products: productsContract
 };
-```
-
-### Creating the store:
-
-```javascript
-import { createStore } from 'nucleojs';
-
-const store = createStore(contracts); // send contracts to create the store
-const { dispatch, update, getStore, subscribe } = store; // these 4 functions are returned from store creation
-```
-
-### Dispatching and updating the store:
-
-Nucleo provides two methods of saving data, used for different approaches.
-
-**dispatch:** works for saving data according to the full contract, used to save the very first contract state in the store or to update the whole contract in the store;
-
-**update:** works for updating parts of data, it performs a index search in the object and save it. `update` will fail if you try to first save a contract to the store using it.
-
----
-
-Dispatch function, considering user contract above:
-
-```javascript
-
-dispatch('user')({ name: { firstName: 'John', lastName: 'Nor' } });
-// it'll fail because it's missing age field
-
-dispatch('user')({ name: { firstName: 'John', lastName: 'Nor' }, age: 27 });
-// it'll save the data to store properly
-```
-
-Update function, considering user contract above:
-
-```javascript
-update('user')({ name: { firstName: 'John' }});
-// it'll update only the user first name and only if this item has been already created in the store before
-```
-
-### Subscribing to changes
-
-You can simply subscribe to store changes by passing your listener functions to `subscribe` function. The listener must be a function and Nucleo will execute your listener sending an object argument with the updated contract for each update or dispatch to the store:
-
-```javascript
-subscribe(listener); // if it's not a function, Nucleo will throw an error
-```
-
-And inside Nucleo, your listener will be executed like this:
-
-```javascript
-listener({ contractName }); // This way you can understand better what was updated and consult Nucleo store as you wish
-```
-
-## Error management
-
-Nucleo makes error management easy by type checking every level of contracts and returning an Object human and machine readable. The `update` and `dispatch` methods return an object with the following structure:
-
-```javascript
-{
-  status:  'NOK',
-  errors: [
-    {
-      error: '<some key> is not in <some contract> contract and can not be saved in store',
-      contract: 'contractName',
-      field: 'fieldName'
-    }
-  ],
-  data: { ... } // the data you just tried to save in store
-}
-```
-
-Code example:
-
-```javascript
-import {
-  NucleoString,
-  NucleoObject
-} from 'nucleojs';
-
-const userType = new NucleoObject({
-  name: 'user',
-  fields: {
-    name: NucleoString,
-  }
-});
-
-const contracts = {
-  user: userType
-};
-
-const { update } = createStore(contracts); // send contracts to create the store
-
-const user = update('user')({ age: 140 });
-
-console.log(user.errors); // here you'll find the error below:
-/*
-
-  [
-    {
-      error: 'age field does not match its rules according to user contract',
-      contract: 'user',
-      field: 'age'
-    }
-  ]
-}
-*/
-```
-
-In cases with no errors, `errors` list will be an empty list and `status` will be `OK`
-
-```javascript
-{
-  status: 'OK',
-  errors: []
-  data: { ... } // the data you just tried to save in store
-}
 ```
 
 ## Contributing
