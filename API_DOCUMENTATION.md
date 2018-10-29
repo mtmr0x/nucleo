@@ -101,7 +101,7 @@ console.log(user);
 ```javascript
 NucleoObject({
   name: String,
-  fields:  NucleoObject
+  fields:  Object
 });
 ```
 
@@ -149,7 +149,7 @@ const contracts = {
 ### Creating NucleoList
 
 ```javascript
-NucleoObject(NucleoObject);
+NucleoList(NucleoType);
 ```
 
 **Usage**
@@ -180,13 +180,15 @@ const userContract = new NucleoObject({
   }
 });
 
-const usersContract = new NucleoList(userContract);
-
-const itemsContract = new NucleoList(NucleoString);
+const usersContract = new NucleoObject({
+  name: 'users',
+  fields:  {
+    data: new NucleoList(userContract)
+  }
+});
 
 const contracts = {
-  users: usersContract,
-  items: itemsContract
+  users: usersContract
 };
 ```
 
@@ -199,7 +201,13 @@ NucleoString: String;
 **Usage**
 
 ```javascript
-const name = 'Jhon';
+const personalInfoType = new NucleoObject({
+  name: 'personalInfo',
+  fields:  {
+    firstName: NucleoString,
+    lastName: NucleoString
+  }
+});
 ```
 
 ## Creating NucleoNumber
@@ -211,7 +219,14 @@ NucleoNumber: Number;
 **Usage**
 
 ```javascript
-const age = 27;
+const personalInfoType = new NucleoObject({
+  name: 'personalInfo',
+  fields:  {
+    firstName: NucleoString,
+    lastName: NucleoString,
+    age: NucleoNumber
+  }
+});
 ```
 
 ## Creating NucleoBoolean
@@ -223,7 +238,12 @@ NucleoBoolean: Boolean;
 **Usage**
 
 ```javascript
-const disabled = false;
+const userStatusType = new NucleoObject({
+  name: 'userStatus',
+  fields: {
+    disabled: NucleoBoolean
+  }
+});
 ```
 
 ## Creating the store

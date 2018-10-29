@@ -30,6 +30,8 @@ yarn add nucleojs
 
 ## Documentation
 
+The links below take you to our `API_DOCUMENTATION.md` file present in this repository with deeper information and documentation to Nucleo usage.
+
 - [Installation](API_DOCUMENTATION.md#installation)
 - [Usage](API_DOCUMENTATION.md#usage)
 - [Contracts](API_DOCUMENTATION.md#contracts)
