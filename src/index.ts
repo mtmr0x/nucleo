@@ -3,7 +3,9 @@ import { createStore } from './store';
 import {
   NucleoString,
   NucleoNumber,
-  NucleoBoolean
+  NucleoBoolean,
+  NucleoStringAssertion,
+  NucleoNumberAssertion
 } from './nucleoTypes/primitive'
 
 import NucleoObject from './nucleoTypes/NucleoObject';
@@ -14,6 +16,8 @@ export {
   NucleoString,
   NucleoNumber,
   NucleoBoolean,
+  NucleoStringAssertion,
+  NucleoNumberAssertion,
   NucleoList,
   NucleoObject
 };
