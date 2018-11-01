@@ -92,7 +92,42 @@ console.log(user);
 
 ## Contracts
 
-### Todo
+Contracts are how your data is defined inside Nucleo. Basically contracts is how you define your `NucleoObject`s:
+
+```javascript
+const userContract = new NucleoObject({
+  name: 'user',
+  fields: {
+    name: NucleoString,
+    age: NucleoNumber,
+    taxId: NucleoString
+  }
+});
+```
+
+The example below we defined a contract named as `user` and data in this contract will look like this:
+
+```javascript
+{
+  name: 'Joseph Nor',
+  age: 28,
+  taxId: '987611654967'
+}
+```
+
+Contracts are organized in a tree structure to be sent to Nucleo and create the store. Let's say you created the user contract above and a few more, they would behave like this to create the store:
+
+```
+const contracts = {
+  user: userContract,
+  products: productsContract,
+  highlights: highlightsContract
+};
+```
+
+`userContract`, `productsContract` and `highlightsContract` are instances of `NucleoObject`. Note that contracts are always instances of `NucleoObject`, if you try to create a store differently, it'll fail.
+
+You can think in Nucleo contracts as data model contracts, as it is.
 
 ## Types
 
@@ -124,7 +159,7 @@ const fullNameContract = new NucleoObject({
 });
 
 const userContract = new NucleoObject({
-  name: 'user', // don't need to be the same name as the variable, but need to be unique
+  name: 'user',
   fields: {
     name: fullNameContract,
     age: NucleoNumber,
