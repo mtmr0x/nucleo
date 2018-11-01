@@ -3,10 +3,20 @@
 - [Contracts](#contracts)
 - [Types](#types)
   - [NucleoObject](#creating-nucleoobject)
+    - [Anatomy](#nucleoobject-anatomy)
+    - [Usage](#nucleoobject-usage)
   - [NucleoList](#creating-nucleolist)
+    - [Anatomy](#nucleolist-anatomy)
+    - [Usage](#nucleolist-usage)
   - [NucleoString](#creating-nucleostring)
   - [NucleoNumber](#creating-nucleonumber)
   - [NucleoBoolean](#creating-nucleoboolean)
+  - [NucleoStringAssertion](#creating-nucleostringassertion)
+    - [Anatomy](#nucleostringassertion-anatomy)
+    - [Usage](#nucleostringassertion-usage)
+  - [NucleoNumberAssertion](#creating-nucleonumberassertion)
+    - [Anatomy](#nucleonumberassertion-anatomy)
+    - [Usage](#nucleonumberassertion-usage)
 - [Creating the store](#creating-the-store)
 - [Dispatching and updating the store](#dispatching-and-updating-the-store)
 - [Get contracts in store](#get-contracts-in-store)
@@ -133,14 +143,21 @@ You can think in Nucleo contracts as data model contracts, as it is.
 
 ### Creating NucleoObject
 
+#### NucleoObject Anatomy
+
 ```javascript
 NucleoObject({
   name: String,
-  fields:  Object
+  fields: Object
 });
 ```
 
-**Usage**
+Inside NucleoObject are expected two keys:
+
+- `name`: every NucleoObject contract must have an unique name and this field is used to create and identify your item in your store.
+- `fields`: is a plain object for the expected fields in this NucleoObject. Inside `fields` must have first level keys with Nucleo types values. If it's necessary to nest, you may create another NucleoObject inside this one.
+
+#### NucleoObject Usage
 
 ```javascript
 import {
@@ -183,11 +200,15 @@ const contracts = {
 
 ### Creating NucleoList
 
+#### NucleoList Anatomy
+
 ```javascript
 NucleoList(NucleoType);
 ```
 
-**Usage**
+Inside Nucleo you can create lists of Nucleo types in your contracts. `NucleoList` accepts one argument which is expected a Nucleo type (`NucleoObject` or any Nucleo primitive are accepted). If you try to commit a new `NucleoList` with argument different from a Nucleo type it'll throw.
+
+#### NucleoList Usage
 
 ```javascript
 import {
@@ -207,7 +228,7 @@ const fullNameContract = new NucleoObject({
 });
 
 const userContract = new NucleoObject({
-  name: 'user', // don't need to be the same name as the variable, but need to be unique
+  name: 'user',
   fields: {
     name: fullNameContract,
     age: NucleoNumber,
@@ -227,7 +248,7 @@ const contracts = {
 };
 ```
 
-## Creating NucleoString
+### Creating NucleoString
 
 ```javascript
 NucleoString: String;
@@ -245,7 +266,7 @@ const personalInfoType = new NucleoObject({
 });
 ```
 
-## Creating NucleoNumber
+### Creating NucleoNumber
 
 ```javascript
 NucleoNumber: Number;
@@ -264,7 +285,7 @@ const personalInfoType = new NucleoObject({
 });
 ```
 
-## Creating NucleoBoolean
+### Creating NucleoBoolean
 
 ```javascript
 NucleoBoolean: Boolean;
@@ -277,6 +298,73 @@ const userStatusType = new NucleoObject({
   name: 'userStatus',
   fields: {
     disabled: NucleoBoolean
+  }
+});
+```
+
+### Creating NucleoStringAssertion
+
+#### NucleoStringAssertion Anatomy
+
+`NucleoStringAssertion` receives a function as argument and execute it for validation and serialization in attempts to save data to its item. Nucleo validate the value type already and there is no need to check if it's a `string`.
+
+```javascript
+myFunc = value => Boolean
+
+NucleoStringAssertion(myFunc)
+```
+
+- `myFunc`: a function declaration under your control, you declare it for be used as rule for validating that field. It must return a boolean according to following rules:
+  - `true`: the assertion is as expected and can be saved in store;
+  - `false`: the assertion is not what's expected and it'll make Nucleo avoid saving data.
+- `value`: value that is being validated to be saved in store;
+
+#### NucleoStringAssertion Usage
+
+```javascript
+function taxIdValidation(value:string) {
+  return value.length === 11;
+}
+
+const userType = new NucleoObject({
+  name: 'user',
+  fields:  {
+    name: NucleoString,
+    taxId: new NucleoStringAssertion(taxIdValidation)
+  }
+});
+
+```
+
+### Creating NucleoNumberAssertion
+
+#### NucleoNumberAssertion Anatomy
+
+`NucleoNumberAssertion` receives a function as argument and execute it for validation and serialization in attempts to save data to its item. Nucleo validate the value type already and there is no need to check if it's a `number`.
+
+```javascript
+myFunc = value => Boolean
+
+NucleoNumberAssertion(myFunc)
+```
+
+- `myFunc`: a function declaration under your control, you declare it for be used as rule for validating that field. It must return a boolean according to following rules:
+  - `true`: the assertion is as expected and can be saved in store;
+  - `false`: the assertion is not what's expected and it'll make Nucleo avoid saving data.
+- `value`: value that is being validated to be saved in store;
+
+#### NucleoNumberAssertion Usage
+
+```javascript
+function ageValidation(value:number) {
+  return value < 100;
+}
+
+const userType = new NucleoObject({
+  name: 'user',
+  fields:  {
+    name: NucleoString,
+    age: new NucleoNumberAssertion(ageValidation)
   }
 });
 ```
