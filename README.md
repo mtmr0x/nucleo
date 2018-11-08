@@ -2,7 +2,7 @@
 
 Nucleo creates and manages a strongly typed and predictable state container.
 
-> Important note: This project is still under development. It's not recommended for production use yet. Some bug fixes are being worked on and we're improving documentation and tests to make sure everything is running as expected.
+> Important note: This project is still under development. It's not recommended for production use yet, despite its basic functionalities are checked as done.
 
 ## Roadmap
 
