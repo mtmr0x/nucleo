@@ -24,7 +24,7 @@ describe('NucleoStringAssertion', () => {
 
   const contracts = { document: userType };
   const store = createStore(contracts);
-  const { dispatch, update, getStore } = store;
+  const { dispatch, update, cloneState } = store;
 
   it('should ty to violate contract with wrong type dispatching to contract', () => {
     const d = dispatch('user')({
@@ -40,7 +40,7 @@ describe('NucleoStringAssertion', () => {
       name: 'John',
       taxId: '12345678909'
     });
-    const { user } = getStore();
+    const user = cloneState('user');
 
     expect(user.name).to.equal('John');
     expect(user.taxId).to.equal('12345678909');
@@ -54,7 +54,7 @@ describe('NucleoStringAssertion', () => {
 
   it('should update data according to contract and save it in store', () => {
     const u = update('user')({ taxId: '12334567890' });
-    const { user } = getStore();
+    const user = cloneState('user');
 
     expect(user.taxId).to.equal('12334567890');
     expect(user.name).to.equal('John');

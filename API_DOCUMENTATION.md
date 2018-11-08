@@ -333,7 +333,6 @@ const userType = new NucleoObject({
     taxId: new NucleoStringAssertion(taxIdValidation)
   }
 });
-
 ```
 
 ### Creating NucleoNumberAssertion

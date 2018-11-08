@@ -27,7 +27,7 @@ describe('Update forbidden attempts', () => {
   });
   const contracts = { user: userType };
   const store = createStore(contracts);
-  const { dispatch, update, getStore } = store;
+  const { dispatch, update, cloneState } = store;
 
  it('should use update method and throw for this item in store be empty', () => {
    const d = () => update('user')({ name: { firstName: 'John' }});
@@ -42,10 +42,12 @@ describe('Update forbidden attempts', () => {
     });
 
     const { errors, data } = update('user')({ name: { name: 'matheus' } });
+    const user = cloneState('user');
+
     expect(errors.length).to.equal(1);
-    expect(getStore().user.name.firstName).to.equal('John');
-    expect(getStore().user.name.lastName).to.equal('Doe');
-    expect(getStore().user.age).to.equal(27);
+    expect(user.name.firstName).to.equal('John');
+    expect(user.name.lastName).to.equal('Doe');
+    expect(user.age).to.equal(27);
   });
 });
 
@@ -85,7 +87,7 @@ describe('Clone method', () => {
   });
   const contracts = { user: userType };
   const store = createStore(contracts);
-  const { dispatch, update, getStore, subscribe, cloneState } = store;
+  const { dispatch, update, subscribe, cloneState } = store;
 
   it('should dispatch first data to store', () => {
     const d = dispatch('user')({

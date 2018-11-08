@@ -24,7 +24,7 @@ describe('NucleoNumberAssertion', () => {
 
   const contracts = { document: userType };
   const store = createStore(contracts);
-  const { dispatch, update, getStore } = store;
+  const { dispatch, update, cloneState } = store;
 
   it('should ty to violate contract with wrong type dispatching to contract', () => {
     const d = dispatch('user')({
@@ -40,7 +40,7 @@ describe('NucleoNumberAssertion', () => {
       name: 'John',
       age: 27
     });
-    const { user } = getStore();
+    const user = cloneState('user');
 
     expect(user.name).to.equal('John');
     expect(user.age).to.equal(27);
@@ -54,7 +54,7 @@ describe('NucleoNumberAssertion', () => {
 
   it('should update data according to contract and save it in store', () => {
     const u = update('user')({ age: 34 });
-    const { user } = getStore();
+    const user = cloneState('user');
 
     expect(user.age).to.equal(34);
     expect(user.name).to.equal('John');

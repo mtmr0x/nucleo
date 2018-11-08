@@ -27,7 +27,7 @@ describe('Update forbidden attempts', () => {
   });
   const contracts = { user: userType };
   const store = createStore(contracts);
-  const { dispatch, update, getStore } = store;
+  const { dispatch, update, cloneState } = store;
 
  it('should use update method and throw for this item in store be empty', () => {
    const d = () => update('user')({ name: { firstName: 'John' }});
@@ -43,9 +43,10 @@ describe('Update forbidden attempts', () => {
 
     const { errors, data } = update('user')({ name: { name: 'matheus' } });
     expect(errors.length).to.equal(1);
-    expect(getStore().user.name.firstName).to.equal('John');
-    expect(getStore().user.name.lastName).to.equal('Doe');
-    expect(getStore().user.age).to.equal(27);
+    const user = cloneState('user');
+    expect(user.name.firstName).to.equal('John');
+    expect(user.name.lastName).to.equal('Doe');
+    expect(user.age).to.equal(27);
   });
 });
 
@@ -85,7 +86,7 @@ describe('Update method', () => {
   });
   const contracts = { user: userType };
   const store = createStore(contracts);
-  const { dispatch, update, getStore, subscribe } = store;
+  const { dispatch, update, cloneState, subscribe } = store;
 
   it('should dispatch only one property in deeper levels and just this property should be updated in store', () => {
     const d = dispatch('user')({
@@ -102,28 +103,31 @@ describe('Update method', () => {
     });
 
     const { errors, data } = update('user')({ name: { firstName: 'Joseph' } });
-    expect(getStore().user.name.firstName).to.equal('Joseph');
-    expect(getStore().user.name.lastName).to.equal('Doe');
-    expect(getStore().user.age).to.equal(27);
+    const user = cloneState('user');
+    expect(user.name.firstName).to.equal('Joseph');
+    expect(user.name.lastName).to.equal('Doe');
+    expect(user.age).to.equal(27);
   });
   it('should dispatch only one property in first level and just this property should be updated in store', () => {
     const { errors, data } = update('user')({ age: 18 });
+    const user = cloneState('user');
 
-    expect(getStore().user.name.firstName).to.equal('Joseph');
-    expect(getStore().user.name.lastName).to.equal('Doe');
-    expect(getStore().user.age).to.equal(18);
+    expect(user.name.firstName).to.equal('Joseph');
+    expect(user.name.lastName).to.equal('Doe');
+    expect(user.age).to.equal(18);
   });
 
   it('should dispatch a value to a deeper level and save it properly', () => {
     const d = update('user')({ location: { address: { complement: 'apartment 2' } } });
+    const user = cloneState('user');
 
-    expect(getStore().user.name.firstName).to.equal('Joseph');
-    expect(getStore().user.name.lastName).to.equal('Doe');
-    expect(getStore().user.age).to.equal(18);
-    expect(getStore().user.location.city).to.equal('NY');
-    expect(getStore().user.location.address.street).to.equal('9 avenue');
-    expect(getStore().user.location.address.streetNumber).to.equal('678');
-    expect(getStore().user.location.address.complement).to.equal('apartment 2');
+    expect(user.name.firstName).to.equal('Joseph');
+    expect(user.name.lastName).to.equal('Doe');
+    expect(user.age).to.equal(18);
+    expect(user.location.city).to.equal('NY');
+    expect(user.location.address.street).to.equal('9 avenue');
+    expect(user.location.address.streetNumber).to.equal('678');
+    expect(user.location.address.complement).to.equal('apartment 2');
   });
 
   it('should update value and listener should receive data properly', () => {
@@ -133,6 +137,7 @@ describe('Update method', () => {
     }
     subscribe(listener);
     const d = update('user')({ location: { address: { complement: 'apartment 3' } } });
+    const user = cloneState('user');
 
     expect(receivedData.data.name.firstName).to.equal('Joseph');
     expect(receivedData.data.name.lastName).to.equal('Doe');
@@ -142,13 +147,13 @@ describe('Update method', () => {
     expect(receivedData.data.location.address.streetNumber).to.equal('678');
     expect(receivedData.data.location.address.complement).to.equal('apartment 3');
 
-    expect(getStore().user.name.firstName).to.equal('Joseph');
-    expect(getStore().user.name.lastName).to.equal('Doe');
-    expect(getStore().user.age).to.equal(18);
-    expect(getStore().user.location.city).to.equal('NY');
-    expect(getStore().user.location.address.street).to.equal('9 avenue');
-    expect(getStore().user.location.address.streetNumber).to.equal('678');
-    expect(getStore().user.location.address.complement).to.equal('apartment 3');
+    expect(user.name.firstName).to.equal('Joseph');
+    expect(user.name.lastName).to.equal('Doe');
+    expect(user.age).to.equal(18);
+    expect(user.location.city).to.equal('NY');
+    expect(user.location.address.street).to.equal('9 avenue');
+    expect(user.location.address.streetNumber).to.equal('678');
+    expect(user.location.address.complement).to.equal('apartment 3');
   })
 });
 

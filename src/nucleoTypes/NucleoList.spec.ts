@@ -37,7 +37,7 @@ describe('NucleoList', () => {
   });
   const contracts = { user: userType };
   const store = createStore(contracts);
-  const { dispatch, update, getStore } = store;
+  const { dispatch, update, cloneState } = store;
 
   it('should dispatch all data to store', () => {
     const data = {
@@ -60,7 +60,9 @@ describe('NucleoList', () => {
   it('should try to update a NucleoList of primitive values succesfully', () => {
     const u = update('user')({ personalInfo: { items: ['g', 'h', 'j', 'k'] } });
 
-    const { personalInfo } = getStore().user;
+    const user = cloneState('user');
+    const { personalInfo } = user;
+
     const { items } = personalInfo;
 
     expect(personalInfo.firstName).to.equal('Joseph');
@@ -73,7 +75,8 @@ describe('NucleoList', () => {
   it('should try to violate a NucleoList of primitive values with update', () => {
     const u = update('user')({ personalInfo: { items: ['g', 'h', 'j', 1] } });
 
-    const { personalInfo } = getStore().user;
+    const user = cloneState('user');
+    const { personalInfo } = user;
     const { items } = personalInfo;
 
     expect(u.errors.length).to.equal(1);
@@ -95,7 +98,8 @@ describe('NucleoList', () => {
     };
 
     const u = update('user')(obj);
-    const { personalInfo } = getStore().user;
+    const user = cloneState('user');
+    const { personalInfo } = user;
 
     expect(u.errors.length).to.equal(0);
     expect(personalInfo.accounts[0].accountType).to.equal('service');
@@ -116,7 +120,9 @@ describe('NucleoList', () => {
 
     const u = update('user')(obj);
 
-    const { personalInfo } = getStore().user;
+    const user = cloneState('user');
+    const { personalInfo } = user;
+
     expect(u.errors.length).to.equal(2);
     expect(personalInfo.accounts[0].accountType).to.equal('service');
     expect(personalInfo.accounts[1].accountType).to.equal('service');
