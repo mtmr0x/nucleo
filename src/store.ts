@@ -24,10 +24,6 @@ function getStore(store: any) {
 function createStore(contracts: any) {
   let __store__:any = {};
   let __contracts__: any = {};
-  if (JSON.stringify(__contracts__) !== '{}') {
-    throw Error('You can\'t create a store when it\'s already created.');
-  }
-
   const contractsKeys: any = Object.keys(contracts);
 
   for (let c:number = 0; c < contractsKeys.length; c++) {
