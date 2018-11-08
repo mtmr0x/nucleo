@@ -16,12 +16,6 @@ function subscribe(listener: Function) {
   return listeners.push(listener);
 }
 
-function getStore(store: any) {
-  return () => {
-    return store;
-  };
-}
-
 function createStore(contracts: any) {
   let __store__:any = {};
   let __contracts__: any = {};
@@ -49,7 +43,6 @@ function createStore(contracts: any) {
     dispatch: save({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'dispatch' }),
     update: save({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'update' }),
     subscribe,
-    getStore: getStore(__store__),
     cloneState: (contractName:string) => indexSearch({
       contractName,
       storeData: __store__[contractName],

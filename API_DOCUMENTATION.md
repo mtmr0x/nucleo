@@ -79,7 +79,7 @@ const contracts = {
 };
 
 const store = createStore(contracts);
-const { dispatch, update, getStore, subscribe } = store;
+const { dispatch, update, cloneState, subscribe } = store;
 
 const user = dispatch('user')({ name: { firstName: 'John', lastName: 'Nor' }, age: 27 });
 // it'll save the data to store properly
@@ -376,7 +376,7 @@ import { createStore } from 'nucleojs';
 import * as contracts from './contracts';
 
 const store = createStore(contracts); // send contracts to create the store
-const { dispatch, update, getStore, subscribe } = store; // these 4 functions are returned from store creation
+const { dispatch, update, cloneState, subscribe } = store; // these 4 functions are returned from store creation
 ```
 
 ## Dispatching and updating the store
@@ -437,47 +437,41 @@ console.log(user);
 */
 ```
 
-## Get contracts in store
+## Getting a state clone from store
 
-The `getStore` function returns all contracts that are in the store.
+The `cloneState` function receives one argument which is the contract name in store, performs a deep clone using the contracts data model as a map to predict the key/values of that contract and be able to return it with great performance.
 
 ```javascript
-const user = getStore().user;
+const user = cloneState('user');
 console.log(user);
 /*
 {
-  status: 'OK',
-  errors: [],
-  data: {
-    name: {
-      firstName: 'Robert',
-      lastName: 'Nor'
-    },
-    age: 27
+  name: {
+    firstName: 'Robert',
+    lastName: 'Nor'
   },
+  age: 27
 }
 */
 ```
 
 ## Subscribing to changes
 
-You can simply subscribe to store changes by passing your listener functions to `subscribe` function. The listener must be a function and Nucleo will execute your listener sending an object argument with the updated contract for each update or dispatch to the store:
+The `subscribe` function receives as argument a function and for each update in the store, Nucleo executes the listener passing as parameter an object containing `contractName` and `data`:
+
+- `contractName`: `string` containing the updated contract name;
+- `data`: `Object` containing a deep clone of the data saved in store.
 
 ```javascript
-const listener = ({ contractName }) => {
-  const changes = getStore()[contractName];
-  console.log(changes);
+const listener = ({ contractName, data }) => {
+  console.log(data);
   /*
   {
-    status: 'OK',
-    errors: [],
-    data: {
-      name: {
-        firstName: 'Robert',
-        lastName: 'Nor'
-      },
-      age: 26
+    name: {
+      firstName: 'Robert',
+      lastName: 'Nor'
     },
+    age: 26
   }
   */
 } 
@@ -488,8 +482,27 @@ update('user')({ age: 26 });
 And inside Nucleo, your listener will be executed like this:
 
 ```javascript
-listener({ contractName }); // This way you can understand better what was updated and consult Nucleo store as you wish
+listener({ contractName, data }); // This way you can understand better what was updated and consult Nucleo store as you wish
 ```
+
+## Subscribing multiple listeners
+
+Nucleo provides only one way of subscribing to changes, but saves the listeners as a list of functions inside of it. You can execute multiple times `subscribe` with all your listeners:
+
+```javascript
+subscribe(listener1);
+subscribe(listener2);
+subscribe(listener3);
+subscribe(listener4);
+
+// or
+
+const listeners = [listener1, listener2, listener3, listener4];
+
+listeners.map(listener => subscribe(listener));
+```
+
+Nucleo will execute one by one, following the order you provided.
 
 ## Error management
 

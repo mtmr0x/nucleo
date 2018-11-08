@@ -55,7 +55,8 @@ The links below take you to our `API_DOCUMENTATION.md` file present in this repo
 import {
   NucleoString,
   NucleoNumber,
-  NucleoObject
+  NucleoObject,
+  createStore
 } from 'nucleojs'
 
 const completeNameContract = new NucleoObject({
@@ -85,6 +86,93 @@ const contracts = {
   user: userContract,
   products: productsContract
 };
+
+```
+
+### Creating the store
+
+```javascript
+import { createStore } from 'nucleojs';
+import * as contracts from './contracts';
+
+const store = createStore(contracts); // send contracts to create the store
+const { dispatch, update, cloneState, subscribe } = store; // these 4 functions are returned from store creation
+```
+
+### Dispatching and updating the store
+
+Nucleo provides two methods of saving data, used for different approaches.
+
+**dispatch:** works for saving data according to the full contract, used to save the very first contract state in the store or to update the whole contract in the store;
+
+**update:** works for updating parts of data, it performs a index search in the object and save it. `update` will fail if you try to first save a contract to the store using it.
+
+---
+
+Dispatch function, considering user contract above:
+
+```javascript
+
+let user = dispatch('user')({ name: { firstName: 'John', lastName: 'Nor' } });
+// it'll fail because it's missing age field
+
+user = dispatch('user')({ name: { firstName: 'John', lastName: 'Nor' }, age: 27 });
+// it'll save the data to store properly
+
+console.log(user);
+/*
+{
+  status: 'OK',
+  errors: [],
+  data: {
+    name: {
+      firstName: 'John',
+      lastName: 'Nor'
+    },
+    age: 27
+  },
+}
+*/
+```
+
+Update function, considering user contract above:
+
+```javascript
+const user = update('user')({ name: { firstName: 'Robert' }});
+// it'll update only the user first name and only if this item has been already created in the store before
+
+console.log(user);
+/*
+{
+  status: 'OK',
+  errors: [],
+  data: {
+    name: {
+      firstName: 'Robert',
+      lastName: 'Nor'
+    },
+    age: 27
+  },
+}
+*/
+```
+
+### Getting a state clone from store
+
+The `cloneState` function receives one argument which is the contract name in store, performs a deep clone using the contracts data model as a map to predict the key/values of that contract and be able to return it with great performance.
+
+```javascript
+const user = cloneState('user');
+console.log(user);
+/*
+{
+  name: {
+    firstName: 'Robert',
+    lastName: 'Nor'
+  },
+  age: 27
+}
+*/
 ```
 
 ## Contributing
