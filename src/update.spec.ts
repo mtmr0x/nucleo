@@ -85,7 +85,7 @@ describe('Update method', () => {
   });
   const contracts = { user: userType };
   const store = createStore(contracts);
-  const { dispatch, update, getStore } = store;
+  const { dispatch, update, getStore, subscribe } = store;
 
   it('should dispatch only one property in deeper levels and just this property should be updated in store', () => {
     const d = dispatch('user')({
@@ -125,5 +125,30 @@ describe('Update method', () => {
     expect(getStore().user.location.address.streetNumber).to.equal('678');
     expect(getStore().user.location.address.complement).to.equal('apartment 2');
   });
+
+  it('should update value and listener should receive data properly', () => {
+    let receivedData:any;
+    function listener(data: any) {
+      receivedData = data;
+    }
+    subscribe(listener);
+    const d = update('user')({ location: { address: { complement: 'apartment 3' } } });
+
+    expect(receivedData.data.name.firstName).to.equal('Joseph');
+    expect(receivedData.data.name.lastName).to.equal('Doe');
+    expect(receivedData.data.age).to.equal(18);
+    expect(receivedData.data.location.city).to.equal('NY');
+    expect(receivedData.data.location.address.street).to.equal('9 avenue');
+    expect(receivedData.data.location.address.streetNumber).to.equal('678');
+    expect(receivedData.data.location.address.complement).to.equal('apartment 3');
+
+    expect(getStore().user.name.firstName).to.equal('Joseph');
+    expect(getStore().user.name.lastName).to.equal('Doe');
+    expect(getStore().user.age).to.equal(18);
+    expect(getStore().user.location.city).to.equal('NY');
+    expect(getStore().user.location.address.street).to.equal('9 avenue');
+    expect(getStore().user.location.address.streetNumber).to.equal('678');
+    expect(getStore().user.location.address.complement).to.equal('apartment 3');
+  })
 });
 

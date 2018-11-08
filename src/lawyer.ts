@@ -4,18 +4,26 @@ import NucleoList from './nucleoTypes/NucleoList';
 import { NucleoObjectType } from './_types/NucleoObjectType';
 import indexSearch from './indexSearch';
 
-const executeListeners = (contractName: string, listeners: Array<Function>) => {
+const executeListeners = (contractName: string, listeners: Array<Function>, data: any) => {
   for (let i = 0; i < listeners.length; i++) {
     listeners[i]({ contractName });
   }
 };
 
-const saveMethodReflection = (store: any, contractName: string) => ({
+const saveMethodReflection = (store: any, contractName: string, listeners: Array<Function>) => ({
   dispatch: (data: any) => {
+    executeListeners(contractName, listeners, data);
     return store[contractName] = data;
   },
   update: (data: any) => {
-    return store[contractName] = indexSearch(store[contractName], data);
+    return store[contractName] = indexSearch({
+      contractName,
+      storeData: store[contractName],
+      data,
+      listeners,
+      newStoreData: {},
+      newListenerData: {}
+    });
   }
 });
 
@@ -129,8 +137,7 @@ export default function lawyer({
 
   return (store:any, listeners:Array<Function>) => {
     if (!__errors__.length) {
-      executeListeners(contractName, listeners);
-      saveMethodReflection(store, contractName)[saveMethod](data);
+      saveMethodReflection(store, contractName, listeners)[saveMethod](data);
     }
 
     return {
