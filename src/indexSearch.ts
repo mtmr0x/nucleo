@@ -14,7 +14,7 @@ interface IndexSearchInterface {
   data: any;
   listeners: Array<Function>|void;
   newStoreData: any;
-  newListenerData: any;
+  newListenersData: any;
 };
 
 const indexSearch = (args: IndexSearchInterface) => {
@@ -24,7 +24,7 @@ const indexSearch = (args: IndexSearchInterface) => {
     data,
     listeners,
     newStoreData = {},
-    newListenerData = {}
+    newListenersData = {}
   } = args;
 
   const dataKeys = Object.keys(data);
@@ -35,7 +35,7 @@ const indexSearch = (args: IndexSearchInterface) => {
       rec: () => {
         const bufferData = data[storeDataKeys[i]] || storeData[storeDataKeys[i]];
         newStoreData[storeDataKeys[i]] = {};
-        newListenerData[storeDataKeys[i]] = {};
+        newListenersData[storeDataKeys[i]] = {};
 
         return indexSearch({
           contractName: '',
@@ -43,16 +43,16 @@ const indexSearch = (args: IndexSearchInterface) => {
           data: bufferData,
           listeners: undefined,
           newStoreData: newStoreData[storeDataKeys[i]],
-          newListenerData: newListenerData[storeDataKeys[i]]
+          newListenersData: newListenersData[storeDataKeys[i]]
         });
       },
       save: () => {
         if (data[storeDataKeys[i]]) {
           newStoreData[storeDataKeys[i]] = data[storeDataKeys[i]];
-          return newListenerData[storeDataKeys[i]] = data[storeDataKeys[i]];
+          return newListenersData[storeDataKeys[i]] = data[storeDataKeys[i]];
         }
         newStoreData[storeDataKeys[i]] = storeData[storeDataKeys[i]];
-        return newListenerData[storeDataKeys[i]] = storeData[storeDataKeys[i]];
+        return newListenersData[storeDataKeys[i]] = storeData[storeDataKeys[i]];
       }
     });
 
@@ -60,7 +60,7 @@ const indexSearch = (args: IndexSearchInterface) => {
   }
 
   if (listeners && listeners.length) {
-    executeListeners(contractName, listeners, newListenerData);
+    executeListeners(contractName, listeners, newListenersData);
   }
   return newStoreData;
 }

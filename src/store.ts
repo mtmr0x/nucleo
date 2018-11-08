@@ -1,5 +1,6 @@
 import save from './save';
 import NucleoObject from './nucleoTypes/NucleoObject';
+import indexSearch from './indexSearch';
 
 let listeners: Array<Function> = [];
 
@@ -48,7 +49,15 @@ function createStore(contracts: any) {
     dispatch: save({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'dispatch' }),
     update: save({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'update' }),
     subscribe,
-    getStore: getStore(__store__)
+    getStore: getStore(__store__),
+    cloneState: (contractName:string) => indexSearch({
+      contractName,
+      storeData: __store__[contractName],
+      data: {},
+      listeners: undefined,
+      newStoreData: {},
+      newListenersData: {}
+    })
   };
 }
 
