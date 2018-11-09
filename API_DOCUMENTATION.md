@@ -473,7 +473,7 @@ const listener = ({ contractName, data }) => {
     age: 26
   }
   */
-} 
+}
 subscribe(listener); // if it's not a function, Nucleo will throw an error
 update('user')({ age: 26 });
 ```
