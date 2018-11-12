@@ -20,7 +20,7 @@ const saveMethodReflection = (store, contractName, listeners) => ({
             data,
             listeners,
             newStoreData: {},
-            newListenerData: {}
+            newListenersData: {}
         });
     }
 });
