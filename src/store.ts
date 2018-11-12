@@ -4,11 +4,6 @@ import indexSearch from './indexSearch';
 
 let listeners: Array<Function> = [];
 
-type ModelType = {
-  name: string,
-  fields: any
-};
-
 function subscribe(listener: Function) {
   if (typeof listener !== 'function') {
     throw Error('Expected listener to be a function');
