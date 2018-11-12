@@ -2,44 +2,26 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const NucleoObject_1 = require("./nucleoTypes/NucleoObject");
 const NucleoList_1 = require("./nucleoTypes/NucleoList");
-const executeListeners = (contractName, listeners) => {
+const indexSearch_1 = require("./indexSearch");
+const executeListeners = (contractName, listeners, data) => {
     for (let i = 0; i < listeners.length; i++) {
         listeners[i]({ contractName });
     }
 };
-const indexSearch = (contractData, data, newData = {}) => {
-    const dataKeys = Object.keys(data);
-    const contractDataKeys = Object.keys(contractData);
-    for (let i = 0; contractDataKeys.length > i; i++) {
-        // reflection for appending data to newData
-        const dataTypeReflection = () => ({
-            'object': () => {
-                // if current data is object, recusirvely call indexSearch
-                const bufferData = data[contractDataKeys[i]] || contractData[contractDataKeys[i]];
-                newData[contractDataKeys[i]] = {};
-                return indexSearch(contractData[contractDataKeys[i]], bufferData, newData[contractDataKeys[i]]);
-            },
-            'primitive': () => {
-                if (data[contractDataKeys[i]]) {
-                    return newData[contractDataKeys[i]] = data[contractDataKeys[i]];
-                }
-                return newData[contractDataKeys[i]] = contractData[contractDataKeys[i]];
-            }
-        });
-        if (typeof contractData[contractDataKeys[i]] === 'object') {
-            dataTypeReflection()['object']();
-            continue;
-        }
-        dataTypeReflection()['primitive']();
-    }
-    return newData;
-};
-const saveMethodReflection = (store, contractName) => ({
+const saveMethodReflection = (store, contractName, listeners) => ({
     dispatch: (data) => {
+        executeListeners(contractName, listeners, data);
         return store[contractName] = data;
     },
     update: (data) => {
-        return store[contractName] = indexSearch(store[contractName], data);
+        return store[contractName] = indexSearch_1.default({
+            contractName,
+            storeData: store[contractName],
+            data,
+            listeners,
+            newStoreData: {},
+            newListenerData: {}
+        });
     }
 });
 function lawyer({ contract, data, saveMethod, __errors__, }) {
@@ -49,10 +31,8 @@ function lawyer({ contract, data, saveMethod, __errors__, }) {
     if (dataKeys.length !== Object.keys(contractFields).length && saveMethod === 'dispatch') {
         throw Error(`Fatal error: In dispatch, the dispatched data and the contract must match in every level. For changing just few values from ${contractName} contract, use update() method.`);
     }
-    // loop object values comparison
     for (let i = 0; dataKeys.length > i; i++) {
         const currentDataKey = data[dataKeys[i]];
-        // REGION NucleoObject
         if (contractFields[dataKeys[i]] instanceof NucleoObject_1.default) {
             lawyer({
                 contract: contractFields[dataKeys[i]],
@@ -62,8 +42,6 @@ function lawyer({ contract, data, saveMethod, __errors__, }) {
             });
             continue;
         }
-        // END REGION NucleoObject
-        // REGION NucleoList
         if ((contractFields[dataKeys[i]] instanceof NucleoList_1.default) && Array.isArray(currentDataKey)) {
             const _listItemType = contractFields[dataKeys[i]].getListChildrenType();
             const _NucleoItemType = contractFields[dataKeys[i]][_listItemType];
@@ -82,6 +60,13 @@ function lawyer({ contract, data, saveMethod, __errors__, }) {
                 NucleoObject: () => {
                     if (_NucleoItemType instanceof NucleoObject_1.default) {
                         for (let d = 0; d < currentDataKey.length; d++) {
+                            if (Object.keys(currentDataKey[d]).length !== Object.keys(_NucleoItemType.fields).length) {
+                                __errors__.push({
+                                    contract: _NucleoItemType.name,
+                                    error: 'You can not update a NucleoList of NucleoObject without its data according to contract in every level'
+                                });
+                                continue;
+                            }
                             lawyer({
                                 contract: _NucleoItemType,
                                 data: currentDataKey[d],
@@ -101,8 +86,6 @@ function lawyer({ contract, data, saveMethod, __errors__, }) {
                 error: `NucleoList should receive data as list, but got ${typeof currentDataKey}`
             });
         }
-        // END REGION NucleoList
-        // REGION primitive types validation
         if (!contractFields[dataKeys[i]]) {
             __errors__.push({
                 contract: contractName,
@@ -116,7 +99,6 @@ function lawyer({ contract, data, saveMethod, __errors__, }) {
                 error: `${dataKeys[i]} does not match its rules according to ${contractName} contract`
             });
         }
-        // END REGION primitive types validation
     }
     let operationStatus = '';
     if (__errors__.length) {
@@ -127,8 +109,7 @@ function lawyer({ contract, data, saveMethod, __errors__, }) {
     }
     return (store, listeners) => {
         if (!__errors__.length) {
-            executeListeners(contractName, listeners);
-            saveMethodReflection(store, contractName)[saveMethod](data);
+            saveMethodReflection(store, contractName, listeners)[saveMethod](data);
         }
         return {
             status: operationStatus,

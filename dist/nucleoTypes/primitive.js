@@ -1,24 +1,37 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// class NucleoCustomPrimitive {
-//   Type: string;
-//   userFormatValidation: Function|void;
-//   nativeType: string;
-//
-//   serialize(value:string|number|boolean):boolean {
-//     if (typeof value !== this.nativeType || this.formatValidation()) {
-//       return false;
-//     }
-//     return true;
-//   }
-//
-//   formatValidation():boolean {
-//     if (this.userFormatValidation) {
-//       return this.userFormatValidation();
-//     }
-//     return false;
-//   }
-// }
+class NucleoCustomPrimitive {
+    serialize(value) {
+        if (typeof value !== this.nativeType || this.formatValidation(value)) {
+            return false;
+        }
+        return true;
+    }
+    formatValidation(value) {
+        if (this.userFormatValidation) {
+            return !this.userFormatValidation(value);
+        }
+        return false;
+    }
+}
+class NucleoStringAssertion extends NucleoCustomPrimitive {
+    constructor(userFormatValidation) {
+        super();
+        this.Type = 'NucleoString';
+        this.nativeType = 'string';
+        this.userFormatValidation = userFormatValidation;
+    }
+}
+exports.NucleoStringAssertion = NucleoStringAssertion;
+class NucleoNumberAssertion extends NucleoCustomPrimitive {
+    constructor(userFormatValidation) {
+        super();
+        this.Type = 'NucleoNumber';
+        this.nativeType = 'number';
+        this.userFormatValidation = userFormatValidation;
+    }
+}
+exports.NucleoNumberAssertion = NucleoNumberAssertion;
 exports.NucleoString = {
     Type: 'NucleoString',
     serialize: (value) => {
@@ -46,30 +59,4 @@ exports.NucleoBoolean = {
         return true;
     }
 };
-// export class NucleoString extends NucleoCustomPrimitive {
-//   constructor(userFormatValidation:Function|void) {
-//     super();
-//     this.Type = 'NucleoString';
-//     this.nativeType = 'string';
-//     this.userFormatValidation = userFormatValidation;
-//   }
-// }
-//
-// export class NucleoNumber extends NucleoCustomPrimitive {
-//   constructor(userFormatValidation:Function|void) {
-//     super();
-//     this.Type = 'NucleoNumber';
-//     this.nativeType = 'number';
-//     this.userFormatValidation = userFormatValidation;
-//   }
-// }
-//
-// export class NucleoBoolean extends NucleoCustomPrimitive {
-//   constructor(userFormatValidation:Function|void) {
-//     super();
-//     this.Type = 'NucleoBoolean';
-//     this.nativeType = 'boolean';
-//     this.userFormatValidation = userFormatValidation;
-//   }
-// }
 //# sourceMappingURL=primitive.js.map

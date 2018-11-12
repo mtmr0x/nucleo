@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const save_1 = require("./save");
 const NucleoObject_1 = require("./nucleoTypes/NucleoObject");
+const indexSearch_1 = require("./indexSearch");
 let listeners = [];
 function subscribe(listener) {
     if (typeof listener !== 'function') {
@@ -9,17 +10,9 @@ function subscribe(listener) {
     }
     return listeners.push(listener);
 }
-function getStore(store) {
-    return () => {
-        return store;
-    };
-}
 function createStore(contracts) {
     let __store__ = {};
     let __contracts__ = {};
-    if (JSON.stringify(__contracts__) !== '{}') {
-        throw Error('You can\'t create a store when it\'s already created.');
-    }
     const contractsKeys = Object.keys(contracts);
     for (let c = 0; c < contractsKeys.length; c++) {
         const current = contracts[contractsKeys[c]];
@@ -37,7 +30,14 @@ function createStore(contracts) {
         dispatch: save_1.default({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'dispatch' }),
         update: save_1.default({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'update' }),
         subscribe,
-        getStore: getStore(__store__)
+        cloneState: (contractName) => indexSearch_1.default({
+            contractName,
+            storeData: __store__[contractName],
+            data: {},
+            listeners: undefined,
+            newStoreData: {},
+            newListenersData: {}
+        })
     };
 }
 exports.createStore = createStore;

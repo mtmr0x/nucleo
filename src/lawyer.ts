@@ -22,7 +22,7 @@ const saveMethodReflection = (store: any, contractName: string, listeners: Array
       data,
       listeners,
       newStoreData: {},
-      newListenerData: {}
+      newListenersData: {}
     });
   }
 });

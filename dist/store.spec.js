@@ -57,11 +57,12 @@ describe('createStore function errors', () => {
         });
         const contracts = { products: productsType };
         const store = store_1.createStore(contracts);
-        const { dispatch, getStore } = store;
+        const { dispatch, cloneState } = store;
         const firstDispatch = dispatch('products')({ sku: ['a', 'b'] });
         const { errors, data } = dispatch('products')({ sku: ['a', 1] });
+        const products = cloneState('products');
         chai_1.expect(errors.length).to.equal(1);
-        chai_1.expect(JSON.stringify(getStore().products)).to.equal('{"sku":["a","b"]}');
+        chai_1.expect(JSON.stringify(products)).to.equal('{"sku":["a","b"]}');
     });
     it('should have a NucleoList and dispatch it as a non-list and show receive and error', () => {
         const productsType = new NucleoObject_1.default({
@@ -72,7 +73,7 @@ describe('createStore function errors', () => {
         });
         const contracts = { products: productsType };
         const store = store_1.createStore(contracts);
-        const { dispatch, getStore } = store;
+        const { dispatch } = store;
         const { errors } = dispatch('products')({ sku: 'a' });
         chai_1.expect(errors.length).to.equal(1);
     });
@@ -92,7 +93,7 @@ describe('createStore function errors', () => {
         });
         const contracts = { products: productsType };
         const store = store_1.createStore(contracts);
-        const { dispatch, getStore } = store;
+        const { dispatch } = store;
         const items = [
             { title: 'USB adapter', sku: '1324' },
             { title: 'USB Type-C adapter', sku: 4321 }
@@ -103,7 +104,7 @@ describe('createStore function errors', () => {
 });
 describe('createStore function dispatch flow', () => {
     const newStore = store_1.createStore(contracts);
-    const { dispatch, getStore, subscribe } = newStore;
+    const { dispatch, cloneState, subscribe } = newStore;
     it('should subscribe and listeners be properly executed', () => {
         let value = [];
         function myListener(obj) {
@@ -116,7 +117,7 @@ describe('createStore function dispatch flow', () => {
     });
     it('should dispatch values to store', () => {
         dispatch('userTest')({ name: { firstName: 'John', lastName: 'Doe' }, age: 29 });
-        const { userTest } = getStore();
+        const userTest = cloneState('userTest');
         chai_1.expect(userTest.name.firstName).to.equal('John');
     });
     it('should have a NucleoList of NucleoString and dispatch it properly', () => {
@@ -128,9 +129,10 @@ describe('createStore function dispatch flow', () => {
         });
         const contracts = { products: productsType };
         const store = store_1.createStore(contracts);
-        const { dispatch, getStore } = store;
+        const { dispatch, cloneState } = store;
         dispatch('products')({ sku: ['a', 'b'] });
-        chai_1.expect(JSON.stringify(getStore().products.sku)).to.equal(JSON.stringify(['a', 'b']));
+        const products = cloneState('products');
+        chai_1.expect(JSON.stringify(products.sku)).to.equal(JSON.stringify(['a', 'b']));
     });
     it('should have a NucleoList of NucleoObject and dispatch it properly', () => {
         const productType = new NucleoObject_1.default({
@@ -148,13 +150,14 @@ describe('createStore function dispatch flow', () => {
         });
         const contracts = { products: productsType };
         const store = store_1.createStore(contracts);
-        const { dispatch, getStore } = store;
+        const { dispatch, cloneState } = store;
         const items = [
             { title: 'USB adapter', sku: '1324' },
             { title: 'USB Type-C adapter', sku: '4321' }
         ];
         dispatch('products')({ items });
-        chai_1.expect(JSON.stringify(getStore().products)).to.equal(JSON.stringify({ items }));
+        const products = cloneState('products');
+        chai_1.expect(JSON.stringify(products)).to.equal(JSON.stringify({ items }));
     });
 });
 //# sourceMappingURL=store.spec.js.map
