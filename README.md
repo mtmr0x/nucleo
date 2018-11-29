@@ -37,10 +37,20 @@ The links below take you to our `API_DOCUMENTATION.md` file present in this repo
 - [Contracts](API_DOCUMENTATION.md#contracts)
 - [Types](API_DOCUMENTATION.md#types)
   - [NucleoObject](API_DOCUMENTATION.md#creating-nucleoobject)
+    - [Anatomy](API_DOCUMENTATION.md#nucleoobject-anatomy)
+    - [Usage](API_DOCUMENTATION.md#nucleoobject-usage)
   - [NucleoList](API_DOCUMENTATION.md#creating-nucleolist)
+    - [Anatomy](API_DOCUMENTATION.md#nucleolist-anatomy)
+    - [Usage](API_DOCUMENTATION.md#nucleolist-usage)
   - [NucleoString](API_DOCUMENTATION.md#creating-nucleostring)
   - [NucleoNumber](API_DOCUMENTATION.md#creating-nucleonumber)
   - [NucleoBoolean](API_DOCUMENTATION.md#creating-nucleoboolean)
+  - [NucleoStringAssertion](API_DOCUMENTATION.md#creating-nucleostringassertion)
+    - [Anatomy](API_DOCUMENTATION.md#nucleostringassertion-anatomy)
+    - [Usage](API_DOCUMENTATION.md#nucleostringassertion-usage)
+  - [NucleoNumberAssertion](API_DOCUMENTATION.md#creating-nucleonumberassertion)
+    - [Anatomy](API_DOCUMENTATION.md#nucleonumberassertion-anatomy)
+    - [Usage](API_DOCUMENTATION.md#nucleonumberassertion-usage)
 - [Creating the store](API_DOCUMENTATION.md#creating-the-store)
 - [Dispatching and updating the store](API_DOCUMENTATION.md#dispatching-and-updating-the-store)
 - [Get contracts in store](API_DOCUMENTATION.md#get-contracts-in-store)
@@ -48,6 +58,18 @@ The links below take you to our `API_DOCUMENTATION.md` file present in this repo
 - [Error management](API_DOCUMENTATION.md#error-management)
 
 ## Basic usage
+
+Nucleo is written in TypeScript and compatible with es2016+. Importing for a ECMAScript usage:
+
+```javascript
+import { createStore } from 'nucleojs';
+```
+
+Importing from Nucleo source for TypeScript usage just add `/src` after nucleojs module:
+
+```javascript
+import { createStore } from 'nucleojs/src';
+```
 
 ### Defining a data model (contract):
 
