@@ -1,19 +1,20 @@
 import NucleoObject from './nucleoTypes/NucleoObject';
 import NucleoList from './nucleoTypes/NucleoList';
+import executeListeners from './executeListeners';
 
 import { NucleoObjectType } from './_types/NucleoObjectType';
 import indexSearch from './indexSearch';
 
-const executeListeners = (contractName: string, listeners: Array<Function>, data: any) => {
-  for (let i = 0; i < listeners.length; i++) {
-    listeners[i]({ contractName });
-  }
-};
-
 const saveMethodReflection = (store: any, contractName: string, listeners: Array<Function>) => ({
   dispatch: (data: any) => {
-    executeListeners(contractName, listeners, data);
-    return store[contractName] = data;
+    return store[contractName] = indexSearch({
+      contractName,
+      storeData: data,
+      data,
+      listeners,
+      newStoreData: {},
+      newListenersData: {}
+    });
   },
   update: (data: any) => {
     return store[contractName] = indexSearch({

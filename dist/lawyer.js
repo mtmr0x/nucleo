@@ -3,15 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const NucleoObject_1 = require("./nucleoTypes/NucleoObject");
 const NucleoList_1 = require("./nucleoTypes/NucleoList");
 const indexSearch_1 = require("./indexSearch");
-const executeListeners = (contractName, listeners, data) => {
-    for (let i = 0; i < listeners.length; i++) {
-        listeners[i]({ contractName });
-    }
-};
 const saveMethodReflection = (store, contractName, listeners) => ({
     dispatch: (data) => {
-        executeListeners(contractName, listeners, data);
-        return store[contractName] = data;
+        return store[contractName] = indexSearch_1.default({
+            contractName,
+            storeData: data,
+            data,
+            listeners,
+            newStoreData: {},
+            newListenersData: {}
+        });
     },
     update: (data) => {
         return store[contractName] = indexSearch_1.default({
