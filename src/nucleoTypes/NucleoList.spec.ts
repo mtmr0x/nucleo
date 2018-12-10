@@ -4,6 +4,7 @@ import {
   NucleoBoolean,
   NucleoList,
   NucleoObject,
+  NucleoFunction,
   createStore
 } from './../index'
 import { expect } from 'chai';
@@ -14,7 +15,8 @@ describe('NucleoList', () => {
     name: 'userAccountsType',
     fields: {
       accountType: NucleoString,
-      accountNumber: NucleoNumber
+      accountNumber: NucleoNumber,
+      taxIdValidator: NucleoFunction
     }
   });
 
@@ -32,23 +34,31 @@ describe('NucleoList', () => {
     name: 'user',
     fields: {
       personalInfo: personalInfoType,
-      age: NucleoNumber
+      age: NucleoNumber,
+      validators: new NucleoList(NucleoFunction)
     }
   });
+
   const contracts = { user: userType };
   const store = createStore(contracts);
   const { dispatch, update, cloneState } = store;
 
+  const taxIdValidator = (value:string) => value.length === 12;
+  const newTaxIdValidator = (value:string) => value.length === 14;
+  const accountNumberValidator = (value:number) => String(value).length <= 8;
+  const ageValidator = (value:number) => value >= 18;
+
   it('should dispatch all data to store', () => {
     const data = {
       age: 27,
+      validators: [taxIdValidator, ageValidator],
       personalInfo: {
         firstName: 'Joseph',
         lastName: 'Nor',
         items: ['a', 'b', 'c'],
         accounts: [
-          { accountType: 'bank', accountNumber: 1233 },
-          { accountType: 'bank', accountNumber: 9876 }
+          { accountType: 'bank', accountNumber: 1233, taxIdValidator: taxIdValidator },
+          { accountType: 'bank', accountNumber: 9876, taxIdValidator: taxIdValidator }
         ]
       }
     }
@@ -87,12 +97,36 @@ describe('NucleoList', () => {
     expect(items[3]).to.equal('k');
   });
 
+  it('should try to update a NucleoList of function values succesfully', () => {
+    const u = update('user')({ validators: [taxIdValidator, accountNumberValidator, ageValidator] });
+
+    const user = cloneState('user');
+    const { validators, personalInfo } = user;
+
+
+    expect(personalInfo.accounts.length).to.equal(2);
+    expect(validators[1]).to.equal(accountNumberValidator);
+    expect(validators.length).to.equal(3);
+  });
+
+  it('should try to violate a NucleoList of function values with update', () => {
+    const u = update('user')({ validators: [taxIdValidator, 'string', ageValidator] });
+
+    const user = cloneState('user');
+    const { personalInfo, validators } = user;
+
+    expect(u.errors.length).to.equal(1);
+    expect(personalInfo.accounts.length).to.equal(2);
+    expect(validators[1]).to.equal(accountNumberValidator);
+    expect(validators.length).to.equal(3);
+  });
+
   it('should try to update a NucleoList of object values succesfully', () => {
     const obj = {
       personalInfo: {
         accounts: [
-          { accountType: 'service', accountNumber: 1111 },
-          { accountType: 'service', accountNumber: 2222 }
+          { accountType: 'service', accountNumber: 1111, taxIdValidator: newTaxIdValidator },
+          { accountType: 'service', accountNumber: 2222, taxIdValidator: newTaxIdValidator }
         ]
       }
     };
@@ -106,6 +140,8 @@ describe('NucleoList', () => {
     expect(personalInfo.accounts[1].accountType).to.equal('service');
     expect(personalInfo.accounts[0].accountNumber).to.equal(1111);
     expect(personalInfo.accounts[1].accountNumber).to.equal(2222);
+    expect(personalInfo.accounts[0].taxIdValidator).to.equal(newTaxIdValidator);
+    expect(personalInfo.accounts[1].taxIdValidator).to.equal(newTaxIdValidator);
   });
 
   it('should try to violate a NucleoList of object values with update', () => {
@@ -128,6 +164,8 @@ describe('NucleoList', () => {
     expect(personalInfo.accounts[1].accountType).to.equal('service');
     expect(personalInfo.accounts[0].accountNumber).to.equal(1111);
     expect(personalInfo.accounts[1].accountNumber).to.equal(2222);
+    expect(personalInfo.accounts[0].taxIdValidator).to.equal(newTaxIdValidator);
+    expect(personalInfo.accounts[1].taxIdValidator).to.equal(newTaxIdValidator);
   });
 });
 
