@@ -12,4 +12,6 @@ const NucleoObject_1 = require("./nucleoTypes/NucleoObject");
 exports.NucleoObject = NucleoObject_1.default;
 const NucleoList_1 = require("./nucleoTypes/NucleoList");
 exports.NucleoList = NucleoList_1.default;
+const NucleoFunction_1 = require("./nucleoTypes/NucleoFunction");
+exports.NucleoFunction = NucleoFunction_1.default;
 //# sourceMappingURL=index.js.map
