@@ -3,9 +3,8 @@
   "version": "0.6.0",
   "main": "dist/index.js",
   "author": "Matheus Marsiglio <matmarsiglio@gmail.com>",
-  "repository": "git://github.com/mtmr0x/nucleo",
+  "repository": "git://github.com/nucleojs/nucleo",
   "license": "MIT",
-  "repository": "git://github.com/mtmr0x/nucleo",
   "private": false,
   "devDependencies": {
     "@types/chai": "^4.1.4",

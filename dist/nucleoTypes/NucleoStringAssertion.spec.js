@@ -17,7 +17,7 @@ describe('NucleoStringAssertion', () => {
     const contracts = { document: userType };
     const store = index_1.createStore(contracts);
     const { dispatch, update, cloneState } = store;
-    it('should ty to violate contract with wrong type dispatching to contract', () => {
+    it('should try to violate contract with wrong type dispatching to contract', () => {
         const d = dispatch('user')({
             name: 'John',
             taxId: '123456789090'

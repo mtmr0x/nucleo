@@ -8,7 +8,8 @@ describe('NucleoList', () => {
         name: 'userAccountsType',
         fields: {
             accountType: index_1.NucleoString,
-            accountNumber: index_1.NucleoNumber
+            accountNumber: index_1.NucleoNumber,
+            taxIdValidator: index_1.NucleoFunction
         }
     });
     const personalInfoType = new index_1.NucleoObject({
@@ -24,22 +25,28 @@ describe('NucleoList', () => {
         name: 'user',
         fields: {
             personalInfo: personalInfoType,
-            age: index_1.NucleoNumber
+            age: index_1.NucleoNumber,
+            validators: new index_1.NucleoList(index_1.NucleoFunction)
         }
     });
     const contracts = { user: userType };
     const store = index_1.createStore(contracts);
     const { dispatch, update, cloneState } = store;
+    const taxIdValidator = (value) => value.length === 12;
+    const newTaxIdValidator = (value) => value.length === 14;
+    const accountNumberValidator = (value) => String(value).length <= 8;
+    const ageValidator = (value) => value >= 18;
     it('should dispatch all data to store', () => {
         const data = {
             age: 27,
+            validators: [taxIdValidator, ageValidator],
             personalInfo: {
                 firstName: 'Joseph',
                 lastName: 'Nor',
                 items: ['a', 'b', 'c'],
                 accounts: [
-                    { accountType: 'bank', accountNumber: 1233 },
-                    { accountType: 'bank', accountNumber: 9876 }
+                    { accountType: 'bank', accountNumber: 1233, taxIdValidator: taxIdValidator },
+                    { accountType: 'bank', accountNumber: 9876, taxIdValidator: taxIdValidator }
                 ]
             }
         };
@@ -69,12 +76,29 @@ describe('NucleoList', () => {
         chai_1.expect(personalInfo.accounts.length).to.equal(2);
         chai_1.expect(items[3]).to.equal('k');
     });
+    it('should try to update a NucleoList of function values succesfully', () => {
+        const u = update('user')({ validators: [taxIdValidator, accountNumberValidator, ageValidator] });
+        const user = cloneState('user');
+        const { validators, personalInfo } = user;
+        chai_1.expect(personalInfo.accounts.length).to.equal(2);
+        chai_1.expect(validators[1]).to.equal(accountNumberValidator);
+        chai_1.expect(validators.length).to.equal(3);
+    });
+    it('should try to violate a NucleoList of function values with update', () => {
+        const u = update('user')({ validators: [taxIdValidator, 'string', ageValidator] });
+        const user = cloneState('user');
+        const { personalInfo, validators } = user;
+        chai_1.expect(u.errors.length).to.equal(1);
+        chai_1.expect(personalInfo.accounts.length).to.equal(2);
+        chai_1.expect(validators[1]).to.equal(accountNumberValidator);
+        chai_1.expect(validators.length).to.equal(3);
+    });
     it('should try to update a NucleoList of object values succesfully', () => {
         const obj = {
             personalInfo: {
                 accounts: [
-                    { accountType: 'service', accountNumber: 1111 },
-                    { accountType: 'service', accountNumber: 2222 }
+                    { accountType: 'service', accountNumber: 1111, taxIdValidator: newTaxIdValidator },
+                    { accountType: 'service', accountNumber: 2222, taxIdValidator: newTaxIdValidator }
                 ]
             }
         };
@@ -86,6 +110,8 @@ describe('NucleoList', () => {
         chai_1.expect(personalInfo.accounts[1].accountType).to.equal('service');
         chai_1.expect(personalInfo.accounts[0].accountNumber).to.equal(1111);
         chai_1.expect(personalInfo.accounts[1].accountNumber).to.equal(2222);
+        chai_1.expect(personalInfo.accounts[0].taxIdValidator).to.equal(newTaxIdValidator);
+        chai_1.expect(personalInfo.accounts[1].taxIdValidator).to.equal(newTaxIdValidator);
     });
     it('should try to violate a NucleoList of object values with update', () => {
         const obj = {
@@ -104,6 +130,8 @@ describe('NucleoList', () => {
         chai_1.expect(personalInfo.accounts[1].accountType).to.equal('service');
         chai_1.expect(personalInfo.accounts[0].accountNumber).to.equal(1111);
         chai_1.expect(personalInfo.accounts[1].accountNumber).to.equal(2222);
+        chai_1.expect(personalInfo.accounts[0].taxIdValidator).to.equal(newTaxIdValidator);
+        chai_1.expect(personalInfo.accounts[1].taxIdValidator).to.equal(newTaxIdValidator);
     });
 });
 //# sourceMappingURL=NucleoList.spec.js.map
