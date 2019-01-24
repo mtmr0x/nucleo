@@ -122,5 +122,10 @@ describe('Clone method', () => {
     expect(clonedUser2.name.lastName).to.equal('Doe');
     expect(clonedUser2.age).to.equal(18);
   });
+  it('should try to clone a state that does not exist and receiv a undefined as response', () => {
+    const state = cloneState('nonExistingState');
+
+    expect(state).to.equal(undefined);
+  })
 });
 

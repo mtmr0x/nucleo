@@ -1,6 +1,6 @@
 {
   "name": "nucleojs",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "main": "dist/index.js",
   "author": "Matheus Marsiglio <matmarsiglio@gmail.com>",
   "repository": "git://github.com/nucleojs/nucleo",
@@ -18,7 +18,7 @@
   "scripts": {
     "start": "ts-node ./src/index.ts",
     "nodemon": "nodemon",
-    "tests": "mocha -r ts-node/register src/**/*.spec.ts",
+    "tests": "mocha -r ts-node/register **/*.spec.ts",
     "test": "mocha -r ts-node/register",
     "compile": "tsc"
   }

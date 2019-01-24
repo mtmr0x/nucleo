@@ -38,14 +38,20 @@ function createStore(contracts: any) {
     dispatch: save({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'dispatch' }),
     update: save({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'update' }),
     subscribe,
-    cloneState: (contractName:string) => indexSearch({
-      contractName,
-      storeData: __store__[contractName],
-      data: {},
-      listeners: undefined,
-      newStoreData: {},
-      newListenersData: {}
-    })
+    cloneState: (contractName:string) => {
+      if (!__contracts__[contractName]) {
+        return undefined;
+      }
+
+      return indexSearch({
+        contractName,
+        storeData: __store__[contractName],
+        data: {},
+        listeners: undefined,
+        newStoreData: {},
+        newListenersData: {}
+      });
+    }
   };
 }
 
