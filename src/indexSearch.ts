@@ -10,11 +10,11 @@ const saveType = (data:any):'rec'|'save' => {
 
 interface IndexSearchInterface {
   contractName: string;
-  storeData: any;
+  storeData: any|{};
   data: any;
   listeners: Array<Function>|void;
-  newStoreData: any;
-  newListenersData: any;
+  newStoreData: any|{};
+  newListenersData: any|{};
 };
 
 const indexSearch = (args: IndexSearchInterface) => {
