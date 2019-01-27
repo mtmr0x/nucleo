@@ -104,5 +104,9 @@ describe('Clone method', () => {
         chai_1.expect(clonedUser2.name.lastName).to.equal('Doe');
         chai_1.expect(clonedUser2.age).to.equal(18);
     });
+    it('should try to clone a state that does not exist and receiv a undefined as response', () => {
+        const state = cloneState('nonExistingState');
+        chai_1.expect(state).to.equal(undefined);
+    });
 });
 //# sourceMappingURL=cloneState.spec.js.map

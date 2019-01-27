@@ -30,14 +30,19 @@ function createStore(contracts) {
         dispatch: save_1.default({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'dispatch' }),
         update: save_1.default({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'update' }),
         subscribe,
-        cloneState: (contractName) => indexSearch_1.default({
-            contractName,
-            storeData: __store__[contractName],
-            data: {},
-            listeners: undefined,
-            newStoreData: {},
-            newListenersData: {}
-        })
+        cloneState: (contractName) => {
+            if (!__contracts__[contractName]) {
+                return undefined;
+            }
+            return indexSearch_1.default({
+                contractName,
+                storeData: __store__[contractName],
+                data: {},
+                listeners: undefined,
+                newStoreData: {},
+                newListenersData: {}
+            });
+        }
     };
 }
 exports.createStore = createStore;
