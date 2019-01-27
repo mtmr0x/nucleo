@@ -20,7 +20,7 @@ interface IndexSearchInterface {
 const indexSearch = (args: IndexSearchInterface) => {
   const {
     contractName,
-    storeData,
+    storeData = {},
     data,
     listeners,
     newStoreData = {},
