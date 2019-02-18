@@ -81,7 +81,8 @@ describe('Update method', () => {
     fields: {
       name: completeNameType,
       age: NucleoNumber,
-      location: userLocationType
+      location: userLocationType,
+      verified: NucleoBoolean
     }
   });
   const contracts = { user: userType };
@@ -99,7 +100,8 @@ describe('Update method', () => {
           complement:  ''
         }
       },
-      age: 27
+      age: 27,
+      verified: true
     });
 
     const { errors, data } = update('user')({ name: { firstName: 'Joseph' } });
@@ -154,6 +156,23 @@ describe('Update method', () => {
     expect(user.location.address.street).to.equal('9 avenue');
     expect(user.location.address.streetNumber).to.equal('678');
     expect(user.location.address.complement).to.equal('apartment 3');
-  })
+  });
+
+  it('should update false javascript values and save it properly', () => {
+    const { errors, data } = update('user')({
+      age: 0,
+      name: {
+        lastName: ''
+      },
+      verified: false
+    });
+
+    const user = cloneState('user');
+
+    expect(user.name.lastName).to.equal('');
+    expect(user.verified).to.equal(false);
+    expect(user.age).to.equal(0);
+
+  });
 });
 
