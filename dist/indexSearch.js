@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const executeListeners_1 = require("./executeListeners");
 const saveType = (data) => {
-    if (typeof data === 'object' && !data.length) {
+    if (typeof data === 'object' && !Array.isArray(data)) {
         return 'rec';
     }
     return 'save';

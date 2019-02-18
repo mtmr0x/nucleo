@@ -36,6 +36,24 @@ describe('NucleoList', () => {
     const newTaxIdValidator = (value) => value.length === 14;
     const accountNumberValidator = (value) => String(value).length <= 8;
     const ageValidator = (value) => value >= 18;
+    it('should dispatch all data to store with empty array at accounts', () => {
+        const data = {
+            age: 27,
+            validators: [taxIdValidator, ageValidator],
+            personalInfo: {
+                firstName: 'Joseph',
+                lastName: 'Nor',
+                items: ['a', 'b', 'c'],
+                accounts: []
+            }
+        };
+        const d = dispatch('user')(data);
+        const clonedData = cloneState('user');
+        const { personalInfo } = clonedData;
+        chai_1.expect(d.errors.length).to.equal(0);
+        chai_1.expect(personalInfo.accounts.length).to.equal(0);
+        chai_1.expect(Array.isArray(personalInfo.accounts)).to.equal(true);
+    });
     it('should dispatch all data to store', () => {
         const data = {
             age: 27,
@@ -51,6 +69,8 @@ describe('NucleoList', () => {
             }
         };
         const d = dispatch('user')(data);
+        const clonedData = cloneState('user');
+        const { personalInfo } = clonedData;
         chai_1.expect(d.errors.length).to.equal(0);
     });
     it('should try to update a NucleoList of primitive values succesfully', () => {
@@ -132,6 +152,18 @@ describe('NucleoList', () => {
         chai_1.expect(personalInfo.accounts[1].accountNumber).to.equal(2222);
         chai_1.expect(personalInfo.accounts[0].taxIdValidator).to.equal(newTaxIdValidator);
         chai_1.expect(personalInfo.accounts[1].taxIdValidator).to.equal(newTaxIdValidator);
+    });
+    it('should be able to save empty list to NucleoList', () => {
+        const obj = {
+            personalInfo: {
+                accounts: []
+            }
+        };
+        const u = update('user')(obj);
+        const user = cloneState('user');
+        const { personalInfo } = user;
+        chai_1.expect(u.errors.length).to.equal(0);
+        chai_1.expect(personalInfo.accounts.length).to.equal(0);
     });
 });
 //# sourceMappingURL=NucleoList.spec.js.map
