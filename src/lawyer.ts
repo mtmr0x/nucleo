@@ -53,7 +53,6 @@ export default function lawyer({
 
   for (let i = 0; dataKeys.length > i; i++) {
     const currentDataKey = data[dataKeys[i]];
-
     if (contractFields[dataKeys[i]] instanceof NucleoObject) {
       lawyer({
         contract: contractFields[dataKeys[i]],
