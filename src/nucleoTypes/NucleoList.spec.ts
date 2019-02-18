@@ -48,6 +48,26 @@ describe('NucleoList', () => {
   const accountNumberValidator = (value:number) => String(value).length <= 8;
   const ageValidator = (value:number) => value >= 18;
 
+  it('should dispatch all data to store with empty array at accounts', () => {
+    const data = {
+      age: 27,
+      validators: [taxIdValidator, ageValidator],
+      personalInfo: {
+        firstName: 'Joseph',
+        lastName: 'Nor',
+        items: ['a', 'b', 'c'],
+        accounts: []
+      }
+    }
+
+    const d = dispatch('user')(data);
+    const clonedData = cloneState('user');
+    const { personalInfo } = clonedData;
+    expect(d.errors.length).to.equal(0);
+    expect(personalInfo.accounts.length).to.equal(0);
+    expect(Array.isArray(personalInfo.accounts)).to.equal(true);
+  });
+
   it('should dispatch all data to store', () => {
     const data = {
       age: 27,
@@ -64,6 +84,8 @@ describe('NucleoList', () => {
     }
 
     const d = dispatch('user')(data);
+    const clonedData = cloneState('user');
+    const { personalInfo } = clonedData;
     expect(d.errors.length).to.equal(0);
   });
 
@@ -166,6 +188,22 @@ describe('NucleoList', () => {
     expect(personalInfo.accounts[1].accountNumber).to.equal(2222);
     expect(personalInfo.accounts[0].taxIdValidator).to.equal(newTaxIdValidator);
     expect(personalInfo.accounts[1].taxIdValidator).to.equal(newTaxIdValidator);
+  });
+
+  it('should be able to save empty list to NucleoList', () => {
+    const obj = {
+      personalInfo: {
+        accounts: []
+      }
+    };
+
+    const u = update('user')(obj);
+
+    const user = cloneState('user');
+    const { personalInfo } = user;
+
+    expect(u.errors.length).to.equal(0);
+    expect(personalInfo.accounts.length).to.equal(0);
   });
 });
 

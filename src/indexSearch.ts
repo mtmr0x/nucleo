@@ -1,7 +1,7 @@
 import executeListeners from './executeListeners';
 
 const saveType = (data:any):'rec'|'save' => {
-  if (typeof data === 'object' && !data.length) {
+  if (typeof data === 'object' && !Array.isArray(data)) {
     return 'rec';
   }
 
