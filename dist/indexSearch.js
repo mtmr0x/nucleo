@@ -15,7 +15,7 @@ const indexSearch = (args) => {
     for (let i = 0; storeDataKeys.length > i; i++) {
         const dataTypeReflection = () => ({
             rec: () => {
-                const bufferData = data[storeDataKeys[i]] || storeData[storeDataKeys[i]];
+                const bufferData = data[storeDataKeys[i]] === null || data[storeDataKeys[i]] === undefined ? storeData[storeDataKeys[i]] : data[storeDataKeys[i]];
                 newStoreData[storeDataKeys[i]] = {};
                 newListenersData[storeDataKeys[i]] = {};
                 return indexSearch({
@@ -28,7 +28,8 @@ const indexSearch = (args) => {
                 });
             },
             save: () => {
-                if (data[storeDataKeys[i]]) {
+                const nonExistentValue = data[storeDataKeys[i]] === null || data[storeDataKeys[i]] === undefined ? true : false;
+                if (!nonExistentValue) {
                     newStoreData[storeDataKeys[i]] = data[storeDataKeys[i]];
                     return newListenersData[storeDataKeys[i]] = data[storeDataKeys[i]];
                 }

@@ -68,7 +68,8 @@ describe('Update method', () => {
         fields: {
             name: completeNameType,
             age: primitive_1.NucleoNumber,
-            location: userLocationType
+            location: userLocationType,
+            verified: primitive_1.NucleoBoolean
         }
     });
     const contracts = { user: userType };
@@ -85,7 +86,8 @@ describe('Update method', () => {
                     complement: ''
                 }
             },
-            age: 27
+            age: 27,
+            verified: true
         });
         const { errors, data } = update('user')({ name: { firstName: 'Joseph' } });
         const user = cloneState('user');
@@ -133,6 +135,19 @@ describe('Update method', () => {
         chai_1.expect(user.location.address.street).to.equal('9 avenue');
         chai_1.expect(user.location.address.streetNumber).to.equal('678');
         chai_1.expect(user.location.address.complement).to.equal('apartment 3');
+    });
+    it('should update false javascript values and save it properly', () => {
+        const { errors, data } = update('user')({
+            age: 0,
+            name: {
+                lastName: ''
+            },
+            verified: false
+        });
+        const user = cloneState('user');
+        chai_1.expect(user.name.lastName).to.equal('');
+        chai_1.expect(user.verified).to.equal(false);
+        chai_1.expect(user.age).to.equal(0);
     });
 });
 //# sourceMappingURL=update.spec.js.map
