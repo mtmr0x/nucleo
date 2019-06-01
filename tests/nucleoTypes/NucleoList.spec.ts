@@ -6,7 +6,7 @@ import {
   NucleoObject,
   NucleoFunction,
   createStore
-} from './../index'
+} from '../../src/index'
 import { expect } from 'chai';
 import 'mocha';
 

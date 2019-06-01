@@ -1,24 +1,24 @@
 import {
   createStore,
-  NucleoNumberAssertion,
+  NucleoStringAssertion,
   NucleoString,
   NucleoObject,
   NucleoList,
-} from './../index'
+} from '../../src/index'
 
 import { expect } from 'chai';
 import 'mocha';
 
-describe('NucleoNumberAssertion', () => {
-  function ageValidation(value:number) {
-    return value < 100;
+describe('NucleoStringAssertion', () => {
+  function taxIdValidation(value:string) {
+    return value.length === 11;
   }
 
   const userType = new NucleoObject({
     name: 'user',
     fields:  {
       name: NucleoString,
-      age: new NucleoNumberAssertion(ageValidation)
+      taxId: new NucleoStringAssertion(taxIdValidation)
     }
   });
 
@@ -29,7 +29,7 @@ describe('NucleoNumberAssertion', () => {
   it('should try to violate contract with wrong type dispatching to contract', () => {
     const d = dispatch('user')({
       name: 'John',
-      age: 110
+      taxId: '123456789090'
     });
 
     expect(d.errors.length).to.equal(1);
@@ -38,25 +38,25 @@ describe('NucleoNumberAssertion', () => {
   it('should dispatch and create this item in store', () => {
     const d = dispatch('user')({
       name: 'John',
-      age: 27
+      taxId: '12345678909'
     });
     const user = cloneState('user');
 
     expect(user.name).to.equal('John');
-    expect(user.age).to.equal(27);
+    expect(user.taxId).to.equal('12345678909');
   });
 
   it('should try to violate contract by trying to update it', () => {
-    const u = update('user')({ age: 200 });
+    const u = update('user')({ taxId: '0123345678909' });
 
     expect(u.errors.length).to.equal(1);
   });
 
   it('should update data according to contract and save it in store', () => {
-    const u = update('user')({ age: 34 });
+    const u = update('user')({ taxId: '12334567890' });
     const user = cloneState('user');
 
-    expect(user.age).to.equal(34);
+    expect(user.taxId).to.equal('12334567890');
     expect(user.name).to.equal('John');
   })
 });

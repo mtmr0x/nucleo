@@ -15,7 +15,7 @@
     }
   },
   "include": [
-    "src/**/*"
+    "src/**/*", "tests/nucleoTypes/NucleoFunction.spec.ts"
   ]
 }
 

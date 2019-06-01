@@ -4,7 +4,7 @@ import {
   NucleoObject,
   NucleoList,
   NucleoFunction
-} from './../index'
+} from '../../src/index'
 
 import { expect } from 'chai';
 import 'mocha';
