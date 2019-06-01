@@ -19,7 +19,6 @@
     "start": "ts-node ./src/index.ts",
     "nodemon": "nodemon",
     "tests": "mocha -r ts-node/register **/*.spec.ts",
-    "test": "mocha -r ts-node/register",
     "compile": "tsc"
   }
 }

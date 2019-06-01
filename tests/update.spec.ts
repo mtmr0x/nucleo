@@ -1,11 +1,11 @@
-import { createStore } from './store';
+import { createStore } from '../src/store';
 import {
   NucleoString,
   NucleoNumber,
   NucleoBoolean
-} from './nucleoTypes/primitive'
-import NucleoObject from './nucleoTypes/NucleoObject';
-import NucleoList from './nucleoTypes/NucleoList';
+} from '../src/nucleoTypes/primitive'
+import NucleoObject from '../src/nucleoTypes/NucleoObject';
+import NucleoList from '../src/nucleoTypes/NucleoList';
 import { expect } from 'chai';
 import 'mocha';
 
