@@ -70,4 +70,3 @@ export const NucleoBoolean: NucleoPrimitiveType = {
     return true;
   }
 };
-

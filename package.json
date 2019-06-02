@@ -9,7 +9,9 @@
   "devDependencies": {
     "@types/chai": "^4.1.4",
     "@types/mocha": "^5.2.3",
+    "@typescript-eslint/parser": "^1.9.0",
     "chai": "^4.1.2",
+    "eslint": "^5.16.0",
     "mocha": "^5.2.0",
     "nodemon": "^1.17.5",
     "ts-node": "^7.0.0",
@@ -19,6 +21,7 @@
     "start": "ts-node ./src/index.ts",
     "nodemon": "nodemon",
     "tests": "mocha -r ts-node/register **/*.spec.ts",
+    "lint": "./node_modules/.bin/eslint src/*.ts src/**/*.ts",
     "compile": "tsc"
   }
 }

@@ -5,5 +5,4 @@ interface SerializeFunction {
 export type NucleoPrimitiveType = {
   Type: string,
   serialize: SerializeFunction
-}
-
+};

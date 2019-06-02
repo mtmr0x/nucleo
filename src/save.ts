@@ -34,6 +34,5 @@ export default function save({
         __errors__: []
       })(store, listeners);
     };
-  }
-};
-
+  };
+}

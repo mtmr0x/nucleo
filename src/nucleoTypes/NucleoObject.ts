@@ -12,4 +12,3 @@ export default class NucleoObject {
 
   getFields = () => this.fields
 }
-
