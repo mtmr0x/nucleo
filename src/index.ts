@@ -6,7 +6,7 @@ import {
   NucleoBoolean,
   NucleoStringAssertion,
   NucleoNumberAssertion
-} from './nucleoTypes/primitive'
+} from './nucleoTypes/primitive';
 
 import NucleoObject from './nucleoTypes/NucleoObject';
 import NucleoList from './nucleoTypes/NucleoList';
@@ -23,4 +23,3 @@ export {
   NucleoObject,
   NucleoFunction
 };
-

@@ -2,7 +2,7 @@ import save from './save';
 import NucleoObject from './nucleoTypes/NucleoObject';
 import indexSearch from './indexSearch';
 
-let listeners: Array<Function> = [];
+const listeners: Array<Function> = [];
 
 function subscribe(listener: Function) {
   if (typeof listener !== 'function') {
@@ -12,7 +12,7 @@ function subscribe(listener: Function) {
 }
 
 function createStore(contracts: any) {
-  let __store__:any = {};
+  const __store__:any = {};
   let __contracts__: any = {};
   const contractsKeys: any = Object.keys(contracts);
 
@@ -58,4 +58,3 @@ function createStore(contracts: any) {
 export {
   createStore
 };
-

@@ -5,4 +5,3 @@ const executeListeners = (contractName: string, listeners: Array<Function>, data
 };
 
 export default executeListeners;
-

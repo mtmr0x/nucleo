@@ -15,7 +15,7 @@ interface IndexSearchInterface {
   listeners: Array<Function>|void;
   newStoreData: any|{};
   newListenersData: any|{};
-};
+}
 
 const indexSearch = (args: IndexSearchInterface) => {
   const {
@@ -27,7 +27,6 @@ const indexSearch = (args: IndexSearchInterface) => {
     newListenersData = {}
   } = args;
 
-  const dataKeys = Object.keys(data);
   const storeDataKeys = Object.keys(storeData);
 
   for (let i = 0; storeDataKeys.length > i; i++) {
@@ -64,7 +63,6 @@ const indexSearch = (args: IndexSearchInterface) => {
     executeListeners(contractName, listeners, newListenersData);
   }
   return newStoreData;
-}
+};
 
 export default indexSearch;
-

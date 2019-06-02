@@ -204,6 +204,7 @@ console.log(user);
 - `npm start` - Start development mode.
 - `npm run nodemon` - Start development mode and waiting for changes.
 - `npm run tests` - Run automated tests.
+- `npm run lint` - Validate syntax of all Typescript files.
 - `npm run compile` - Compile for production.
 
 ## Contributing

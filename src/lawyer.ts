@@ -1,6 +1,5 @@
 import NucleoObject from './nucleoTypes/NucleoObject';
 import NucleoList from './nucleoTypes/NucleoList';
-import executeListeners from './executeListeners';
 
 import { NucleoObjectType } from './_types/NucleoObjectType';
 import indexSearch from './indexSearch';
@@ -144,7 +143,6 @@ export default function lawyer({
       status: operationStatus,
       errors: __errors__,
       data,
-    }
-  }
+    };
+  };
 }
-
