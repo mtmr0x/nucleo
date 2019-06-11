@@ -110,13 +110,47 @@ describe('Update method', () => {
     expect(user.name.lastName).to.equal('Doe');
     expect(user.age).to.equal(27);
   });
+
+  it('should dispatch only one property in deeper levels and just this property should be returning into data update, if status OK, ', () => {
+    const d = dispatch('user')({
+      name: { firstName: 'John', lastName: 'Doe' },
+      location: {
+        city: 'NY',
+        address: {
+          street: '9 avenue',
+          streetNumber: '678',
+          complement:  ''
+        }
+      },
+      age: 27,
+      verified: true
+    });
+
+    const { errors, data } = update('user')({ name: { firstName: 'Joseph' } });
+    expect(data.name.firstName).to.equal('Joseph');
+    expect(data.name.lastName).to.equal('Doe');
+    expect(data.age).to.equal(27);
+  });
+
+
   it('should dispatch only one property in first level and just this property should be updated in store', () => {
     const { errors, data } = update('user')({ age: 18 });
+
     const user = cloneState('user');
 
     expect(user.name.firstName).to.equal('Joseph');
     expect(user.name.lastName).to.equal('Doe');
     expect(user.age).to.equal(18);
+    expect(user.verified).to.equal(true);
+  });
+
+  it('should dispatch only one property in first level and just this property should be returning into data update, if status OK', () => {
+    const { errors, data } = update('user')({ age: 18 });
+
+    expect(data.name.firstName).to.equal('Joseph');
+    expect(data.name.lastName).to.equal('Doe');
+    expect(data.age).to.equal(18);
+    expect(data.verified).to.equal(true);
   });
 
   it('should dispatch a value to a deeper level and save it properly', () => {
@@ -130,6 +164,18 @@ describe('Update method', () => {
     expect(user.location.address.street).to.equal('9 avenue');
     expect(user.location.address.streetNumber).to.equal('678');
     expect(user.location.address.complement).to.equal('apartment 2');
+  });
+
+  it('should dispatch a value to a deeper level, save it properly and returning into data update, if status OK', () => {
+    const { errors, data } = update('user')({ location: { address: { complement: 'apartment 2' } } });
+
+    expect(data.name.firstName).to.equal('Joseph');
+    expect(data.name.lastName).to.equal('Doe');
+    expect(data.age).to.equal(18);
+    expect(data.location.city).to.equal('NY');
+    expect(data.location.address.street).to.equal('9 avenue');
+    expect(data.location.address.streetNumber).to.equal('678');
+    expect(data.location.address.complement).to.equal('apartment 2');
   });
 
   it('should update value and listener should receive data properly', () => {
@@ -174,5 +220,21 @@ describe('Update method', () => {
     expect(user.age).to.equal(0);
 
   });
+
+  it('should update false javascript values, save it properly and returning into data update, if status OK', () => {
+    const { errors, data } = update('user')({
+      age: 0,
+      name: {
+        lastName: ''
+      },
+      verified: false
+    });
+
+    expect(data.name.lastName).to.equal('');
+    expect(data.verified).to.equal(false);
+    expect(data.age).to.equal(0);
+
+  });
+
 });
 

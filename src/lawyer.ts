@@ -16,7 +16,7 @@ const saveMethodReflection = (store: any, contractName: string, listeners: Array
     });
   },
   update: (data: any) => {
-    return store[contractName] = indexSearch({
+   return store[contractName] = indexSearch({
       contractName,
       storeData: store[contractName],
       data,
@@ -135,14 +135,15 @@ export default function lawyer({
   }
 
   return (store:any, listeners:Array<Function>) => {
+    let newStore = data;
     if (!__errors__.length) {
-      saveMethodReflection(store, contractName, listeners)[saveMethod](data);
+      newStore = saveMethodReflection(store, contractName, listeners)[saveMethod](data);
     }
 
     return {
       status: operationStatus,
       errors: __errors__,
-      data,
-    };
-  };
+      data: newStore,
+    }
+  }
 }
