@@ -133,7 +133,7 @@ describe('Update method', () => {
   });
 
 
-  it('should dispatch only one property in first level and just this property should be updated in store', () => {
+  it('should update only one property in first level and just this property should be updated in store', () => {
     const { errors, data } = update('user')({ age: 18 });
 
     const user = cloneState('user');
@@ -144,7 +144,7 @@ describe('Update method', () => {
     expect(user.verified).to.equal(true);
   });
 
-  it('should dispatch only one property in first level and just this property should be returning into data update, if status OK', () => {
+  it('should update only one property in first level and just this property should be returning into data update, if status OK', () => {
     const { errors, data } = update('user')({ age: 18 });
 
     expect(data.name.firstName).to.equal('Joseph');
@@ -153,7 +153,7 @@ describe('Update method', () => {
     expect(data.verified).to.equal(true);
   });
 
-  it('should dispatch a value to a deeper level and save it properly', () => {
+  it('should update a value to a deeper level and save it properly', () => {
     const d = update('user')({ location: { address: { complement: 'apartment 2' } } });
     const user = cloneState('user');
 
@@ -166,7 +166,7 @@ describe('Update method', () => {
     expect(user.location.address.complement).to.equal('apartment 2');
   });
 
-  it('should dispatch a value to a deeper level, save it properly and returning into data update, if status OK', () => {
+  it('should update a value to a deeper level, save it properly and returning into data update, if status OK', () => {
     const { errors, data } = update('user')({ location: { address: { complement: 'apartment 2' } } });
 
     expect(data.name.firstName).to.equal('Joseph');
