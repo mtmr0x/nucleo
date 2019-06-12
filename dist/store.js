@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const save_1 = require("./save");
 const NucleoObject_1 = require("./nucleoTypes/NucleoObject");
 const indexSearch_1 = require("./indexSearch");
-let listeners = [];
+const listeners = [];
 function subscribe(listener) {
     if (typeof listener !== 'function') {
         throw Error('Expected listener to be a function');
@@ -11,7 +11,7 @@ function subscribe(listener) {
     return listeners.push(listener);
 }
 function createStore(contracts) {
-    let __store__ = {};
+    const __store__ = {};
     let __contracts__ = {};
     const contractsKeys = Object.keys(contracts);
     for (let c = 0; c < contractsKeys.length; c++) {

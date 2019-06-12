@@ -21,5 +21,4 @@ function save({ contracts, store, listeners, saveMethod }) {
     };
 }
 exports.default = save;
-;
 //# sourceMappingURL=save.js.map

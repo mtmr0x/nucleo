@@ -7,10 +7,8 @@ const saveType = (data) => {
     }
     return 'save';
 };
-;
 const indexSearch = (args) => {
     const { contractName, storeData = {}, data, listeners, newStoreData = {}, newListenersData = {} } = args;
-    const dataKeys = Object.keys(data);
     const storeDataKeys = Object.keys(storeData);
     for (let i = 0; storeDataKeys.length > i; i++) {
         const dataTypeReflection = () => ({

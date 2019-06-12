@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const NucleoObject_1 = require("./../nucleoTypes/NucleoObject");
-;
 class NucleoList {
     constructor(config) {
         this.getListChildrenType = () => {
