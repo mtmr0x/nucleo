@@ -19,6 +19,7 @@
     - [Usage](#nucleonumberassertion-usage)
 - [Creating the store](#creating-the-store)
 - [Dispatching and updating the store](#dispatching-and-updating-the-store)
+- [Update and Dispatch function signature](#Update-and-Dispatch-function-signature)
 - [Get contracts in store](#get-contracts-in-store)
 - [Subscribing to changes](#subscribing-to-changes)
 - [Error management](#error-management)
@@ -428,13 +429,52 @@ console.log(user);
   data: {
     name: {
       firstName: 'Robert',
-      lastName: 'Nor'
     },
-    age: 27
   },
+}
+
+It'll return the data you asked to save. To receive the new store, you will have to clone this state or subscribe to Nucleo changes through subscribe function
+Check documentation for cloneState in the next section
+*/
+const newUser = cloneState('user');
+console.log(newUser);
+/*
+{
+  name: {
+    firstName: 'Robert',
+    lastName: 'Nor',
+  },
+  age: 27,
 }
 */
 ```
+
+#### Update and Dispatch function signature
+
+`update` and `dispatch` functions have the same signature albeit a discrete behavioral difference (you can find this difference in .
+
+**Both are curried functions:**
+
+ - `update(<contract_name>)(<data_to_save_in_contract>)`;
+ - `dispatch(<contract_name>)(<data_to_save_in_contract>)`.
+
+`<contract_name>`: a `string` for the contract name you want to update or dispatch. It's the `name` field for every new `NucleoObject` in the contracts definition. Those must be unique. You can find more information about contracts in API_DOCUMENTATION.md.
+
+`<data_to_save_in_contract>`: must follow its contract model. For understanding how to use `update` and `dispatch` for saving data, check API_DOCUMENTATION.md in "Dispatching and updating the store" section.
+
+**Both return the same object interface:**
+
+```javascript
+{
+  status: 'OK' | 'NOK', // a string return 'OK' for success cases and 'NOK' for errors
+  errors: [], // in case of errors, it will return the list of errors
+  data: { ... } // the data you just tried to save in store
+}
+```
+
+ - `status`: a string return 'OK' for success cases and 'NOK' for errors;
+ - `errors`: a list of objects containing the errors in this operation. Usually related to contract violations. You can find more details in API_DOCUMENTATION.md at "Error management" area.
+ - `data`: This is the exactly same object you tried to save at store for comparison reasons in cases of errors.
 
 ## Getting a state clone from store
 
