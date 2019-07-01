@@ -1,6 +1,10 @@
-const executeListeners = (contractName: string, listeners: Array<Function>, data: any) => {
+import { Listener } from './subscribe';
+
+const executeListeners = (contractName: string, listeners: Array<Listener>, data: any) => {
   for (let i = 0; i < listeners.length; i++) {
-    listeners[i]({ contractName, data });
+    if (listeners[i].on) {
+      listeners[i].listener({ contractName, data });
+    }
   }
 };
 

@@ -1,9 +1,10 @@
 import lawyer from './lawyer';
+import { Listener } from './subscribe';
 
 interface saveInterface {
   contracts: any;
   store: any;
-  listeners: Array<Function>;
+  listeners: Array<Listener>;
   saveMethod: 'update'|'dispatch'
 }
 

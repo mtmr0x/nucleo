@@ -1,15 +1,7 @@
 import save from './save';
 import NucleoObject from './nucleoTypes/NucleoObject';
 import indexSearch from './indexSearch';
-
-const listeners: Array<Function> = [];
-
-function subscribe(listener: Function) {
-  if (typeof listener !== 'function') {
-    throw Error('Expected listener to be a function');
-  }
-  return listeners.push(listener);
-}
+import subscribe, { listeners } from './subscribe';
 
 function createStore(contracts: any) {
   const __store__:any = {};

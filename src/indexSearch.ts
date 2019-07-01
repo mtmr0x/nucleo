@@ -1,4 +1,5 @@
 import executeListeners from './executeListeners';
+import { Listener } from './subscribe';
 
 const saveType = (data:any):'rec'|'save' => {
   if (typeof data === 'object' && !Array.isArray(data)) {
@@ -12,7 +13,7 @@ interface IndexSearchInterface {
   contractName: string;
   storeData: any|{};
   data: any;
-  listeners: Array<Function>|void;
+  listeners: Array<Listener>|void;
   newStoreData: any|{};
   newListenersData: any|{};
 }

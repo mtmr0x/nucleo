@@ -4,7 +4,9 @@ import NucleoList from './nucleoTypes/NucleoList';
 import { NucleoObjectType } from './_types/NucleoObjectType';
 import indexSearch from './indexSearch';
 
-const saveMethodReflection = (store: any, contractName: string, listeners: Array<Function>) => ({
+import { Listener } from './subscribe';
+
+const saveMethodReflection = (store: any, contractName: string, listeners: Array<Listener>) => ({
   dispatch: (data: any) => {
     return store[contractName] = indexSearch({
       contractName,
@@ -134,7 +136,7 @@ export default function lawyer({
     operationStatus = 'OK';
   }
 
-  return (store:any, listeners:Array<Function>) => {
+  return (store:any, listeners:Array<Listener>) => {
     if (!__errors__.length) {
       saveMethodReflection(store, contractName, listeners)[saveMethod](data);
     }
