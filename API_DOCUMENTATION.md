@@ -524,6 +524,17 @@ And inside Nucleo, your listener will be executed like this:
 listener({ contractName, data }); // This way you can understand better what was updated and consult Nucleo store as you wish
 ```
 
+## Unsubscribing
+
+Subscribe function returns a `unsubscribe` function that can understand context and properly unsubscribe the right listener.
+
+```javascript
+const unsubscribe = subscribe(func);
+
+// when you need to unsubscribe is just call its function
+unsubscribe(); // done :)
+```
+
 ## Subscribing multiple listeners
 
 Nucleo provides only one way of subscribing to changes, but saves the listeners as a list of functions inside of it. You can execute multiple times `subscribe` with all your listeners:

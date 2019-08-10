@@ -54,6 +54,7 @@ The links below take you to our `API_DOCUMENTATION.md` file present in this repo
 - [Dispatching and updating the store](API_DOCUMENTATION.md#dispatching-and-updating-the-store)
 - [Get contracts in store](API_DOCUMENTATION.md#get-contracts-in-store)
 - [Subscribing to changes](API_DOCUMENTATION.md#subscribing-to-changes)
+- [Unsubscribing](API_DOCUMENTATION.md#unsubscribing)
 - [Error management](API_DOCUMENTATION.md#error-management)
 
 ## Basic usage

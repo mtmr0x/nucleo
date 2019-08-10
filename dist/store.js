@@ -3,13 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const save_1 = require("./save");
 const NucleoObject_1 = require("./nucleoTypes/NucleoObject");
 const indexSearch_1 = require("./indexSearch");
-const listeners = [];
-function subscribe(listener) {
-    if (typeof listener !== 'function') {
-        throw Error('Expected listener to be a function');
-    }
-    return listeners.push(listener);
-}
+const subscribe_1 = require("./subscribe");
 function createStore(contracts) {
     const __store__ = {};
     let __contracts__ = {};
@@ -27,9 +21,9 @@ function createStore(contracts) {
         __contracts__[current.name] = Object.assign({}, fields);
     }
     return {
-        dispatch: save_1.default({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'dispatch' }),
-        update: save_1.default({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'update' }),
-        subscribe,
+        dispatch: save_1.default({ contracts: __contracts__, store: __store__, listeners: subscribe_1.listeners, saveMethod: 'dispatch' }),
+        update: save_1.default({ contracts: __contracts__, store: __store__, listeners: subscribe_1.listeners, saveMethod: 'update' }),
+        subscribe: subscribe_1.default,
         cloneState: (contractName) => {
             if (!__contracts__[contractName]) {
                 return undefined;

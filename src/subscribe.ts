@@ -26,6 +26,6 @@ export default function subscribe(listener: Function):Function {
         listeners[i].on = false;
       }
     }
-  }
+  };
 }
 
