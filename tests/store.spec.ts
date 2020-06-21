@@ -3,11 +3,19 @@ import {
   NucleoString,
   NucleoNumber,
   NucleoBoolean
-} from '../src/nucleoTypes/primitive'
+} from '../src/nucleoTypes/primitive';
 import NucleoObject from '../src/nucleoTypes/NucleoObject';
 import NucleoList from '../src/nucleoTypes/NucleoList';
 import { expect } from 'chai';
 import 'mocha';
+
+type UserTest = {
+	name: {
+		firstName: string,
+		lastName: string,
+	},
+	age: number,
+}
 
 const completeNameType = new NucleoObject({
   name: 'completeName',

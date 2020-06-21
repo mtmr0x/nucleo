@@ -1,4 +1,5 @@
-import { NucleoObjectType } from './../_types/NucleoObjectType';
+import { NucleoObjectType, Fields } from './../_types/NucleoObjectType';
+import { NucleoListType } from './../_types/NucleoListType';
 
 import NucleoObject from './../nucleoTypes/NucleoObject';
 
@@ -9,8 +10,8 @@ interface N {
   serialize?:Function;
 }
 
-export default class NucleoList {
-  NucleoObject: NucleoObjectType;
+export default class NucleoList implements NucleoListType {
+  NucleoObject: NucleoObjectType<Fields>;
   NucleoPrimitive: N;
 
   constructor(config: N) {

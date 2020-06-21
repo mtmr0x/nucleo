@@ -2,10 +2,7 @@ import save from './save';
 import NucleoObject from './nucleoTypes/NucleoObject';
 import indexSearch from './indexSearch';
 import subscribe, { listeners } from './subscribe';
-
-export interface State {
-	[key: string]: string|number|boolean;
-}
+import { State } from './_types/State';
 
 export interface Store<T extends State> {
 	dispatch: (c: string) => (d: { [key:string]: any }) => any;
@@ -14,7 +11,7 @@ export interface Store<T extends State> {
 	cloneState: (c: string) => T;
 }
 
-function createStore(contracts: any): Store<State> {
+function createStore(contracts: any): Store<any> {
   const __store__:any = {};
   let __contracts__: any = {};
   const contractsKeys: any = Object.keys(contracts);

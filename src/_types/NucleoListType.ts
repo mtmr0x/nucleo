@@ -1,5 +1,1 @@
-import { NucleoPrimitiveType } from './NucleoPrimitiveType';
-
-export type NucleoListType = {
-  itemsType: NucleoPrimitiveType
-};
+export type NucleoListType = {};
