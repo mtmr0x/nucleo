@@ -5,7 +5,7 @@ export type Listener = {
 }
 export const listeners: Array<Listener> = [];
 
-export default function subscribe(listener: Function):Function {
+export default function subscribe(listener: Function):() => void {
   if (typeof listener !== 'function') {
     throw Error('Expected listener to be a function');
   }

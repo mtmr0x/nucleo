@@ -3,7 +3,18 @@ import NucleoObject from './nucleoTypes/NucleoObject';
 import indexSearch from './indexSearch';
 import subscribe, { listeners } from './subscribe';
 
-function createStore(contracts: any) {
+export interface State {
+	[key: string]: string|number|boolean;
+}
+
+export interface Store<T extends State> {
+	dispatch: (c: string) => (d: { [key:string]: any }) => any;
+	update: (c: string) => (d: { [key:string]: any }) => any;
+	subscribe: (f: Function) => () => void;
+	cloneState: (c: string) => T;
+}
+
+function createStore(contracts: any): Store<State> {
   const __store__:any = {};
   let __contracts__: any = {};
   const contractsKeys: any = Object.keys(contracts);
