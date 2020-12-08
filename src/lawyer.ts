@@ -1,7 +1,7 @@
 import NucleoObject from './nucleoTypes/NucleoObject';
 import NucleoList from './nucleoTypes/NucleoList';
 
-import { NucleoObjectType } from './_types/NucleoObjectType';
+import { NucleoObjectType, Fields } from './_types/NucleoObjectType';
 import indexSearch from './indexSearch';
 
 import { Listener } from './subscribe';
@@ -29,8 +29,8 @@ const saveMethodReflection = (store: any, contractName: string, listeners: Array
   }
 });
 
-interface LawyerInterface {
-  contract: NucleoObjectType;
+interface LawyerInterface<F> {
+  contract: NucleoObjectType<F>;
   data: any;
   saveMethod: 'update'|'dispatch';
   __errors__: Array<any>;
@@ -41,7 +41,7 @@ export default function lawyer({
   data,
   saveMethod,
   __errors__,
-}:LawyerInterface) {
+}:LawyerInterface<Fields>) {
   const { fields: contractFields }:any = contract;
   const dataKeys:Array<string> = Object.keys(data);
   const contractName:string = contract.name;

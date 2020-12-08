@@ -6,5 +6,5 @@ export type Fields = NucleoListType | NucleoPrimitiveType | NucleoObjectType<Fie
 
 export interface NucleoObjectType<T extends Fields> {
   name: string;
-	fields: { [key: string]: T };
+  fields: { [key: string]: T };
 }
