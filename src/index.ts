@@ -10,7 +10,6 @@ import {
 
 import NucleoObject from './nucleoTypes/NucleoObject';
 import NucleoList from './nucleoTypes/NucleoList';
-import NucleoFunction from './nucleoTypes/NucleoFunction';
 
 export {
   createStore,
@@ -21,5 +20,4 @@ export {
   NucleoNumberAssertion,
   NucleoList,
   NucleoObject,
-  NucleoFunction
 };

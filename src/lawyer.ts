@@ -2,11 +2,12 @@ import NucleoObject from './nucleoTypes/NucleoObject';
 import NucleoList from './nucleoTypes/NucleoList';
 
 import { NucleoObjectType, Fields } from './_types/NucleoObjectType';
+import { Contracts } from './_types/Contracts';
 import indexSearch from './indexSearch';
 
 import { Listener } from './subscribe';
 
-const saveMethodReflection = (store: any, contractName: string, listeners: Array<Listener>) => ({
+const saveMethodMapper = (store: any, contractName: string, listeners: Array<Listener>) => ({
   dispatch: (data: any) => {
     return store[contractName] = indexSearch({
       contractName,
@@ -29,8 +30,8 @@ const saveMethodReflection = (store: any, contractName: string, listeners: Array
   }
 });
 
-interface LawyerInterface<F> {
-  contract: NucleoObjectType<F>;
+interface Lawyer {
+  contract: NucleoObjectType<any>;
   data: any;
   saveMethod: 'update'|'dispatch';
   __errors__: Array<any>;
@@ -41,8 +42,8 @@ export default function lawyer({
   data,
   saveMethod,
   __errors__,
-}:LawyerInterface<Fields>) {
-  const { fields: contractFields }:any = contract;
+}:Lawyer) {
+  const { fields: contractFields } = contract;
   const dataKeys:Array<string> = Object.keys(data);
   const contractName:string = contract.name;
 
@@ -68,7 +69,7 @@ export default function lawyer({
       const _listItemType = contractFields[dataKeys[i]].getListChildrenType();
       const _NucleoItemType = contractFields[dataKeys[i]][_listItemType];
 
-      const dataTypeReflection:Function = () => ({
+      const dataTypeMapper = (): { [key: string]: () => void } => ({
         NucleoPrimitive: () => {
           const { serialize, Type } = _NucleoItemType;
 
@@ -104,7 +105,7 @@ export default function lawyer({
         },
       });
 
-      dataTypeReflection()[_listItemType]();
+      dataTypeMapper()[_listItemType]();
       continue;
     } else if ((contractFields[dataKeys[i]] instanceof NucleoList) && !Array.isArray(currentDataKey)) {
       __errors__.push({
@@ -138,7 +139,7 @@ export default function lawyer({
 
   return (store:any, listeners:Array<Listener>) => {
     if (!__errors__.length) {
-      saveMethodReflection(store, contractName, listeners)[saveMethod](data);
+      saveMethodMapper(store, contractName, listeners)[saveMethod](data);
     }
 
     return {

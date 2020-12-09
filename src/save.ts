@@ -1,7 +1,7 @@
 import lawyer from './lawyer';
 import { Listener } from './subscribe';
 
-interface saveInterface {
+interface Save {
   contracts: any;
   store: any;
   listeners: Array<Listener>;
@@ -13,7 +13,7 @@ export default function save({
   store,
   listeners,
   saveMethod
-}:saveInterface) {
+}:Save) {
   return (contractName: string) => {
     if (!contracts[contractName]) {
       throw Error(

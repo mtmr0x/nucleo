@@ -3,7 +3,6 @@ import {
   NucleoNumberAssertion,
   NucleoString,
   NucleoObject,
-  NucleoList,
 } from '../../src/index'
 
 import { expect } from 'chai';
@@ -36,11 +35,11 @@ describe('NucleoNumberAssertion', () => {
   });
 
   it('should dispatch and create this item in store', () => {
-    const d = dispatch('user')({
+    dispatch('user')({
       name: 'John',
       age: 27
     });
-    const user = cloneState('user');
+    const user = cloneState('user') as any;
 
     expect(user.name).to.equal('John');
     expect(user.age).to.equal(27);
@@ -53,8 +52,8 @@ describe('NucleoNumberAssertion', () => {
   });
 
   it('should update data according to contract and save it in store', () => {
-    const u = update('user')({ age: 34 });
-    const user = cloneState('user');
+    update('user')({ age: 34 });
+    const user = cloneState('user') as any;
 
     expect(user.age).to.equal(34);
     expect(user.name).to.equal('John');

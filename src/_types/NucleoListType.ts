@@ -1,1 +1,4 @@
-export type NucleoListType = {};
+export type NucleoListType = {
+  getListChildrenType: () => string;
+};
+

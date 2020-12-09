@@ -5,7 +5,6 @@ import {
   NucleoBoolean
 } from '../src/nucleoTypes/primitive'
 import NucleoObject from '../src/nucleoTypes/NucleoObject';
-import NucleoList from '../src/nucleoTypes/NucleoList';
 import { expect } from 'chai';
 import 'mocha';
 
@@ -43,7 +42,7 @@ describe('Update forbidden attempts', () => {
 
     const { errors, data } = update('user')({ name: { name: 'matheus' } });
     expect(errors.length).to.equal(1);
-    const user = cloneState('user');
+    const user = cloneState('user') as any;
     expect(user.name.firstName).to.equal('John');
     expect(user.name.lastName).to.equal('Doe');
     expect(user.age).to.equal(27);
@@ -104,15 +103,15 @@ describe('Update method', () => {
       verified: true
     });
 
-    const { errors, data } = update('user')({ name: { firstName: 'Joseph' } });
-    const user = cloneState('user');
+    update('user')({ name: { firstName: 'Joseph' } });
+    const user = cloneState('user') as any;
     expect(user.name.firstName).to.equal('Joseph');
     expect(user.name.lastName).to.equal('Doe');
     expect(user.age).to.equal(27);
   });
   it('should dispatch only one property in first level and just this property should be updated in store', () => {
-    const { errors, data } = update('user')({ age: 18 });
-    const user = cloneState('user');
+    update('user')({ age: 18 });
+    const user = cloneState('user') as any;
 
     expect(user.name.firstName).to.equal('Joseph');
     expect(user.name.lastName).to.equal('Doe');
@@ -120,8 +119,8 @@ describe('Update method', () => {
   });
 
   it('should dispatch a value to a deeper level and save it properly', () => {
-    const d = update('user')({ location: { address: { complement: 'apartment 2' } } });
-    const user = cloneState('user');
+    update('user')({ location: { address: { complement: 'apartment 2' } } });
+    const user = cloneState('user') as any;
 
     expect(user.name.firstName).to.equal('Joseph');
     expect(user.name.lastName).to.equal('Doe');
@@ -138,8 +137,8 @@ describe('Update method', () => {
       receivedData = data;
     }
     subscribe(listener);
-    const d = update('user')({ location: { address: { complement: 'apartment 3' } } });
-    const user = cloneState('user');
+    update('user')({ location: { address: { complement: 'apartment 3' } } });
+    const user = cloneState('user') as any;
 
     expect(receivedData.data.name.firstName).to.equal('Joseph');
     expect(receivedData.data.name.lastName).to.equal('Doe');
@@ -167,7 +166,7 @@ describe('Update method', () => {
       verified: false
     });
 
-    const user = cloneState('user');
+    const user = cloneState('user') as any;
 
     expect(user.name.lastName).to.equal('');
     expect(user.verified).to.equal(false);

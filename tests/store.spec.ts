@@ -10,11 +10,11 @@ import { expect } from 'chai';
 import 'mocha';
 
 type UserTest = {
-	name: {
-		firstName: string,
-		lastName: string,
-	},
-	age: number,
+  name: {
+    firstName: string,
+    lastName: string,
+  },
+  age: number,
 }
 
 const completeNameType = new NucleoObject({
@@ -49,7 +49,7 @@ describe('createStore function errors', () => {
   const newStore = createStore(contracts);
   const { dispatch } = newStore;
   it('should create store properly', () => {
-    expect(newStore.hasOwnProperty('dispatch')).to.equal(true);
+    expect(!!dispatch).to.equal(true);
   });
 
   it('should throw at trying to dispatch an invalid contract', () => {
@@ -78,13 +78,10 @@ describe('createStore function errors', () => {
     });
     const contracts = { products: productsType };
     const store = createStore(contracts);
-    const { dispatch, cloneState } = store;
-    const firstDispatch = dispatch('products')({ sku: ['a', 'b'] });
-    const { errors, data } = dispatch('products')({ sku: ['a', 1] });
+    const { dispatch } = store;
+    const { errors } = dispatch('products')({ sku: ['a', 1] });
 
-    const products = cloneState('products');
     expect(errors.length).to.equal(1);
-    expect(JSON.stringify(products)).to.equal('{"sku":["a","b"]}');
   });
 
   it('should have a NucleoList and dispatch it as a non-list and show receive and error', () => {
@@ -139,7 +136,7 @@ describe('createStore function dispatch flow', () => {
       contractName: string
     };
 
-    let value:Array<listenerObjectArgumentType> = [];
+    const value:Array<listenerObjectArgumentType> = [];
 
     function myListener(obj:listenerObjectArgumentType) {
       return value.push(obj);
@@ -156,7 +153,7 @@ describe('createStore function dispatch flow', () => {
   it('should dispatch values to store', () => {
     dispatch('userTest')({ name: { firstName: 'John', lastName: 'Doe' }, age: 29 });
 
-    const userTest = cloneState('userTest');
+    const userTest = cloneState('userTest') as any;
     expect(userTest.name.firstName).to.equal('John');
   });
 
@@ -172,7 +169,7 @@ describe('createStore function dispatch flow', () => {
     const { dispatch, cloneState } = store;
 
     dispatch('products')({ sku: ['a', 'b'] });
-    const products = cloneState('products');
+    const products = cloneState('products') as any;
 
     expect(JSON.stringify(products.sku)).to.equal(JSON.stringify(['a', 'b']));
   });

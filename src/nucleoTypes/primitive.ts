@@ -1,8 +1,10 @@
 import { NucleoPrimitiveType } from './../_types/NucleoPrimitiveType';
 
+type UserFormatValidation = (arg: string|number) => boolean;
+
 class NucleoCustomPrimitive {
   Type: string;
-  userFormatValidation: Function|void;
+  userFormatValidation: UserFormatValidation|void;
   nativeType: string;
 
   serialize(value:string|number):boolean {
@@ -21,7 +23,7 @@ class NucleoCustomPrimitive {
 }
 
 export class NucleoStringAssertion extends NucleoCustomPrimitive {
-  constructor(userFormatValidation:Function|void) {
+  constructor(userFormatValidation:UserFormatValidation|void) {
     super();
     this.Type = 'NucleoString';
     this.nativeType = 'string';
@@ -30,7 +32,7 @@ export class NucleoStringAssertion extends NucleoCustomPrimitive {
 }
 
 export class NucleoNumberAssertion extends NucleoCustomPrimitive {
-  constructor(userFormatValidation:Function|void) {
+  constructor(userFormatValidation:UserFormatValidation|void) {
     super();
     this.Type = 'NucleoNumber';
     this.nativeType = 'number';

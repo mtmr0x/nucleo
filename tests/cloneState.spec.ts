@@ -2,10 +2,8 @@ import { createStore } from '../src/store';
 import {
   NucleoString,
   NucleoNumber,
-  NucleoBoolean
 } from '../src/nucleoTypes/primitive'
 import NucleoObject from '../src/nucleoTypes/NucleoObject';
-import NucleoList from '../src/nucleoTypes/NucleoList';
 import { expect } from 'chai';
 import 'mocha';
 
@@ -36,13 +34,13 @@ describe('Update forbidden attempts', () => {
  });
 
   it('should dispatch values and then return error tring to update fields violating the contract', () => {
-    const d = dispatch('user')({
+    dispatch('user')({
       name: { firstName: 'John', lastName: 'Doe' },
       age: 27
     });
 
     const { errors, data } = update('user')({ name: { name: 'matheus' } });
-    const user = cloneState('user');
+    const user = cloneState('user') as any;
 
     expect(errors.length).to.equal(1);
     expect(user.name.firstName).to.equal('John');
@@ -104,19 +102,19 @@ describe('Clone method', () => {
     });
   });
   it('should update data, then clone state to get updated data', () => {
-    const { errors, data } = update('user')({ age: 18 });
-    const clonedUser = cloneState('user');
+    update('user')({ age: 18 });
+    const clonedUser = cloneState('user') as any;
 
     expect(clonedUser.name.firstName).to.equal('John');
     expect(clonedUser.name.lastName).to.equal('Doe');
     expect(clonedUser.age).to.equal(18);
   });
   it('should update data, clone and mutate first clone, then a new clone displays store is untouchable', () => {
-    const { errors, data } = update('user')({ name: { firstName: 'Noah' } });
-    const clonedUser = cloneState('user');
+    update('user')({ name: { firstName: 'Noah' } });
+    const clonedUser = cloneState('user') as any;
     clonedUser.name.firstName = 'Joseph';
 
-    const clonedUser2 = cloneState('user');
+    const clonedUser2 = cloneState('user') as any;
 
     expect(clonedUser2.name.firstName).to.equal('Noah');
     expect(clonedUser2.name.lastName).to.equal('Doe');

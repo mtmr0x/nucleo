@@ -1,13 +1,14 @@
 import { NucleoObjectType, Fields } from './../_types/NucleoObjectType';
 import { NucleoListType } from './../_types/NucleoListType';
+import { SerializeFunction } from './../_types/NucleoPrimitiveType';
 
 import NucleoObject from './../nucleoTypes/NucleoObject';
 
 interface N {
-  name?:string;
-  fields?:any;
-  Type?:string;
-  serialize?:Function;
+  name?: string;
+  fields?: any;
+  Type?: string;
+  serialize?: SerializeFunction;
 }
 
 export default class NucleoList implements NucleoListType {
@@ -22,7 +23,6 @@ export default class NucleoList implements NucleoListType {
   }
 
   getListChildrenType = ():string => {
-    // TODO: oh please, improve this shit
     if (this.NucleoObject) {
       return 'NucleoObject';
     }

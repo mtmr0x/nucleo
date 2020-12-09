@@ -2,8 +2,6 @@ import {
   createStore,
   NucleoString,
   NucleoObject,
-  NucleoList,
-  NucleoFunction
 } from '../../src/index'
 
 import { expect } from 'chai';
@@ -18,7 +16,6 @@ describe('NucleoFunction', () => {
     name: 'user',
     fields:  {
       name: NucleoString,
-      taxIdValidation: NucleoFunction
     }
   });
 
@@ -36,11 +33,11 @@ describe('NucleoFunction', () => {
   });
 
   it('should dispatch and create this item in store', () => {
-    const d = dispatch('user')({
+    dispatch('user')({
       name: 'John',
       taxIdValidation: taxIdValidation
     });
-    const user = cloneState('user');
+    const user = cloneState('user') as any;
 
     expect(user.name).to.equal('John');
     expect(user.taxIdValidation).to.equal(taxIdValidation);
@@ -56,8 +53,8 @@ describe('NucleoFunction', () => {
     function newTaxIdValidation(value:string) {
       return value.length === 14;
     }
-    const u = update('user')({ taxIdValidation: newTaxIdValidation });
-    const user = cloneState('user');
+    update('user')({ taxIdValidation: newTaxIdValidation });
+    const user = cloneState('user') as any;
 
     expect(user.taxIdValidation).to.equal(newTaxIdValidation);
     expect(user.name).to.equal('John');

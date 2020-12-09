@@ -1,46 +1,20 @@
 {
-  "env": {
-    "es6": true,
-    "browser": true
-  },
-  "globals": {
-    "ENV": true
-  },
-  "parser": "@typescript-eslint/parser",
-  "extends": [
-    "eslint:recommended"
-  ],
-  "plugins": ["@typescript-eslint"],
-  "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module"
-  },
-  "rules": {
-    "indent": [
-      "error",
-      2
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
-    "linebreak-style": [
-      "error",
-      "unix"
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint"
     ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ],
-    "eqeqeq": [
-      "error",
-      "always"
-    ],
-    "prefer-const": "error",
-    "no-const-assign": "error",
-    "no-var": "error",
-    "@typescript-eslint/no-unused-vars": "error",
-    "no-multiple-empty-lines": "error",
-    "eol-last": ["error", "always"]
-  }
+    "rules": {
+    }
 }

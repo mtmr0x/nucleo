@@ -2,22 +2,25 @@ import save from './save';
 import NucleoObject from './nucleoTypes/NucleoObject';
 import indexSearch from './indexSearch';
 import subscribe, { listeners } from './subscribe';
-import { State } from './_types/State';
+import { Contracts } from './_types/Contracts';
+import { Update } from './_types/Update';
 
-export interface Store<T extends State> {
-	dispatch: (c: string) => (d: { [key:string]: any }) => any;
-	update: (c: string) => (d: { [key:string]: any }) => any;
-	subscribe: (f: Function) => () => void;
-	cloneState: (c: string) => T;
+import { Fields } from './_types/NucleoObjectType';
+
+export interface Store<T> {
+  dispatch: (contract: string) => (d: T) => Update<T>;
+  update: (contract: string) => (d: T) => Update<T>;
+  subscribe: (f: (arg: { contractName: string; data: T }) => void) => () => void;
+  cloneState: (contract: string) => T;
 }
 
-function createStore(contracts: any): Store<any> {
-  const __store__:any = {};
-  let __contracts__: any = {};
-  const contractsKeys: any = Object.keys(contracts);
+function createStore<S>(contracts: Contracts): Store<S> {
+  const __store__: any = {};
+  let __contracts__: Contracts = {};
+  const contractsKeys: string[] = Object.keys(contracts);
 
-  for (let c:number = 0; c < contractsKeys.length; c++) {
-    const current: any = contracts[contractsKeys[c]];
+  for (let c = 0; c < contractsKeys.length; c++) {
+    const current: Fields = contracts[contractsKeys[c]];
     if (!(current instanceof NucleoObject)) {
       throw Error(
         `Each contract must be instances of NucleoObject. Received ${JSON.stringify(current)}.\nTo understand more, check the documentation about creating a contract in Nucleo here: https://github.com/mtmr0x/nucleo`

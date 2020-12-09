@@ -1,10 +1,8 @@
 import {
   NucleoString,
   NucleoNumber,
-  NucleoBoolean,
   NucleoList,
   NucleoObject,
-  NucleoFunction,
   createStore
 } from '../../src/index'
 import { expect } from 'chai';
@@ -16,7 +14,6 @@ describe('NucleoList', () => {
     fields: {
       accountType: NucleoString,
       accountNumber: NucleoNumber,
-      taxIdValidator: NucleoFunction
     }
   });
 
@@ -35,7 +32,6 @@ describe('NucleoList', () => {
     fields: {
       personalInfo: personalInfoType,
       age: NucleoNumber,
-      validators: new NucleoList(NucleoFunction)
     }
   });
 
@@ -61,7 +57,7 @@ describe('NucleoList', () => {
     }
 
     const d = dispatch('user')(data);
-    const clonedData = cloneState('user');
+    const clonedData = cloneState('user') as any;
     const { personalInfo } = clonedData;
     expect(d.errors.length).to.equal(0);
     expect(personalInfo.accounts.length).to.equal(0);
@@ -84,15 +80,13 @@ describe('NucleoList', () => {
     }
 
     const d = dispatch('user')(data);
-    const clonedData = cloneState('user');
-    const { personalInfo } = clonedData;
     expect(d.errors.length).to.equal(0);
   });
 
   it('should try to update a NucleoList of primitive values succesfully', () => {
-    const u = update('user')({ personalInfo: { items: ['g', 'h', 'j', 'k'] } });
+    update('user')({ personalInfo: { items: ['g', 'h', 'j', 'k'] } });
 
-    const user = cloneState('user');
+    const user = cloneState('user') as any;
     const { personalInfo } = user;
 
     const { items } = personalInfo;
@@ -107,7 +101,7 @@ describe('NucleoList', () => {
   it('should try to violate a NucleoList of primitive values with update', () => {
     const u = update('user')({ personalInfo: { items: ['g', 'h', 'j', 1] } });
 
-    const user = cloneState('user');
+    const user = cloneState('user') as any;
     const { personalInfo } = user;
     const { items } = personalInfo;
 
@@ -120,9 +114,9 @@ describe('NucleoList', () => {
   });
 
   it('should try to update a NucleoList of function values succesfully', () => {
-    const u = update('user')({ validators: [taxIdValidator, accountNumberValidator, ageValidator] });
+    update('user')({ validators: [taxIdValidator, accountNumberValidator, ageValidator] });
 
-    const user = cloneState('user');
+    const user = cloneState('user') as any;
     const { validators, personalInfo } = user;
 
 
@@ -134,7 +128,7 @@ describe('NucleoList', () => {
   it('should try to violate a NucleoList of function values with update', () => {
     const u = update('user')({ validators: [taxIdValidator, 'string', ageValidator] });
 
-    const user = cloneState('user');
+    const user = cloneState('user') as any;
     const { personalInfo, validators } = user;
 
     expect(u.errors.length).to.equal(1);
@@ -154,7 +148,7 @@ describe('NucleoList', () => {
     };
 
     const u = update('user')(obj);
-    const user = cloneState('user');
+    const user = cloneState('user') as any;
     const { personalInfo } = user;
 
     expect(u.errors.length).to.equal(0);
@@ -178,7 +172,7 @@ describe('NucleoList', () => {
 
     const u = update('user')(obj);
 
-    const user = cloneState('user');
+    const user = cloneState('user') as any;
     const { personalInfo } = user;
 
     expect(u.errors.length).to.equal(2);
@@ -199,7 +193,7 @@ describe('NucleoList', () => {
 
     const u = update('user')(obj);
 
-    const user = cloneState('user');
+    const user = cloneState('user') as any;
     const { personalInfo } = user;
 
     expect(u.errors.length).to.equal(0);

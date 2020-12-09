@@ -1,4 +1,4 @@
-interface SerializeFunction {
+export interface SerializeFunction {
   (value: string|boolean|number): boolean
 }
 
