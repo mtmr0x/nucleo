@@ -4,7 +4,6 @@ const NucleoObject_1 = require("./../nucleoTypes/NucleoObject");
 class NucleoList {
     constructor(config) {
         this.getListChildrenType = () => {
-            // TODO: oh please, improve this shit
             if (this.NucleoObject) {
                 return 'NucleoObject';
             }

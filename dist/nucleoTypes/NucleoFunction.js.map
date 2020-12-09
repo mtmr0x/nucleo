@@ -1,1 +1,0 @@
-{"version":3,"file":"NucleoFunction.js","sourceRoot":"","sources":["../../src/nucleoTypes/NucleoFunction.ts"],"names":[],"mappings":";;AAEA,MAAM,cAAc,GAAuB;IACzC,IAAI,EAAE,gBAAgB;IACtB,SAAS,EAAE,CAAC,KAAe,EAAU,EAAE;QACrC,IAAI,OAAO,KAAK,KAAK,UAAU,EAAE;YAC/B,OAAO,KAAK,CAAC;SACd;QAED,OAAO,IAAI,CAAC;IACd,CAAC;CACF,CAAC;AAEF,kBAAe,cAAc,CAAC"}
