@@ -9,7 +9,7 @@ const saveType = (data:any):'rec'|'save' => {
   return 'save';
 };
 
-interface IndexSearchInterface {
+interface IndexSearch {
   contractName: string;
   storeData: any;
   data: any;
@@ -18,7 +18,7 @@ interface IndexSearchInterface {
   newListenersData: any;
 }
 
-const indexSearch = (args: IndexSearchInterface) => {
+const indexSearch = (args: IndexSearch) => {
   const {
     contractName,
     storeData = {},
