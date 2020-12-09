@@ -35,19 +35,19 @@ const saveMethodMapper = (store: any, contractName: string, listeners: Array<Lis
   }
 });
 
-interface Lawyer {
+interface ContractVerification {
   contract: NucleoObjectType<any>;
   data: any;
   saveMethod: 'update'|'dispatch';
   __errors__: Array<{ contract: string; error: string; field?: string }>;
 }
 
-function lawyer({
+function contractVerification({
   contract,
   data,
   saveMethod,
   __errors__,
-}:Lawyer) {
+}:ContractVerification) {
   const { fields: contractFields } = contract;
   const dataKeys:Array<string> = Object.keys(data);
   const contractName:string = contract.name;
@@ -61,7 +61,7 @@ function lawyer({
   for (let i = 0; dataKeys.length > i; i++) {
     const currentDataKey = data[dataKeys[i]];
     if (contractFields[dataKeys[i]] instanceof NucleoObject) {
-      lawyer({
+      contractVerification({
         contract: contractFields[dataKeys[i]],
         data: currentDataKey,
         saveMethod,
@@ -99,7 +99,7 @@ function lawyer({
                 continue;
               }
 
-              lawyer({
+              contractVerification({
                 contract: _NucleoItemType,
                 data: currentDataKey[d],
                 saveMethod,
@@ -174,7 +174,7 @@ export default function save({
       );
     }
     return (data: any) => {
-      return lawyer({
+      return contractVerification({
         contract: { name: contractName, fields: contracts[contractName]},
         data,
         saveMethod,
