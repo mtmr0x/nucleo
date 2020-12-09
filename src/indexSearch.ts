@@ -18,7 +18,7 @@ interface IndexSearch {
   newListenersData: any;
 }
 
-const indexSearch = (args: IndexSearch) => {
+export default function indexSearch(args: IndexSearch) {
   const {
     contractName,
     storeData = {},
@@ -64,6 +64,4 @@ const indexSearch = (args: IndexSearch) => {
     executeListeners(contractName, listeners, newListenersData);
   }
   return newStoreData;
-};
-
-export default indexSearch;
+}
