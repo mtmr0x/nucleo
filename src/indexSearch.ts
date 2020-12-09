@@ -31,7 +31,7 @@ export default function indexSearch(args: IndexSearch) {
   const storeDataKeys = Object.keys(storeData);
 
   for (let i = 0; storeDataKeys.length > i; i++) {
-    const dataTypeReflection = () => ({
+    const dataTypeMapper = () => ({
       rec: () => {
         const bufferData = data[storeDataKeys[i]] === null || data[storeDataKeys[i]] === undefined ? storeData[storeDataKeys[i]] : data[storeDataKeys[i]];
         newStoreData[storeDataKeys[i]] = {};
@@ -57,7 +57,7 @@ export default function indexSearch(args: IndexSearch) {
       }
     });
 
-    dataTypeReflection()[saveType(storeData[storeDataKeys[i]])]();
+    dataTypeMapper()[saveType(storeData[storeDataKeys[i]])]();
   }
 
   if (listeners && listeners.length) {
