@@ -1,8 +1,8 @@
-export interface SerializeFunction {
-  (value: string|boolean|number): boolean
+export interface SerializeFunction<T> {
+  (value: T): boolean
 }
 
-export type NucleoPrimitiveType = {
+export type NucleoPrimitiveType<T> = {
   Type: string,
-  serialize: SerializeFunction
+  serialize: SerializeFunction<T>
 };

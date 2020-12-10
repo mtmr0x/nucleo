@@ -1,20 +1,20 @@
 import { NucleoPrimitiveType } from './../_types/NucleoPrimitiveType';
 
-type UserFormatValidation = (arg: string|number) => boolean;
+type UserFormatValidation<T> = (arg: T) => boolean;
 
-class NucleoCustomPrimitive {
+class NucleoCustomPrimitive<T> {
   Type: string;
-  userFormatValidation: UserFormatValidation|void;
+  userFormatValidation: UserFormatValidation<T>;
   nativeType: string;
 
-  serialize(value:string|number):boolean {
-    if (typeof value !== this.nativeType || this.formatValidation(value)) {
+  serialize(value: T):boolean {
+    if (typeof value !== 'boolean' && (typeof value !== this.nativeType || this.formatValidation(value))) {
       return false;
     }
     return true;
   }
 
-  formatValidation(value:string|number):boolean {
+  formatValidation(value: T):boolean {
     if (this.userFormatValidation) {
       return !this.userFormatValidation(value);
     }
@@ -22,8 +22,8 @@ class NucleoCustomPrimitive {
   }
 }
 
-export class NucleoStringAssertion extends NucleoCustomPrimitive {
-  constructor(userFormatValidation:UserFormatValidation|void) {
+export class NucleoStringAssertion<T> extends NucleoCustomPrimitive<T> {
+  constructor(userFormatValidation:UserFormatValidation<T>) {
     super();
     this.Type = 'NucleoString';
     this.nativeType = 'string';
@@ -31,8 +31,8 @@ export class NucleoStringAssertion extends NucleoCustomPrimitive {
   }
 }
 
-export class NucleoNumberAssertion extends NucleoCustomPrimitive {
-  constructor(userFormatValidation:UserFormatValidation|void) {
+export class NucleoNumberAssertion<T> extends NucleoCustomPrimitive<T> {
+  constructor(userFormatValidation:UserFormatValidation<T>) {
     super();
     this.Type = 'NucleoNumber';
     this.nativeType = 'number';
@@ -40,7 +40,7 @@ export class NucleoNumberAssertion extends NucleoCustomPrimitive {
   }
 }
 
-export const NucleoString: NucleoPrimitiveType = {
+export const NucleoString: NucleoPrimitiveType<string> = {
   Type: 'NucleoString',
   serialize: (value: string):boolean => {
     if (typeof value !== 'string') {
@@ -51,7 +51,7 @@ export const NucleoString: NucleoPrimitiveType = {
   }
 };
 
-export const NucleoNumber: NucleoPrimitiveType = {
+export const NucleoNumber: NucleoPrimitiveType<number> = {
   Type: 'NucleoNumber',
   serialize: (value: number):boolean => {
     if (typeof value !== 'number') {
@@ -62,7 +62,7 @@ export const NucleoNumber: NucleoPrimitiveType = {
   }
 };
 
-export const NucleoBoolean: NucleoPrimitiveType = {
+export const NucleoBoolean: NucleoPrimitiveType<boolean> = {
   Type: 'NucleoBoolean',
   serialize: (value: boolean):boolean => {
     if (typeof value !== 'boolean') {
