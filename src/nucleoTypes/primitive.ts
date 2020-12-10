@@ -2,7 +2,7 @@ import { NucleoPrimitiveType } from './../_types/NucleoPrimitiveType';
 
 type UserFormatValidation<T> = (arg: T) => boolean;
 
-class NucleoCustomPrimitive<T> {
+export class NucleoCustomPrimitive<T> {
   Type: string;
   userFormatValidation: UserFormatValidation<T>;
   nativeType: string;

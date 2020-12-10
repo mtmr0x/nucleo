@@ -1,21 +1,21 @@
-import { NucleoObjectType, Fields } from './../_types/NucleoObjectType';
+import { NucleoObjectType } from './../_types/NucleoObjectType';
 import { NucleoListType } from './../_types/NucleoListType';
 import { SerializeFunction } from './../_types/NucleoPrimitiveType';
 
 import NucleoObject from './../nucleoTypes/NucleoObject';
 
-interface N {
+interface N<T> {
   name?: string;
   fields?: any;
   Type?: string;
-  serialize?: SerializeFunction;
+  serialize?: SerializeFunction<T>;
 }
 
-export default class NucleoList implements NucleoListType {
-  NucleoObject: NucleoObjectType<Fields>;
-  NucleoPrimitive: N;
+export default class NucleoList<T> implements NucleoListType {
+  NucleoObject: NucleoObjectType<T>;
+  NucleoPrimitive: N<T>;
 
-  constructor(config: N) {
+  constructor(config: N<T>) {
     if (config instanceof NucleoObject) {
       this.NucleoObject = config;
     }

@@ -1,10 +1,10 @@
-import { NucleoObjectType, Fields } from './../_types/NucleoObjectType';
+import { NucleoObjectType } from './../_types/NucleoObjectType';
 
-export default class NucleoObject implements NucleoObjectType<Fields> {
+export default class NucleoObject<T> implements NucleoObjectType<T> {
   name: string;
-  fields: any;
+  fields: { [key: string]: T };
 
-  constructor(config: NucleoObjectType<Fields>) {
+  constructor(config: NucleoObjectType<T>) {
     this.name = config.name;
     this.fields = config.fields;
   }

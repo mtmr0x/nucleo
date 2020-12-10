@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class NucleoCustomPrimitive {
     serialize(value) {
-        if (typeof value !== this.nativeType || this.formatValidation(value)) {
+        if (typeof value !== 'boolean' && (typeof value !== this.nativeType || this.formatValidation(value))) {
             return false;
         }
         return true;
@@ -14,6 +14,7 @@ class NucleoCustomPrimitive {
         return false;
     }
 }
+exports.NucleoCustomPrimitive = NucleoCustomPrimitive;
 class NucleoStringAssertion extends NucleoCustomPrimitive {
     constructor(userFormatValidation) {
         super();

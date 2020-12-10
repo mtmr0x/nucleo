@@ -5,8 +5,6 @@ import subscribe, { listeners } from './subscribe';
 import { Contracts } from './_types/Contracts';
 import { Update } from './_types/Update';
 
-import { Fields } from './_types/NucleoObjectType';
-
 export interface Store<T> {
   dispatch: (contract: string) => (d: T) => Update<T>;
   update: (contract: string) => (d: T) => Update<T>;
@@ -14,13 +12,13 @@ export interface Store<T> {
   cloneState: (contract: string) => T;
 }
 
-function createStore<S>(contracts: Contracts): Store<S> {
+function createStore<S>(contracts: Contracts<S>): Store<S> {
   const __store__: any = {};
-  let __contracts__: Contracts = {};
+  let __contracts__: any = {};
   const contractsKeys: string[] = Object.keys(contracts);
 
   for (let c = 0; c < contractsKeys.length; c++) {
-    const current: Fields = contracts[contractsKeys[c]];
+    const current = contracts[contractsKeys[c]];
     if (!(current instanceof NucleoObject)) {
       throw Error(
         `Each contract must be instances of NucleoObject. Received ${JSON.stringify(current)}.\nTo understand more, check the documentation about creating a contract in Nucleo here: https://github.com/mtmr0x/nucleo`

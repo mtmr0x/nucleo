@@ -1,6 +1,6 @@
-import { NucleoObjectType, Fields } from './NucleoObjectType';
+import { NucleoObjectType } from './NucleoObjectType';
 
-export interface Contracts {
-  [key: string]: NucleoObjectType<Fields>
+export interface Contracts<S> {
+  [key: string]: NucleoObjectType<S>
 }
 
