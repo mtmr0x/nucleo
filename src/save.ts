@@ -36,7 +36,7 @@ const saveMethodMapper = (store: any, contractName: string, listeners: Array<Lis
 });
 
 interface ContractVerification {
-  contract: NucleoObjectType<any>;
+  contract: NucleoObjectType;
   data: any;
   saveMethod: 'update'|'dispatch';
   __errors__: Array<{ contract: string; error: string; field?: string }>;

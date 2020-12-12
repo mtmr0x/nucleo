@@ -12,7 +12,7 @@ interface N<T> {
 }
 
 export default class NucleoList<T> implements NucleoListType {
-  NucleoObject: NucleoObjectType<T>;
+  NucleoObject: NucleoObjectType;
   NucleoPrimitive: N<T>;
 
   constructor(config: N<T>) {
