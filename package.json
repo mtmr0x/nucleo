@@ -1,10 +1,10 @@
 {
   "name": "nucleojs",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Matheus Marsiglio <matmarsiglio@gmail.com>",
-  "repository": "git://github.com/nucleojs/nucleo",
+  "repository": "git://github.com/mtmr0x/nucleo",
   "license": "MIT",
   "private": false,
   "husky": {
