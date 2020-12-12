@@ -12,7 +12,7 @@ export interface Store<T> {
   cloneState: (contract: string) => T;
 }
 
-function createStore<S>(contracts: Contracts<S>): Store<S> {
+function createStore<S>(contracts: Contracts): Store<S> {
   const __store__: any = {};
   let __contracts__: any = {};
   const contractsKeys: string[] = Object.keys(contracts);
