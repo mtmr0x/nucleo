@@ -10,7 +10,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint",
-      "pre-push": "npm run tests && npm run lint"
+      "pre-push": "npm run test -- tests/update.spec.ts && npm run lint"
     }
   },
   "devDependencies": {
