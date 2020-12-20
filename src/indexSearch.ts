@@ -2,7 +2,7 @@ import executeListeners from './executeListeners';
 import { Listener } from './subscribe';
 
 const saveType = (data:any):'rec'|'save' => {
-  if (typeof data === 'object' && !Array.isArray(data)) {
+  if (typeof data === 'object' && !Array.isArray(data) && data !== null) {
     return 'rec';
   }
 

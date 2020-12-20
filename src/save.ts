@@ -9,54 +9,22 @@ interface Save {
   contracts: any;
   store: any;
   listeners: Array<Listener>;
-  saveMethod: 'update'|'dispatch'
 }
-
-const saveMethodMapper = (store: any, contractName: string, listeners: Array<Listener>) => ({
-  dispatch: (data: any) => {
-    return store[contractName] = indexSearch({
-      contractName,
-      storeData: data,
-      data,
-      listeners,
-      newStoreData: {},
-      newListenersData: {}
-    });
-  },
-  update: (data: any) => {
-    return store[contractName] = indexSearch({
-      contractName,
-      storeData: store[contractName],
-      data,
-      listeners,
-      newStoreData: {},
-      newListenersData: {}
-    });
-  }
-});
 
 interface ContractVerification {
   contract: NucleoObjectType;
   data: any;
-  saveMethod: 'update'|'dispatch';
   __errors__: Array<{ contract: string; error: string; field?: string }>;
 }
 
 function contractVerification({
   contract,
   data,
-  saveMethod,
   __errors__,
 }:ContractVerification) {
   const { fields: contractFields } = contract;
   const dataKeys:Array<string> = Object.keys(data);
   const contractName:string = contract.name;
-
-  if (dataKeys.length !== Object.keys(contractFields).length && saveMethod === 'dispatch') {
-    throw Error(
-      `Fatal error: In dispatch, the dispatched data and the contract must match in every level. For changing just few values from ${contractName} contract, use update() method.`
-    );
-  }
 
   for (let i = 0; dataKeys.length > i; i++) {
     const currentDataKey = data[dataKeys[i]];
@@ -64,7 +32,6 @@ function contractVerification({
       contractVerification({
         contract: contractFields[dataKeys[i]],
         data: currentDataKey,
-        saveMethod,
         __errors__
       });
       continue;
@@ -102,7 +69,6 @@ function contractVerification({
               contractVerification({
                 contract: _NucleoItemType,
                 data: currentDataKey[d],
-                saveMethod,
                 __errors__
               });
             }
@@ -144,7 +110,14 @@ function contractVerification({
 
   return (store:any, listeners:Array<Listener>) => {
     if (!__errors__.length) {
-      saveMethodMapper(store, contractName, listeners)[saveMethod](data);
+      store[contractName] = indexSearch({
+        contractName,
+        storeData: store[contractName],
+        data,
+        listeners,
+        newStoreData: {},
+        newListenersData: {}
+      });
     }
 
     return {
@@ -158,7 +131,6 @@ export default function save({
   contracts,
   store,
   listeners,
-  saveMethod
 }:Save) {
   return (contractName: string) => {
     if (!contracts[contractName]) {
@@ -167,17 +139,16 @@ export default function save({
       );
     }
 
-    if (saveMethod === 'update' && !store[contractName]) {
-      throw Error(
-        `Fatal error: you can not update an item in store if it is not created yet.
-        First use dispatch to save it and then you can perform updates at ${contractName} contract.`
-      );
-    }
+    // if (saveMethod === 'update' && !store[contractName]) {
+    //   throw Error(
+    //     `Fatal error: you can not update an item in store if it is not created yet.
+    //     First use dispatch to save it and then you can perform updates at ${contractName} contract.`
+    //   );
+    // }
     return (data: any) => {
       return contractVerification({
         contract: { name: contractName, fields: contracts[contractName]},
         data,
-        saveMethod,
         __errors__: []
       })(store, listeners);
     };

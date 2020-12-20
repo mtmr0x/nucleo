@@ -1,19 +1,39 @@
 import save from './save';
 import NucleoObject from './nucleoTypes/NucleoObject';
+import NucleoList from './nucleoTypes/NucleoList';
 import indexSearch from './indexSearch';
 import subscribe, { listeners } from './subscribe';
 import { Contracts } from './_types/Contracts';
 import { Update } from './_types/Update';
 
 export interface Store<T> {
-  dispatch: (contract: string) => (d: T) => Update<T>;
   update: (contract: string) => (d: T) => Update<T>;
   subscribe: (f: (arg: { contractName: string; data: T }) => void) => () => void;
   cloneState: (contract: string) => T;
 }
 
+function mountStore(store:any = {}, contracts: Contracts) {
+  const contractsKeys: string[] = Object.keys(contracts);
+  for (let cIndex = 0; cIndex < contractsKeys.length; cIndex++) {
+    const currentKey = contractsKeys[cIndex];
+    const currentItem = contracts[currentKey]
+    if (currentItem instanceof NucleoObject) {
+      store[currentKey] = {}
+      mountStore(store[currentKey], currentItem.fields);
+      continue;
+    }
+    if (currentItem instanceof NucleoList) {
+      store[currentKey] = [];
+      continue;
+    }
+
+    store[currentKey] = null;
+  }
+  return store;
+}
+
 function createStore<S>(contracts: Contracts): Store<S> {
-  const __store__: any = {};
+  const __store__: any = mountStore({}, contracts);
   let __contracts__: any = {};
   const contractsKeys: string[] = Object.keys(contracts);
 
@@ -36,7 +56,6 @@ function createStore<S>(contracts: Contracts): Store<S> {
   }
 
   return {
-    dispatch: save({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'dispatch' }),
     update: save({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'update' }),
     subscribe,
     cloneState: (contractName:string) => {
