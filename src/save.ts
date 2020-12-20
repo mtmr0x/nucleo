@@ -139,12 +139,6 @@ export default function save({
       );
     }
 
-    // if (saveMethod === 'update' && !store[contractName]) {
-    //   throw Error(
-    //     `Fatal error: you can not update an item in store if it is not created yet.
-    //     First use dispatch to save it and then you can perform updates at ${contractName} contract.`
-    //   );
-    // }
     return (data: any) => {
       return contractVerification({
         contract: { name: contractName, fields: contracts[contractName]},
