@@ -56,7 +56,7 @@ function createStore<S>(contracts: Contracts): Store<S> {
   }
 
   return {
-    update: save({ contracts: __contracts__, store: __store__, listeners, saveMethod: 'update' }),
+    update: save({ contracts: __contracts__, store: __store__, listeners }),
     subscribe,
     cloneState: (contractName:string) => {
       if (!__contracts__[contractName]) {
