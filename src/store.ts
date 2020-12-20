@@ -4,12 +4,12 @@ import NucleoList from './nucleoTypes/NucleoList';
 import indexSearch from './indexSearch';
 import subscribe, { listeners } from './subscribe';
 import { Contracts } from './_types/Contracts';
-import { Update } from './_types/Update';
+import { TransactionStatus } from './transactionVerification';
 
-export interface Store<T> {
-  update: (contract: string) => (d: T) => Update<T>;
-  subscribe: (f: (arg: { contractName: string; data: T }) => void) => () => void;
-  cloneState: (contract: string) => T;
+export interface Store<S> {
+  update: (contractName: string) => (data: S) => TransactionStatus;
+  subscribe: (f: (arg: { contractName: string; data: S }) => void) => () => void;
+  cloneState: (contract: string) => S;
 }
 
 function mountStore(store:any = {}, contracts: Contracts) {
@@ -63,14 +63,12 @@ function createStore<S>(contracts: Contracts): Store<S> {
         return undefined;
       }
 
-      return indexSearch({
-        contractName,
+      const [clonedData] = indexSearch({
         storeData: __store__[contractName],
         data: {},
-        listeners: undefined,
-        newStoreData: {},
-        newListenersData: {}
       });
+
+      return clonedData;
     }
   };
 }
