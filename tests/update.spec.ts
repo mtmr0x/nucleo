@@ -1,4 +1,4 @@
-import { createStore } from '../src/store';
+import { useNucleoState } from '../src/store';
 import {
   NucleoString,
   NucleoNumber,
@@ -18,7 +18,7 @@ describe('Update forbidden attempts', () => {
     }
   });
 
-  const userType = new NucleoObject({
+  const User = new NucleoObject({
     name: 'user',
     fields: {
       name: completeNameType,
@@ -27,26 +27,38 @@ describe('Update forbidden attempts', () => {
       scope: new NucleoList(NucleoString),
     }
   });
-  const contracts = { user: userType };
-  const store = createStore(contracts);
-  const { update, cloneState } = store;
+  /*
+   * const [getState, setState, subscribe] = createStore(contracts);
+   * const [user, setUser, subscribe] = useNucleoState(userContract)
+   */
 
-  it('should create a singular piece of user state', () => {
-    update('user')({ name: { firstName: 'John' }});
+  it('should use nucleo state', () => {
+    const [user, setUser] = useNucleoState<any>(User) // make this any be able to receive User
+    console.log('user state', user());
+    const transaction = setUser({ name: { firstName: 'John' } });
+    console.log('user state 2', user());
+    console.log('transaction', transaction);
+    console.log('make it possible', user().age); // make it possible
+    const newUser = user() as any;
+    expect(newUser.age).to.equal(null);
+  })
 
-    const user = cloneState('user') as any;
+  // it('should create a singular piece of user state', () => {
+  //   update('user')({ name: { firstName: 'John' }});
 
-    expect(user.name.firstName).to.equal('John');
-    expect(user.name.lastName).to.equal(null);
-  });
+  //   const user = cloneState('user') as any;
 
-  it('should dispatch another piece of store in user contract', () => {
-    update('user')({ name: { lastName: 'Doe' }, age: 29 });
-    const user = cloneState('user') as any;
+  //   expect(user.name.firstName).to.equal('John');
+  //   expect(user.name.lastName).to.equal(null);
+  // });
 
-    expect(user.name.firstName).to.equal('John');
-    expect(user.name.lastName).to.equal('Doe');
-  });
+  // it('should dispatch another piece of store in user contract', () => {
+  //   update('user')({ name: { lastName: 'Doe' }, age: 29 });
+  //   const user = cloneState('user') as any;
+
+  //   expect(user.name.firstName).to.equal('John');
+  //   expect(user.name.lastName).to.equal('Doe');
+  // });
 
 //   it('should dispatch values and then return error tring to update fields violating the contract', () => {
 //     const d = dispatch('user')({

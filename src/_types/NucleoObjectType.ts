@@ -1,4 +1,6 @@
 export interface NucleoObjectType {
   name: string;
-  fields: { [key: string]: any };
+  fields: {
+    [key: string]: any
+  };
 }

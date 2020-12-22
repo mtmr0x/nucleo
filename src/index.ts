@@ -1,4 +1,4 @@
-import { createStore } from './store';
+// import { createStore } from './store';
 
 import {
   NucleoString,
@@ -12,7 +12,7 @@ import NucleoObject from './nucleoTypes/NucleoObject';
 import NucleoList from './nucleoTypes/NucleoList';
 
 export {
-  createStore,
+  // createStore,
   NucleoString,
   NucleoNumber,
   NucleoBoolean,
