@@ -3,7 +3,7 @@ import executeListeners from './executeListeners';
 import transactionVerification from './transactionVerification';
 
 import { Listener } from './subscribe';
-import { Contracts } from './_types/Contracts';
+import { Contracts } from './types';
 
 interface Save {
   contracts: Contracts;

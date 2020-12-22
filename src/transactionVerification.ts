@@ -1,7 +1,8 @@
-import NucleoObject from './nucleoTypes/NucleoObject';
-import NucleoList from './nucleoTypes/NucleoList';
-
-import { NucleoObjectType } from './_types/NucleoObjectType';
+import {
+  NucleoObjectType,
+  NucleoObject,
+  NucleoList,
+} from './types';
 
 type TransactionError = {
   contract: string;

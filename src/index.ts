@@ -5,11 +5,10 @@ import {
   NucleoNumber,
   NucleoBoolean,
   NucleoStringAssertion,
-  NucleoNumberAssertion
-} from './nucleoTypes/primitive';
-
-import NucleoObject from './nucleoTypes/NucleoObject';
-import NucleoList from './nucleoTypes/NucleoList';
+  NucleoNumberAssertion,
+  NucleoObject,
+  NucleoList,
+} from './types';
 
 export {
   // createStore,

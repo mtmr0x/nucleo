@@ -1,11 +1,13 @@
 import save from './save';
-import NucleoObject from './nucleoTypes/NucleoObject';
-import NucleoList from './nucleoTypes/NucleoList';
 import indexSearch from './indexSearch';
 import subscribe, { listeners } from './subscribe';
-import { Contracts } from './_types/Contracts';
-import { NucleoObjectType } from './_types/NucleoObjectType';
 import { TransactionStatus } from './transactionVerification';
+import {
+  NucleoObject,
+  NucleoList,
+  Contracts,
+  NucleoObjectType,
+} from './types';
 
 export interface Store<S> {
   update: (contractName: string) => (data: S) => TransactionStatus;
