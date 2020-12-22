@@ -3,9 +3,9 @@ import {
   NucleoString,
   NucleoNumber,
   NucleoBoolean,
-} from '../src/nucleoTypes/primitive'
-import NucleoObject from '../src/nucleoTypes/NucleoObject';
-import NucleoList from '../src/nucleoTypes/NucleoList';
+  NucleoObject,
+  NucleoList,
+} from '../src';
 import { expect } from 'chai';
 import 'mocha';
 
