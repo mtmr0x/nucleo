@@ -38,7 +38,6 @@ describe('Update forbidden attempts', () => {
     const transaction = setUser({ name: { firstName: 'John' }, age: 28 });
     console.log('user state 2', user());
     console.log('transaction', transaction);
-    console.log('make it possible', user().age); // make it possible
     const newUser = user() as any;
     expect(newUser.age).to.equal(28);
   })
