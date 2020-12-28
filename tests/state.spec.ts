@@ -35,12 +35,12 @@ describe('Update forbidden attempts', () => {
   it('should use nucleo state', () => {
     const [user, setUser] = useNucleoState<any>(User) // make this any be able to receive User
     console.log('user state', user());
-    const transaction = setUser({ name: { firstName: 'John' } });
+    const transaction = setUser({ name: { firstName: 'John' }, age: 28 });
     console.log('user state 2', user());
     console.log('transaction', transaction);
     console.log('make it possible', user().age); // make it possible
     const newUser = user() as any;
-    expect(newUser.age).to.equal(null);
+    expect(newUser.age).to.equal(28);
   })
 
   // it('should create a singular piece of user state', () => {

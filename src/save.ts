@@ -3,29 +3,23 @@ import executeListeners from './executeListeners';
 import transactionVerification from './transactionVerification';
 
 import { Listener } from './subscribe';
-import { Contracts } from './types';
+import { NucleoObject } from './types';
 
 interface Save {
-  contracts: Contracts;
+  contract: NucleoObject;
   store: any;
   listeners: Array<Listener>;
 }
 
 export default function save({
-  contracts,
+  contract,
   store,
   listeners,
 }: Save) {
   return (contractName: string) => {
-    if (!contracts[contractName]) {
-      throw Error(
-        `Fatal error: The provided contract named as "${contractName}" could not be found in store contracts`
-      );
-    }
-
     return (data: any) => {
       const transactionStatus = transactionVerification({
-        contract: { name: contractName, fields: contracts[contractName]},
+        contract,
         data,
       });
 

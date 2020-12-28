@@ -35,24 +35,24 @@ export interface Store<S> {
 //   return store;
 // }
 
-function mountState(store:any = {}, contracts: any) {
+function mountState(state:any = {}, contracts: any) {
   const contractsKeys: string[] = Object.keys(contracts);
   for (let cIndex = 0; cIndex < contractsKeys.length; cIndex++) {
     const currentKey = contractsKeys[cIndex];
     const currentItem = contracts[currentKey]
     if (currentItem instanceof NucleoObject) {
-      store[currentKey] = {}
-      mountState(store[currentKey], currentItem.fields);
+      state[currentKey] = {}
+      mountState(state[currentKey], currentItem.fields);
       continue;
     }
     if (currentItem instanceof NucleoList) {
-      store[currentKey] = [];
+      state[currentKey] = [];
       continue;
     }
 
-    store[currentKey] = null;
+    state[currentKey] = null;
   }
-  return store;
+  return state;
 }
 
 type UseNucleoState<S> = [
@@ -61,22 +61,22 @@ type UseNucleoState<S> = [
   (f: (arg: { contractName: string; data: S }) => void) => () => void,
 ];
 
-export function useNucleoState<S>(state: NucleoObjectType): UseNucleoState<S> { // maybe rename NucleoObject to NucleoState?
-  if (!(state instanceof NucleoObject)) {
-    throw Error(`Your state must be a NucleoObject. Import it like "import { NucleoObject } from 'nucleojs' and create the state from it. Check the documentation at <url here>`);
+export function useNucleoState<S>(contract: NucleoObject): UseNucleoState<S> { // maybe rename NucleoObject to NucleoState?
+  if (!(contract instanceof NucleoObject)) {
+    throw Error(`Your contract must be a NucleoObject. Import it like "import { NucleoObject } from 'nucleojs' and create the state from it. Check the documentation at <url here>`);
   }
 
   const contracts: { [key:string]: any } = {}
-  contracts[state.name] = state;
+  contracts[contract.name] = contract;
   const __state__: any = mountState({}, contracts);
 
-  const setState = save({ contracts, store: __state__, listeners });
+  const setState = save({ contract, store: __state__, listeners });
   const getState = <T>(): T => {
-    const [clonedData] = indexSearch({ storeData: __state__[state.name], data: {} });
+    const [clonedData] = indexSearch({ storeData: __state__[contract.name], data: {} });
     return clonedData;
   }
 
-  return [getState, setState(state.name), subscribe];
+  return [getState, setState(contract.name), subscribe];
 }
 
 // export function createStore<S>(contracts: Contracts): Store<S> {

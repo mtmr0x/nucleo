@@ -1,6 +1,6 @@
 import {
-  NucleoObjectType,
   NucleoObject,
+  NucleoObjectFields,
   NucleoList,
 } from './types';
 
@@ -11,7 +11,7 @@ type TransactionError = {
 }
 
 type TransactionVerification = {
-  contract: NucleoObjectType;
+  contract: NucleoObject;
   data: any;
   __errors__?: Array<TransactionError>;
 }
@@ -34,7 +34,7 @@ export default function transactionVerification({
     const currentDataKey = data[dataKeys[i]];
     if (contractFields[dataKeys[i]] instanceof NucleoObject) {
       transactionVerification({
-        contract: contractFields[dataKeys[i]],
+        contract: contractFields[dataKeys[i]] as NucleoObject,
         data: currentDataKey,
         __errors__
       });
@@ -42,8 +42,9 @@ export default function transactionVerification({
     }
 
     if ((contractFields[dataKeys[i]] instanceof NucleoList) && Array.isArray(currentDataKey)) {
-      const _listItemType = contractFields[dataKeys[i]].getListChildrenType();
-      const _NucleoItemType = contractFields[dataKeys[i]][_listItemType];
+      const _listItemType: string = contractFields[dataKeys[i]].getListChildrenType();
+      const contractFieldsItem: any = contractFields[dataKeys[i]];
+      const _NucleoItemType = contractFieldsItem[_listItemType];
 
       const dataTypeMapper = (): { [key: string]: () => void } => ({
         NucleoPrimitive: () => {
@@ -99,7 +100,6 @@ export default function transactionVerification({
     if (contractFields[dataKeys[i]] && contractFields[dataKeys[i]].serialize && !contractFields[dataKeys[i]].serialize(currentDataKey)) {
       __errors__.push({
         contract: contractName,
-        field: contractFields[dataKeys[i]],
         error: `${dataKeys[i]} does not match its rules according to ${contractName} contract`
       });
     }
