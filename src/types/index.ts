@@ -3,7 +3,7 @@ export interface NucleoObjectFields {
   [key: string]: NucleoObject|NucleoList<any>|NucleoPrimitiveType<string|boolean|number>;
 }
 
-export interface NucleoObjectType {
+interface NucleoObjectType {
   name: string;
   fields: NucleoObjectFields;
   getListChildrenType?: () => string; // from lists
@@ -23,8 +23,7 @@ export class NucleoObject implements NucleoObjectType {
 }
 
 // Primitives
-
-export interface SerializeFunction<T> {
+interface SerializeFunction<T> {
   (value: T): boolean
 }
 
@@ -99,12 +98,12 @@ interface ListChild<T> {
   serialize?: SerializeFunction<T>;
 }
 
-export type NucleoListType = {
+interface NucleoListType {
   getListChildrenType: () => string;
   name: string;
   fields: NucleoObjectFields;
   serialize: () => any;
-};
+}
 
 export class NucleoList<T> implements NucleoListType {
   NucleoObject: NucleoObjectType;
