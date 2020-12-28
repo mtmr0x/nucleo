@@ -92,7 +92,7 @@ export const NucleoBoolean = (options?: PrimitiveOptions<boolean>): NucleoPrimit
 });
 
 // NucleoList
-interface N<T> {
+interface ListChild<T> {
   name?: string;
   fields?: any;
   Type?: string;
@@ -108,12 +108,12 @@ export type NucleoListType = {
 
 export class NucleoList<T> implements NucleoListType {
   NucleoObject: NucleoObjectType;
-  NucleoPrimitive: N<T>;
+  NucleoPrimitive: ListChild<T>;
   name: string;
   fields: NucleoObjectFields;
   serialize: () => any;
 
-  constructor(config: N<T>) {
+  constructor(config: ListChild<T>) {
     if (config instanceof NucleoObject) {
       this.NucleoObject = config;
     }
