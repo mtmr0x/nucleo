@@ -13,8 +13,10 @@ describe('Update forbidden attempts', () => {
   const completeNameType = new NucleoObject({
     name: 'completeName',
     fields:  {
-      firstName: NucleoString,
-      lastName: NucleoString
+      firstName: NucleoString({
+        check: (value) => (value.length > 2)
+      }),
+      lastName: NucleoString()
     }
   });
 
@@ -22,9 +24,9 @@ describe('Update forbidden attempts', () => {
     name: 'user',
     fields: {
       name: completeNameType,
-      age: NucleoNumber,
-      isAuthenticated: NucleoBoolean,
-      scope: new NucleoList(NucleoString),
+      age: NucleoNumber(),
+      isAuthenticated: NucleoBoolean(),
+      scope: new NucleoList(NucleoString()),
     }
   });
   /*

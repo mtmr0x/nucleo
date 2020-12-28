@@ -1,9 +1,4 @@
-export interface Contracts {
-  [key: string]: NucleoObjectType
-}
-
 // NucleoObject
-
 export interface NucleoObjectFields {
   [key: string]: NucleoObject|NucleoList<any>|NucleoPrimitiveType<string|boolean|number>;
 }
@@ -11,7 +6,7 @@ export interface NucleoObjectFields {
 export interface NucleoObjectType {
   name: string;
   fields: NucleoObjectFields;
-  getListChildrenType?: () => string;
+  getListChildrenType?: () => string; // from lists
   serialize?: () => any;
 }
 
@@ -25,8 +20,6 @@ export class NucleoObject implements NucleoObjectType {
     this.name = config.name;
     this.fields = config.fields;
   }
-
-  getFields = () => this.fields
 }
 
 // Primitives
@@ -35,97 +28,68 @@ export interface SerializeFunction<T> {
   (value: T): boolean
 }
 
-export type NucleoPrimitiveType<T> = {
+const PrimitiveExternalFields = {
+  name: '',
+  fields: {},
+  getListChildrenType: () => '',
+}
+
+type NucleoPrimitiveType<T> = {
   Type: string;
   serialize: SerializeFunction<T>;
   name: string;
   fields: NucleoObjectFields;
-  getFields: () => NucleoObjectFields;
-  getListChildrenType: () => string;
+  getListChildrenType: () => string; // from lists
 };
 
-type UserFormatValidation<T> = (arg: T) => boolean;
+type PrimitiveOptions<T> = {
+  check?: (value: T) => boolean;
+};
 
-export class NucleoCustomPrimitive<T> {
-  Type: string;
-  userFormatValidation: UserFormatValidation<T>;
-  nativeType: string;
-
-  serialize(value: T):boolean {
-    if (typeof value !== 'boolean' && (typeof value !== this.nativeType || this.formatValidation(value))) {
-      return false;
-    }
-    return true;
-  }
-
-  formatValidation(value: T):boolean {
-    if (this.userFormatValidation) {
-      return !this.userFormatValidation(value);
-    }
-    return false;
-  }
-}
-
-export class NucleoStringAssertion<T> extends NucleoCustomPrimitive<T> {
-  constructor(userFormatValidation:UserFormatValidation<T>) {
-    super();
-    this.Type = 'NucleoString';
-    this.nativeType = 'string';
-    this.userFormatValidation = userFormatValidation;
-  }
-}
-
-export class NucleoNumberAssertion<T> extends NucleoCustomPrimitive<T> {
-  constructor(userFormatValidation:UserFormatValidation<T>) {
-    super();
-    this.Type = 'NucleoNumber';
-    this.nativeType = 'number';
-    this.userFormatValidation = userFormatValidation;
-  }
-}
-
-const PrimitiveExternalFields = {
-  name: '',
-  fields: {},
-  getFields: () => ({}),
-  getListChildrenType: () => '',
-}
-
-export const NucleoString: NucleoPrimitiveType<string> = {
+export const NucleoString = (options?: PrimitiveOptions<string>): NucleoPrimitiveType<string> => ({
   Type: 'NucleoString',
   serialize: (value: string):boolean => {
     if (typeof value !== 'string') {
       return false;
     }
+    if (options && options.check) {
+      return options.check(value);
+    }
 
     return true;
   },
   ...PrimitiveExternalFields,
-};
+});
 
-export const NucleoNumber: NucleoPrimitiveType<number> = {
+export const NucleoNumber = (options?: PrimitiveOptions<number>): NucleoPrimitiveType<number> => ({
   Type: 'NucleoNumber',
   serialize: (value: number):boolean => {
     if (typeof value !== 'number') {
       return false;
     }
-
-    return true;
-  },
-  ...PrimitiveExternalFields,
-};
-
-export const NucleoBoolean: NucleoPrimitiveType<boolean> = {
-  Type: 'NucleoBoolean',
-  serialize: (value: boolean):boolean => {
-    if (typeof value !== 'boolean') {
-      return false;
+    if (options && options.check) {
+      return options.check(value);
     }
 
     return true;
   },
   ...PrimitiveExternalFields,
-};
+});
+
+export const NucleoBoolean = (options?: PrimitiveOptions<boolean>): NucleoPrimitiveType<boolean> => ({
+  Type: 'NucleoBoolean',
+  serialize: (value: boolean):boolean => {
+    if (typeof value !== 'boolean') {
+      return false;
+    }
+    if (options && options.check) {
+      return options.check(value);
+    }
+
+    return true;
+  },
+  ...PrimitiveExternalFields,
+});
 
 // NucleoList
 interface N<T> {
@@ -162,5 +126,4 @@ export class NucleoList<T> implements NucleoListType {
     }
     return 'NucleoPrimitive';
   }
-  getFields = () => this.fields
 }

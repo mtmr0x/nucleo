@@ -5,8 +5,6 @@ import { TransactionStatus } from './transactionVerification';
 import {
   NucleoObject,
   NucleoList,
-  Contracts,
-  NucleoObjectType,
 } from './types';
 
 export interface Store<S> {

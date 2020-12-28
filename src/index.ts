@@ -4,8 +4,6 @@ import {
   NucleoString,
   NucleoNumber,
   NucleoBoolean,
-  NucleoStringAssertion,
-  NucleoNumberAssertion,
   NucleoObject,
   NucleoList,
 } from './types';
@@ -15,8 +13,7 @@ export {
   NucleoString,
   NucleoNumber,
   NucleoBoolean,
-  NucleoStringAssertion,
-  NucleoNumberAssertion,
   NucleoList,
   NucleoObject,
 };
+
