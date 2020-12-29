@@ -1,12 +1,12 @@
 export type Listener = {
   index: number,
-  listener: (arg: { contractName: string; data: any }) => void,
+  listener: (arg: { modelName: string; data: any }) => void,
   on: boolean,
 }
 
 export const listeners: Listener[] = [];
 
-export default function subscribe<T>(listener: (arg: { contractName: string; data: T }) => void):() => void {
+export default function subscribe<T>(listener: (arg: { modelName: string; data: T }) => void):() => void {
   if (typeof listener !== 'function') {
     throw Error('Expected listener to be a function');
   }

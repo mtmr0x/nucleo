@@ -8,8 +8,10 @@ import {
   NucleoList,
 } from './types';
 
+import { nucleoState } from './nucleoState';
+
 export {
-  // createStore,
+  nucleoState,
   NucleoString,
   NucleoNumber,
   NucleoBoolean,

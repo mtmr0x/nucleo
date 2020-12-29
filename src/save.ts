@@ -6,33 +6,33 @@ import { Listener } from './subscribe';
 import { NucleoObject } from './types';
 
 interface Save {
-  contract: NucleoObject;
-  store: any;
+  model: NucleoObject;
+  state: any;
   listeners: Array<Listener>;
 }
 
 export default function save({
-  contract,
-  store,
+  model,
+  state,
   listeners,
 }: Save) {
-  return (contractName: string) => {
+  return (modelName: string) => {
     return (data: any) => {
       const transactionStatus = transactionVerification({
-        contract,
+        model,
         data,
       });
 
       if (!transactionStatus.errors.length) {
         const [updatedData, clonedUpdatedData] = indexSearch({
-          storeData: store[contractName],
+          storeData: state[modelName],
           data,
         });
 
-        store[contractName] = updatedData;
+        state[modelName] = updatedData;
 
         if (listeners && listeners.length) {
-          executeListeners(contractName, listeners, clonedUpdatedData);
+          executeListeners(modelName, listeners, clonedUpdatedData);
         }
       }
 

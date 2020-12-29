@@ -7,12 +7,6 @@ import {
   NucleoList,
 } from './types';
 
-export interface Store<S> {
-  update: (contractName: string) => (data: S) => TransactionStatus;
-  subscribe: (f: (arg: { contractName: string; data: S }) => void) => () => void;
-  cloneState: (contract: string) => S;
-}
-
 function mountState(state:any = {}, contracts: any) {
   const contractsKeys: string[] = Object.keys(contracts);
   for (let cIndex = 0; cIndex < contractsKeys.length; cIndex++) {
@@ -33,27 +27,27 @@ function mountState(state:any = {}, contracts: any) {
   return state;
 }
 
-type UseNucleoState<S> = [
+type NucleoState<S> = [
   () => S,
   (d: S) => TransactionStatus,
-  (f: (arg: { contractName: string; data: S }) => void) => () => void,
+  (f: (arg: { modelName: string; data: S }) => void) => () => void,
 ];
 
-export function useNucleoState<S>(contract: NucleoObject): UseNucleoState<S> { // maybe rename NucleoObject to NucleoState?
-  if (!(contract instanceof NucleoObject)) {
-    throw Error(`Your contract must be a NucleoObject. Import it like "import { NucleoObject } from 'nucleojs' and create the state from it. Check the documentation at <url here>`);
+export function nucleoState<S>(model: NucleoObject): NucleoState<S> {
+  if (!(model instanceof NucleoObject)) {
+    throw Error(`Your model must be a NucleoObject. Import it like "import { NucleoObject } from 'nucleojs' and create the state from it. Check the documentation at <url here>`);
   }
 
   const contracts: { [key:string]: any } = {}
-  contracts[contract.name] = contract;
+  contracts[model.name] = model;
   const __state__: any = mountState({}, contracts);
 
-  const setState = save({ contract, store: __state__, listeners });
+  const setState = save({ model, state: __state__, listeners });
   const getState = <T>(): T => {
-    const [clonedData] = indexSearch({ storeData: __state__[contract.name], data: {} });
+    const [clonedData] = indexSearch({ storeData: __state__[model.name], data: {} });
     return clonedData;
   }
 
-  return [getState, setState(contract.name), subscribe];
+  return [getState, setState(model.name), subscribe];
 }
 

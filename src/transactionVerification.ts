@@ -1,17 +1,16 @@
 import {
   NucleoObject,
-  NucleoObjectFields,
   NucleoList,
 } from './types';
 
 type TransactionError = {
-  contract: string;
+  model: string;
   error: string;
   field?: string;
 }
 
 type TransactionVerification = {
-  contract: NucleoObject;
+  model: NucleoObject;
   data: any;
   __errors__?: Array<TransactionError>;
 }
@@ -22,29 +21,29 @@ export type TransactionStatus = {
 }
 
 export default function transactionVerification({
-  contract,
+  model,
   data,
   __errors__ = [],
 }: TransactionVerification): TransactionStatus {
-  const { fields: contractFields } = contract;
+  const { fields: modelFields } = model;
   const dataKeys:Array<string> = Object.keys(data);
-  const contractName:string = contract.name;
+  const modelName:string = model.name;
 
   for (let i = 0; dataKeys.length > i; i++) {
     const currentDataKey = data[dataKeys[i]];
-    if (contractFields[dataKeys[i]] instanceof NucleoObject) {
+    if (modelFields[dataKeys[i]] instanceof NucleoObject) {
       transactionVerification({
-        contract: contractFields[dataKeys[i]] as NucleoObject,
+        model: modelFields[dataKeys[i]] as NucleoObject,
         data: currentDataKey,
         __errors__
       });
       continue;
     }
 
-    if ((contractFields[dataKeys[i]] instanceof NucleoList) && Array.isArray(currentDataKey)) {
-      const _listItemType: string = contractFields[dataKeys[i]].getListChildrenType();
-      const contractFieldsItem: any = contractFields[dataKeys[i]];
-      const _NucleoItemType = contractFieldsItem[_listItemType];
+    if ((modelFields[dataKeys[i]] instanceof NucleoList) && Array.isArray(currentDataKey)) {
+      const _listItemType: string = modelFields[dataKeys[i]].getListChildrenType();
+      const modelFieldsItem: any = modelFields[dataKeys[i]];
+      const _NucleoItemType = modelFieldsItem[_listItemType];
 
       const dataTypeMapper = (): { [key: string]: () => void } => ({
         NucleoPrimitive: () => {
@@ -53,7 +52,7 @@ export default function transactionVerification({
           for (let d = 0; d < currentDataKey.length; d++) {
             if (!serialize(currentDataKey[d])) {
               __errors__.push({
-                contract: contractName,
+                model: modelName,
                 error: `NucleoList expect to receive ${Type}, but got ${typeof currentDataKey[d]}`
               });
             }
@@ -64,15 +63,15 @@ export default function transactionVerification({
             for (let d = 0; d < currentDataKey.length; d++) {
               if (Object.keys(currentDataKey[d]).length !== Object.keys(_NucleoItemType.fields).length) {
                 __errors__.push({
-                  contract: _NucleoItemType.name,
-                  error: 'You can not update a NucleoList of NucleoObject without its data according to contract in every level'
+                  model: _NucleoItemType.name,
+                  error: 'You can not update a NucleoList of NucleoObject without its data according to model in every level'
                 });
 
                 continue;
               }
 
               transactionVerification({
-                contract: _NucleoItemType,
+                model: _NucleoItemType,
                 data: currentDataKey[d],
                 __errors__
               });
@@ -83,24 +82,24 @@ export default function transactionVerification({
 
       dataTypeMapper()[_listItemType]();
       continue;
-    } else if ((contractFields[dataKeys[i]] instanceof NucleoList) && !Array.isArray(currentDataKey)) {
+    } else if ((modelFields[dataKeys[i]] instanceof NucleoList) && !Array.isArray(currentDataKey)) {
       __errors__.push({
-        contract: contractName,
+        model: modelName,
         error: `NucleoList should receive data as list, but got ${typeof currentDataKey}`
       });
     }
 
-    if (!contractFields[dataKeys[i]]) {
+    if (!modelFields[dataKeys[i]]) {
       __errors__.push({
-        contract: contractName,
-        error: `${dataKeys[i]} is not in ${contractName} contract and can not be saved in store.`
+        model: modelName,
+        error: `${dataKeys[i]} is not in ${modelName} model and can not be saved in store.`
       });
     }
 
-    if (contractFields[dataKeys[i]] && contractFields[dataKeys[i]].serialize && !contractFields[dataKeys[i]].serialize(currentDataKey)) {
+    if (modelFields[dataKeys[i]] && modelFields[dataKeys[i]].serialize && !modelFields[dataKeys[i]].serialize(currentDataKey)) {
       __errors__.push({
-        contract: contractName,
-        error: `${dataKeys[i]} does not match its rules according to ${contractName} contract`
+        model: modelName,
+        error: `${dataKeys[i]} does not match its rules according to ${modelName} model`
       });
     }
   }

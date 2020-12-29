@@ -1,4 +1,4 @@
-import { useNucleoState } from '../src/store';
+import { nucleoState } from '../src/nucleoState';
 import {
   NucleoString,
   NucleoNumber,
@@ -31,7 +31,7 @@ describe('Update forbidden attempts', () => {
   });
 
   it('should use nucleo state', () => {
-    const [user, setUser] = useNucleoState<any>(User) // make this any be able to receive User
+    const [user, setUser] = nucleoState<any>(User) // make this any be able to receive User
     console.log('user state', user());
     const transaction = setUser({ name: { firstName: 'John' }, age: 28 });
     console.log('user state 2', user());
