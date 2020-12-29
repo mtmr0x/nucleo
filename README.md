@@ -49,7 +49,7 @@ const User = new NucleoModel({
 });
 
 // create the state
-const [user, updateUser] = nucleoState<any>(User) // make this any be able to receive User
+const [user, updateUser] = nucleoState(User) // make this any be able to receive User
 
 // send data to user state
 updateUser({ name: { firstName: 'John' }, age: 28 });
