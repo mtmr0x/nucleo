@@ -7,11 +7,11 @@ import {
   NucleoList,
 } from './types';
 
-function mountState(state:any = {}, contracts: any) {
-  const contractsKeys: string[] = Object.keys(contracts);
+function mountState(state:any = {}, models: any) {
+  const contractsKeys: string[] = Object.keys(models);
   for (let cIndex = 0; cIndex < contractsKeys.length; cIndex++) {
     const currentKey = contractsKeys[cIndex];
-    const currentItem = contracts[currentKey]
+    const currentItem = models[currentKey]
     if (currentItem instanceof NucleoObject) {
       state[currentKey] = {}
       mountState(state[currentKey], currentItem.fields);
@@ -38,9 +38,9 @@ export function nucleoState<S>(model: NucleoObject): NucleoState<S> {
     throw Error(`Your model must be a NucleoObject. Import it like "import { NucleoObject } from 'nucleojs' and create the state from it. Check the documentation at <url here>`);
   }
 
-  const contracts: { [key:string]: any } = {}
-  contracts[model.name] = model;
-  const __state__: any = mountState({}, contracts);
+  const models: { [key:string]: any } = {}
+  models[model.name] = model;
+  const __state__: any = mountState({}, models);
 
   const setState = save({ model, state: __state__, listeners });
   const getState = <T>(): T => {
