@@ -1,22 +1,22 @@
-// NucleoObject
-export interface NucleoObjectFields {
-  [key: string]: NucleoObject|NucleoList<any>|NucleoPrimitiveType<string|boolean|number>;
+// NucleoModel
+export interface NucleoModelFields {
+  [key: string]: NucleoModel|NucleoList<any>|NucleoPrimitiveType<string|boolean|number>;
 }
 
-interface NucleoObjectType {
+interface NucleoModelType {
   name: string;
-  fields: NucleoObjectFields;
+  fields: NucleoModelFields;
   getListChildrenType?: () => string; // from lists
   serialize?: () => any;
 }
 
-export class NucleoObject implements NucleoObjectType {
+export class NucleoModel implements NucleoModelType {
   name: string;
-  fields: NucleoObjectFields;
+  fields: NucleoModelFields;
   getListChildrenType: () => string;
   serialize: () => any;
 
-  constructor(config: NucleoObjectType) {
+  constructor(config: NucleoModelType) {
     this.name = config.name;
     this.fields = config.fields;
   }
@@ -37,7 +37,7 @@ type NucleoPrimitiveType<T> = {
   Type: string;
   serialize: SerializeFunction<T>;
   name: string;
-  fields: NucleoObjectFields;
+  fields: NucleoModelFields;
   getListChildrenType: () => string; // from lists
 };
 
@@ -101,27 +101,27 @@ interface ListChild<T> {
 interface NucleoListType {
   getListChildrenType: () => string;
   name: string;
-  fields: NucleoObjectFields;
+  fields: NucleoModelFields;
   serialize: () => any;
 }
 
 export class NucleoList<T> implements NucleoListType {
-  NucleoObject: NucleoObjectType;
+  NucleoModel: NucleoModelType;
   NucleoPrimitive: ListChild<T>;
   name: string;
-  fields: NucleoObjectFields;
+  fields: NucleoModelFields;
   serialize: () => any;
 
   constructor(config: ListChild<T>) {
-    if (config instanceof NucleoObject) {
-      this.NucleoObject = config;
+    if (config instanceof NucleoModel) {
+      this.NucleoModel = config;
     }
     this.NucleoPrimitive = { Type: config.Type, serialize: config.serialize };
   }
 
   getListChildrenType = ():string => {
-    if (this.NucleoObject) {
-      return 'NucleoObject';
+    if (this.NucleoModel) {
+      return 'NucleoModel';
     }
     return 'NucleoPrimitive';
   }

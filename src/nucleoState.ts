@@ -3,7 +3,7 @@ import indexSearch from './indexSearch';
 import subscribe, { listeners } from './subscribe';
 import { TransactionStatus } from './transactionVerification';
 import {
-  NucleoObject,
+  NucleoModel,
   NucleoList,
 } from './types';
 
@@ -12,7 +12,7 @@ function mountState(state:any = {}, models: any) {
   for (let cIndex = 0; cIndex < contractsKeys.length; cIndex++) {
     const currentKey = contractsKeys[cIndex];
     const currentItem = models[currentKey]
-    if (currentItem instanceof NucleoObject) {
+    if (currentItem instanceof NucleoModel) {
       state[currentKey] = {}
       mountState(state[currentKey], currentItem.fields);
       continue;
@@ -33,9 +33,9 @@ type NucleoState<S> = [
   (f: (arg: { modelName: string; data: S }) => void) => () => void,
 ];
 
-export function nucleoState<S>(model: NucleoObject): NucleoState<S> {
-  if (!(model instanceof NucleoObject)) {
-    throw Error(`Your model must be a NucleoObject. Import it like "import { NucleoObject } from 'nucleojs' and create the state from it. Check the documentation at <url here>`);
+export function nucleoState<S>(model: NucleoModel): NucleoState<S> {
+  if (!(model instanceof NucleoModel)) {
+    throw Error(`Your model must be a NucleoModel. Import it like "import { NucleoModel } from 'nucleojs' and create the state from it. Check the documentation at <url here>`);
   }
 
   const models: { [key:string]: any } = {}

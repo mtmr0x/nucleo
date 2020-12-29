@@ -1,5 +1,5 @@
 import {
-  NucleoObject,
+  NucleoModel,
   NucleoList,
 } from './types';
 
@@ -10,7 +10,7 @@ type TransactionError = {
 }
 
 type TransactionVerification = {
-  model: NucleoObject;
+  model: NucleoModel;
   data: any;
   __errors__?: Array<TransactionError>;
 }
@@ -31,9 +31,9 @@ export default function transactionVerification({
 
   for (let i = 0; dataKeys.length > i; i++) {
     const currentDataKey = data[dataKeys[i]];
-    if (modelFields[dataKeys[i]] instanceof NucleoObject) {
+    if (modelFields[dataKeys[i]] instanceof NucleoModel) {
       transactionVerification({
-        model: modelFields[dataKeys[i]] as NucleoObject,
+        model: modelFields[dataKeys[i]] as NucleoModel,
         data: currentDataKey,
         __errors__
       });
@@ -58,13 +58,13 @@ export default function transactionVerification({
             }
           }
         },
-        NucleoObject: () => {
-          if (_NucleoItemType instanceof NucleoObject) {
+        NucleoModel: () => {
+          if (_NucleoItemType instanceof NucleoModel) {
             for (let d = 0; d < currentDataKey.length; d++) {
               if (Object.keys(currentDataKey[d]).length !== Object.keys(_NucleoItemType.fields).length) {
                 __errors__.push({
                   model: _NucleoItemType.name,
-                  error: 'You can not update a NucleoList of NucleoObject without its data according to model in every level'
+                  error: 'You can not update a NucleoList of NucleoModel without its data according to model in every level'
                 });
 
                 continue;

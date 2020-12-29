@@ -4,7 +4,7 @@ import {
   NucleoString,
   NucleoNumber,
   NucleoBoolean,
-  NucleoObject,
+  NucleoModel,
   NucleoList,
 } from './types';
 
@@ -16,6 +16,6 @@ export {
   NucleoNumber,
   NucleoBoolean,
   NucleoList,
-  NucleoObject,
+  NucleoModel,
 };
 

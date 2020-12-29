@@ -3,14 +3,14 @@ import {
   NucleoString,
   NucleoNumber,
   NucleoBoolean,
-  NucleoObject,
+  NucleoModel,
   NucleoList,
 } from '../src';
 import { expect } from 'chai';
 import 'mocha';
 
 describe('Update forbidden attempts', () => {
-  const completeNameType = new NucleoObject({
+  const completeNameType = new NucleoModel({
     name: 'completeName',
     fields:  {
       firstName: NucleoString({
@@ -20,7 +20,7 @@ describe('Update forbidden attempts', () => {
     }
   });
 
-  const User = new NucleoObject({
+  const User = new NucleoModel({
     name: 'user',
     fields: {
       name: completeNameType,

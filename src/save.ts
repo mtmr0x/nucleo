@@ -3,10 +3,10 @@ import executeListeners from './executeListeners';
 import transactionVerification from './transactionVerification';
 
 import { Listener } from './subscribe';
-import { NucleoObject } from './types';
+import { NucleoModel } from './types';
 
 interface Save {
-  model: NucleoObject;
+  model: NucleoModel;
   state: any;
   listeners: Array<Listener>;
 }
