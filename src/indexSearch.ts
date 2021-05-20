@@ -23,6 +23,8 @@ interface IndexSearch {
  * This is necessary because listeners are not under control of Nucleo and we must not send
  * them a reference to the data in the store.
  *
+ * O(nlogn)
+ *
  */
 export default function indexSearch(args: IndexSearch) {
   const {

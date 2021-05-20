@@ -40,6 +40,7 @@ export default function transactionVerification({
       continue;
     }
 
+    // LISTS ARE HERE
     if ((modelFields[dataKeys[i]] instanceof NucleoList) && Array.isArray(currentDataKey)) {
       const _listItemType: string = modelFields[dataKeys[i]].getListChildrenType();
       const modelFieldsItem: any = modelFields[dataKeys[i]];

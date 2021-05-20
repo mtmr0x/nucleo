@@ -30,14 +30,34 @@ describe('Update forbidden attempts', () => {
     }
   });
 
-  it('should use nucleo state', () => {
+  it('should properly update second level object', () => {
     const [user, setUser] = nucleoState<any>(User) // make this any be able to receive User
-    console.log('user state', user());
-    const transaction = setUser({ name: { firstName: 'John' }, age: 28 });
-    console.log('user state 2', user());
-    console.log('transaction', transaction);
+    setUser({ name: { firstName: 'John' }, age: 28, scope: ['a', 'b'] });
+    setUser({ name: { lastName: 'Doe' } });
     const newUser = user() as any;
+    expect(newUser.name.firstName).to.equal('John');
+    expect(newUser.name.lastName).to.equal('Doe');
     expect(newUser.age).to.equal(28);
+  });
+
+  it('should update only the list key', () => {
+    const [user, setUser] = nucleoState<any>(User) // make this any be able to receive User
+    setUser({ name: { firstName: 'John' }, age: 28, scope: ['a', 'b'] });
+    setUser({ scope: ['v'] });
+    const newUser = user() as any;
+    expect(newUser.scope[0]).to.equal('v');
+    expect(newUser.scope.length).to.equal(1);
+  });
+
+  it('should update boolean values', () => {
+    const [user, setUser] = nucleoState<any>(User) // make this any be able to receive User
+    setUser({ name: { firstName: 'John' }, age: 28, scope: ['a', 'b'] });
+    setUser({ isAuthenticated: false });
+    const newUser = user() as any;
+    expect(newUser.name.firstName).to.equal('John');
+    expect(newUser.age).to.equal(28);
+    expect(newUser.scope.length).to.equal(2);
+    expect(newUser.isAuthenticated).to.equal(false);
   })
 });
 
