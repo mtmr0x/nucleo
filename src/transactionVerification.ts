@@ -26,6 +26,7 @@ export default function transactionVerification({
   __errors__ = [],
 }: TransactionVerification): TransactionStatus {
   const { fields: modelFields } = model;
+  console.log('aqui', data);
   const dataKeys:Array<string> = Object.keys(data);
   const modelName:string = model.name;
 
@@ -61,19 +62,21 @@ export default function transactionVerification({
         },
         NucleoModel: () => {
           if (_NucleoItemType instanceof NucleoModel) {
-            for (let d = 0; d < currentDataKey.length; d++) {
-              if (Object.keys(currentDataKey[d]).length !== Object.keys(_NucleoItemType.fields).length) {
-                __errors__.push({
-                  model: _NucleoItemType.name,
-                  error: 'You can not update a NucleoList of NucleoModel without its data according to model in every level'
-                });
+            // for (let d = 0; d < currentDataKey.length; d++) {
+            for (let d = 0; d < Object.keys(_NucleoItemType.fields).length; d++) {
+              console.log('>>>', _NucleoItemType.fields);
+              // if (Object.keys(currentDataKey[d]).length !== Object.keys(_NucleoItemType.fields).length) {
+              //   __errors__.push({
+              //     model: _NucleoItemType.name,
+              //     error: 'You can not update a NucleoList of NucleoModel without its data according to model in every level'
+              //   });
 
-                continue;
-              }
+              //   continue;
+              // }
 
               transactionVerification({
                 model: _NucleoItemType,
-                data: currentDataKey[d],
+                data: currentDataKey[d] || {},
                 __errors__
               });
             }
