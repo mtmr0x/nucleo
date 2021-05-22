@@ -72,13 +72,13 @@ describe('Update forbidden attempts', () => {
   it('should set as null list of objects values when not passed', () => {
     const [user, setUser] = nucleoState<any>(User) // make this any be able to receive User
     const transaction = setUser({
-      name: { firstName: 'John' },
-      age: 28,
-      scope: ['a', 'b'],
+  //    name: { firstName: 'John' },
+  //    age: 28,
+  //    scope: ['a', 'b'],
       entries: [{ a: 1 }],
     });
     console.log('transaction', transaction);
-    setUser({ isAuthenticated: false });
+    // setUser({ isAuthenticated: false });
     const newUser = user() as any;
     console.log('here', newUser);
   });
