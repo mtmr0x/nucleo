@@ -1,6 +1,6 @@
 {
   "name": "nucleojs",
-  "version": "1.4.1",
+  "version": "2.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Matheus Marsiglio <matmarsiglio@gmail.com>",
@@ -9,8 +9,8 @@
   "private": false,
   "husky": {
     "hooks": {
-      "pre-commit": "npm run tests && npm run lint",
-      "pre-push": "npm run tests && npm run lint"
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run test -- tests/state.spec.ts && npm run lint"
     }
   },
   "devDependencies": {
@@ -36,6 +36,7 @@
     "start": "ts-node ./src/index.ts",
     "nodemon": "nodemon",
     "tests": "mocha -r ts-node/register **/*.spec.ts",
+    "test": "mocha -r ts-node/register",
     "lint": "./node_modules/.bin/eslint src/*.ts src/**/*.ts",
     "compile": "tsc"
   }

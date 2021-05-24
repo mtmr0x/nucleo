@@ -1,23 +1,21 @@
-import { createStore } from './store';
+// import { createStore } from './store';
 
 import {
   NucleoString,
   NucleoNumber,
   NucleoBoolean,
-  NucleoStringAssertion,
-  NucleoNumberAssertion
-} from './nucleoTypes/primitive';
+  NucleoModel,
+  NucleoList,
+} from './types';
 
-import NucleoObject from './nucleoTypes/NucleoObject';
-import NucleoList from './nucleoTypes/NucleoList';
+import { nucleoState } from './nucleoState';
 
 export {
-  createStore,
+  nucleoState,
   NucleoString,
   NucleoNumber,
   NucleoBoolean,
-  NucleoStringAssertion,
-  NucleoNumberAssertion,
   NucleoList,
-  NucleoObject,
+  NucleoModel,
 };
+

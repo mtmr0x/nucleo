@@ -1,8 +1,5 @@
-import executeListeners from './executeListeners';
-import { Listener } from './subscribe';
-
 const saveType = (data:any):'rec'|'save' => {
-  if (typeof data === 'object' && !Array.isArray(data)) {
+  if (typeof data === 'object' && !Array.isArray(data) && data !== null) {
     return 'rec';
   }
 
@@ -10,22 +7,31 @@ const saveType = (data:any):'rec'|'save' => {
 };
 
 interface IndexSearch {
-  contractName: string;
   storeData: any;
   data: any;
-  listeners: Array<Listener>|void;
-  newStoreData: any;
-  newListenersData: any;
+  updatedData?: any;
+  clonedUpdatedData?: any;
 }
 
+/*
+ * This function returns a tuple of exact same data but not with the same references.
+ *
+ * [updatedData, clonedUpdatedData]
+ * updatedData -> is used to be saved in the store;
+ * clonedUpdatedData -> is used to be sent to listeners;
+ *
+ * This is necessary because listeners are not under control of Nucleo and we must not send
+ * them a reference to the data in the store.
+ *
+ * O(nlogn)
+ *
+ */
 export default function indexSearch(args: IndexSearch) {
   const {
-    contractName,
     storeData = {},
     data,
-    listeners,
-    newStoreData = {},
-    newListenersData = {}
+    updatedData = {},
+    clonedUpdatedData = {}
   } = args;
 
   const storeDataKeys = Object.keys(storeData);
@@ -34,34 +40,30 @@ export default function indexSearch(args: IndexSearch) {
     const dataTypeMapper = () => ({
       rec: () => {
         const bufferData = data[storeDataKeys[i]] === null || data[storeDataKeys[i]] === undefined ? storeData[storeDataKeys[i]] : data[storeDataKeys[i]];
-        newStoreData[storeDataKeys[i]] = {};
-        newListenersData[storeDataKeys[i]] = {};
+        updatedData[storeDataKeys[i]] = {};
+        clonedUpdatedData[storeDataKeys[i]] = {};
 
         return indexSearch({
-          contractName: '',
           storeData: storeData[storeDataKeys[i]],
           data: bufferData,
-          listeners: undefined,
-          newStoreData: newStoreData[storeDataKeys[i]],
-          newListenersData: newListenersData[storeDataKeys[i]]
+          updatedData: updatedData[storeDataKeys[i]],
+          clonedUpdatedData: clonedUpdatedData[storeDataKeys[i]]
         });
       },
       save: () => {
         const nonExistentValue = data[storeDataKeys[i]] === null || data[storeDataKeys[i]] === undefined ? true : false;
         if (!nonExistentValue) {
-          newStoreData[storeDataKeys[i]] = data[storeDataKeys[i]];
-          return newListenersData[storeDataKeys[i]] = data[storeDataKeys[i]];
+          updatedData[storeDataKeys[i]] = data[storeDataKeys[i]];
+          return clonedUpdatedData[storeDataKeys[i]] = data[storeDataKeys[i]];
         }
-        newStoreData[storeDataKeys[i]] = storeData[storeDataKeys[i]];
-        return newListenersData[storeDataKeys[i]] = storeData[storeDataKeys[i]];
+        updatedData[storeDataKeys[i]] = storeData[storeDataKeys[i]];
+        return clonedUpdatedData[storeDataKeys[i]] = storeData[storeDataKeys[i]];
       }
     });
 
     dataTypeMapper()[saveType(storeData[storeDataKeys[i]])]();
   }
 
-  if (listeners && listeners.length) {
-    executeListeners(contractName, listeners, newListenersData);
-  }
-  return newStoreData;
+  return [updatedData, clonedUpdatedData];
 }
+
