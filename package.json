@@ -27,7 +27,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "husky": "^2.7.0",
-    "mocha": "^5.2.0",
+    "mocha": "^10.2.0",
     "nodemon": "^1.19.4",
     "ts-node": "^7.0.1",
     "typescript": "3.7.5"
